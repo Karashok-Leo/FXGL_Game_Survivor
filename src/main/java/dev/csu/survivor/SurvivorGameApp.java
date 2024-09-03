@@ -11,6 +11,7 @@ import dev.csu.survivor.enums.Direction;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
 import java.util.Map;
@@ -48,6 +49,10 @@ public class SurvivorGameApp extends GameApplication
         input.addAction(new MoveAction("DOWN", () -> world.getPlayer(), Direction.DOWN), KeyCode.S);
         input.addAction(new MoveAction("LEFT", () -> world.getPlayer(), Direction.LEFT), KeyCode.A);
         input.addAction(new MoveAction("RIGHT", () -> world.getPlayer(), Direction.RIGHT), KeyCode.D);
+        input.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
+        {
+            FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());
+        });
     }
 
     @Override

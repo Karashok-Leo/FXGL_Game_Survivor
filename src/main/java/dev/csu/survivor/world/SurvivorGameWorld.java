@@ -7,7 +7,7 @@ public class SurvivorGameWorld
 {
     private boolean active = false;
 
-    private Entity player;
+    private final Entity player;
 
     public SurvivorGameWorld()
     {

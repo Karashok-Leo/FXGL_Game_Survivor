@@ -1,42 +1,38 @@
 package dev.csu.survivor.component;
 
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import dev.csu.survivor.enums.Direction;
-import javafx.geometry.Point2D;
+import javafx.geometry.Dimension2D;
 import javafx.util.Duration;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnimationComponent extends Component
+public abstract class AnimationComponent extends Component
 {
-    private final AnimatedTexture texture;
-    private final AnimationMap animationMap;
-    private Direction direction = Direction.DOWN;
+    protected final AnimationMap animationMap;
+    protected final AnimatedTexture texture;
+    protected final Dimension2D dimension;
+    protected Direction direction;
 
-    public AnimationComponent()
+    public AnimationComponent(AnimationMap animationMap, String defaultState, Direction defaultDirection)
     {
-        this.animationMap = new AnimationMap(
-                "player",
-                new StateEntry("idle", 2, new int[]{4, 12, 12, 12}),
-                new StateEntry("run", 0.8, 8),
-                new StateEntry("hurt", 0.5, 5),
-                new StateEntry("death", 0.9, 7)
+        this.animationMap = animationMap;
+        this.texture = new AnimatedTexture(animationMap.get(defaultState, defaultDirection));
+        this.dimension = new Dimension2D(
+                texture.getAnimationChannel().getFrameWidth(0),
+                texture.getAnimationChannel().getFrameHeight(0)
         );
-//        this.animationMap = new AnimationMap(
-//                "enemy",
-//                new StateEntry("run", 0.8, 8),
-//                new StateEntry("attack", 0.8, 8),
-//                new StateEntry("hurt", 0.6, 6),
-//                new StateEntry("death", 1.2, 8)
-//        );
+        this.direction = defaultDirection;
+    }
 
-        texture = new AnimatedTexture(animationMap.get("idle", Direction.DOWN));
+    public Dimension2D getDimension()
+    {
+        return this.dimension;
     }
 
     public void setDirection(Direction direction)
@@ -48,23 +44,13 @@ public class AnimationComponent extends Component
     public void onAdded()
     {
         entity.getViewComponent().addChild(texture);
+        entity.getTransformComponent().translate(-dimension.getWidth(), -dimension.getHeight());
+        // TODO: dimension scaling
         entity.setScaleX(2);
         entity.setScaleY(2);
     }
 
-    @Override
-    public void onUpdate(double tpf)
-    {
-        Vec2 velocity = entity.getComponent(MotionComponent.class).getVelocity();
-        boolean isIdle = velocity.isNearlyEqualTo(Point2D.ZERO);
-
-        // TODO: update direction
-
-        if (isIdle) loopAnimation(animationMap.get("idle", direction));
-        else loopAnimation(animationMap.get("run", direction));
-    }
-
-    private void loopAnimation(AnimationChannel channel)
+    protected void loopAnimation(AnimationChannel channel)
     {
         if (texture.getAnimationChannel() != channel)
             texture.loopAnimationChannel(channel);

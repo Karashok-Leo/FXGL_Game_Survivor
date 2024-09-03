@@ -5,9 +5,14 @@ import com.almasb.fxgl.entity.component.Component;
 
 public class MotionComponent extends Component
 {
-    public static final double SPEED = 3;
+    private final double speed;
 
     private final Vec2 velocity = new Vec2();
+
+    public MotionComponent(double speed)
+    {
+        this.speed = speed;
+    }
 
     public Vec2 getVelocity()
     {
@@ -17,6 +22,6 @@ public class MotionComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
-        entity.translate(velocity.normalize().mulLocal(SPEED));
+        entity.translate(velocity.normalize().mulLocal(speed));
     }
 }

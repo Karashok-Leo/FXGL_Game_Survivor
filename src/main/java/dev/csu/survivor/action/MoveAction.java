@@ -3,8 +3,8 @@ package dev.csu.survivor.action;
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.UserAction;
-import dev.csu.survivor.component.AnimationComponent;
 import dev.csu.survivor.component.MotionComponent;
+import dev.csu.survivor.component.PlayerAnimationComponent;
 import dev.csu.survivor.enums.Direction;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public class MoveAction extends UserAction
     @Override
     protected void onAction()
     {
-        playerGetter.get().getComponent(AnimationComponent.class).setDirection(direction);
+        playerGetter.get().getComponent(PlayerAnimationComponent.class).setDirection(direction);
     }
 
     @Override
