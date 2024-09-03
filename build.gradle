@@ -7,6 +7,12 @@ plugins {
 group = project.maven_group
 version = project.version_tag
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(project.jdk_version))
+    }
+}
+
 application {
     mainClass = "dev.csu.survivor.SurvivorGameApp"
 }
