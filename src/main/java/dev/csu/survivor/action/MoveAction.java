@@ -1,0 +1,40 @@
+package dev.csu.survivor.action;
+
+import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.input.UserAction;
+import dev.csu.survivor.component.AnimationComponent;
+import dev.csu.survivor.component.MotionComponent;
+import dev.csu.survivor.enums.Direction;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
+
+public class MoveAction extends UserAction
+{
+    private final LazyValue<Entity> playerGetter;
+    private final Direction direction;
+
+    public MoveAction(@NotNull String name, Supplier<Entity> playerSupplier, Direction direction)
+    {
+        super(name);
+        this.playerGetter = new LazyValue<>(playerSupplier);
+        this.direction = direction;
+    }
+
+    @Override
+    protected void onActionBegin()
+    {
+        Entity player = playerGetter.get();
+        player.getComponent(MotionComponent.class).getVelocity().addLocal(direction.vector);
+        AnimationComponent animationComponent = player.getComponent(AnimationComponent.class);
+        animationComponent.setDirection(direction);
+    }
+
+    @Override
+    protected void onActionEnd()
+    {
+        Entity player = playerGetter.get();
+        player.getComponent(MotionComponent.class).getVelocity().subLocal(direction.vector);
+    }
+}

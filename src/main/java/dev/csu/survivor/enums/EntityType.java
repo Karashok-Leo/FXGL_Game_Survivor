@@ -1,4 +1,4 @@
-package dev.csu.survivor;
+package dev.csu.survivor.enums;
 
 public enum EntityType
 {
