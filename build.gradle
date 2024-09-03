@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version "0.1.0"
+}
+
+group = project.maven_group
+version = project.version_tag
+
+application {
+    mainClass = "dev.csu.survivor.SurvivorGameApp"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://nexus.gluonhq.com/nexus/content/repositories/releases/"
+    }
+}
+
+dependencies {
+    implementation "com.github.almasb:fxgl:${project.fxgl_version}"
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+javafx {
+    version = project.javafx_version
+    modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media' ]
+}
+
+test {
+    useJUnitPlatform()
+}
