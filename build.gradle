@@ -34,7 +34,7 @@ dependencies {
 
 javafx {
     version = project.javafx_version
-    modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media' ]
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media']
 }
 
 test {

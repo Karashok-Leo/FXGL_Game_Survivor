@@ -19,6 +19,11 @@ public class SurvivorGameApp extends GameApplication
 {
     private SurvivorGameWorld world;
 
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
+
     @Override
     protected void initSettings(GameSettings gameSettings)
     {
@@ -27,11 +32,6 @@ public class SurvivorGameApp extends GameApplication
         gameSettings.setHeight(800);
         gameSettings.setVersion("0.1.0");
         gameSettings.setMainMenuEnabled(true);
-    }
-
-    public static void main(String[] args)
-    {
-        launch(args);
     }
 
     @Override

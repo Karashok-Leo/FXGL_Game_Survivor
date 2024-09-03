@@ -25,16 +25,18 @@ public class MoveAction extends UserAction
     @Override
     protected void onActionBegin()
     {
-        Entity player = playerGetter.get();
-        player.getComponent(MotionComponent.class).getVelocity().addLocal(direction.vector);
-        AnimationComponent animationComponent = player.getComponent(AnimationComponent.class);
-        animationComponent.setDirection(direction);
+        playerGetter.get().getComponent(MotionComponent.class).getVelocity().addLocal(direction.vector);
+    }
+
+    @Override
+    protected void onAction()
+    {
+        playerGetter.get().getComponent(AnimationComponent.class).setDirection(direction);
     }
 
     @Override
     protected void onActionEnd()
     {
-        Entity player = playerGetter.get();
-        player.getComponent(MotionComponent.class).getVelocity().subLocal(direction.vector);
+        playerGetter.get().getComponent(MotionComponent.class).getVelocity().subLocal(direction.vector);
     }
 }
