@@ -1,5 +1,6 @@
 package dev.csu.survivor.component;
 
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.EntityState;
@@ -14,10 +15,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AnimationComponent extends Component
+import static dev.csu.survivor.util.MathUtil.SQRT2;
+
+public class AnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
     protected StateComponent state;
+    protected MotionComponent motion;
     protected AnimatedTexture texture;
     protected Dimension2D dimension;
     protected Direction direction = Direction.DOWN;
@@ -37,10 +41,20 @@ public abstract class AnimationComponent extends Component
         this.direction = direction;
     }
 
+    public void updateDirection(Vec2 velocity)
+    {
+        Vec2 normalize = velocity.normalize();
+        if (normalize.x < -SQRT2) direction = Direction.LEFT;
+        else if (normalize.x > SQRT2) direction = Direction.RIGHT;
+        else if (normalize.y < -SQRT2) direction = Direction.UP;
+        else if (normalize.y > SQRT2) direction = Direction.DOWN;
+    }
+
     @Override
     public void onAdded()
     {
         this.state = entity.getComponent(StateComponent.class);
+        this.motion = entity.getComponent(MotionComponent.class);
         this.texture = new AnimatedTexture(animationMap.get(state.getCurrentState(), direction));
         this.dimension = new Dimension2D(
                 texture.getAnimationChannel().getFrameWidth(0),
@@ -87,7 +101,7 @@ public abstract class AnimationComponent extends Component
 
     public record AnimationMap(Map<EntityState, EnumMap<Direction, AnimationChannel>> animations)
     {
-        AnimationMap(String owner, StateEntry... statesEntries)
+        public AnimationMap(String owner, StateEntry... statesEntries)
         {
             this(new HashMap<>());
             for (StateEntry entry : statesEntries)

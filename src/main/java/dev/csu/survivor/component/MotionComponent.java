@@ -17,25 +17,49 @@ public class MotionComponent extends Component
         this.speed = speed;
     }
 
-    public Vec2 getVelocity()
+    public void addVelocity(Vec2 v)
     {
-        return velocity;
+        this.addVelocity(v.x, v.y);
+    }
+
+    public void addVelocity(double vx, double vy)
+    {
+        this.velocity.addLocal(vx, vy);
     }
 
     @Override
     public void onAdded()
     {
-        state = entity.getComponent(StateComponent.class);
+        this.state = this.entity.getComponent(StateComponent.class);
     }
 
     @Override
     public void onUpdate(double tpf)
     {
-        if (state.getCurrentState() != EntityStates.ATTACK)
-            state.changeState(
-                    velocity.isNearlyEqualTo(Point2D.ZERO) ?
-                            EntityStates.IDLE : EntityStates.RUN
-            );
-        entity.translate(velocity.normalize().mulLocal(speed));
+        if (isUnmoving())
+        {
+            if (!state.isIn(EntityStates.HURT, EntityStates.ATTACK))
+                state.changeState(EntityStates.IDLE);
+        } else
+        {
+            if (state.isIn(EntityStates.IDLE))
+                state.changeState(EntityStates.RUN);
+        }
+
+        if (!state.isIn(EntityStates.IDLE))
+            entity.getComponent(AnimationComponent.class)
+                    .updateDirection(velocity);
+
+        // Move
+        Vec2 vector = velocity.normalize().mulLocal(speed);
+        entity.translate(vector);
+
+        // Reset velocity
+        velocity.reset();
+    }
+
+    protected boolean isUnmoving()
+    {
+        return velocity.isNearlyEqualTo(Point2D.ZERO);
     }
 }

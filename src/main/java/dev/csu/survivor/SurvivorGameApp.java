@@ -1,16 +1,18 @@
 package dev.csu.survivor;
 
+import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.PhysicsWorld;
 import dev.csu.survivor.action.MoveAction;
+import dev.csu.survivor.component.AttackHurtComponent;
 import dev.csu.survivor.enums.Direction;
-import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.factory.SurvivorEntityFactory;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -35,6 +37,7 @@ public class SurvivorGameApp extends GameApplication
         gameSettings.setHeight(800);
         gameSettings.setVersion("0.1.0");
         gameSettings.setMainMenuEnabled(true);
+        gameSettings.setApplicationMode(ApplicationMode.DEVELOPER);
     }
 
     @Override
@@ -53,7 +56,13 @@ public class SurvivorGameApp extends GameApplication
         input.addAction(new MoveAction(Direction.RIGHT), KeyCode.D);
         input.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
-            FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());
+            switch (e.getButton())
+            {
+                case PRIMARY ->
+                {
+                    FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());
+                }
+            }
         });
     }
 
@@ -73,29 +82,19 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initPhysics()
     {
-        FXGL.getPhysicsWorld().addCollisionHandler(
+        PhysicsWorld physicsWorld = FXGL.getPhysicsWorld();
+
+        physicsWorld.setGravity(0, 0);
+        physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.PLAYER,
                         EntityType.ENEMY
                 )
                 {
                     @Override
-                    protected void onCollisionBegin(Entity a, Entity b)
-                    {
-                        StateComponent stateComponent = b.getComponent(StateComponent.class);
-                        stateComponent.changeState(EntityStates.ATTACK);
-                    }
-
-                    @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                    }
-
-                    @Override
-                    protected void onCollisionEnd(Entity a, Entity b)
-                    {
-                        StateComponent stateComponent = b.getComponent(StateComponent.class);
-                        stateComponent.changeState(EntityStates.RUN);
+                        b.getComponent(AttackHurtComponent.class).attack(a);
                     }
                 }
         );

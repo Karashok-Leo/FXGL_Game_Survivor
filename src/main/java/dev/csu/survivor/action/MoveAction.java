@@ -1,10 +1,11 @@
 package dev.csu.survivor.action;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.input.UserAction;
 import dev.csu.survivor.component.MotionComponent;
-import dev.csu.survivor.component.PlayerAnimationComponent;
 import dev.csu.survivor.enums.Direction;
+import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 
 public class MoveAction extends UserAction
@@ -20,12 +21,12 @@ public class MoveAction extends UserAction
     @Override
     protected void onActionBegin()
     {
-        FXGL.getGameWorld()
+        StateComponent state = FXGL.getGameWorld()
                 .getEntitiesByType(EntityType.PLAYER)
                 .getFirst()
-                .getComponent(MotionComponent.class)
-                .getVelocity()
-                .addLocal(direction.vector);
+                .getComponent(StateComponent.class);
+//        if (state.isIn(EntityStates.IDLE))
+        state.changeState(EntityStates.RUN);
     }
 
     @Override
@@ -34,18 +35,7 @@ public class MoveAction extends UserAction
         FXGL.getGameWorld()
                 .getEntitiesByType(EntityType.PLAYER)
                 .getFirst()
-                .getComponent(PlayerAnimationComponent.class)
-                .setDirection(direction);
-    }
-
-    @Override
-    protected void onActionEnd()
-    {
-        FXGL.getGameWorld()
-                .getEntitiesByType(EntityType.PLAYER)
-                .getFirst()
                 .getComponent(MotionComponent.class)
-                .getVelocity()
-                .subLocal(direction.vector);
+                .addVelocity(direction.vector);
     }
 }
