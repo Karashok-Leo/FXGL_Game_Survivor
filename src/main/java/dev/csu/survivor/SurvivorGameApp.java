@@ -4,10 +4,12 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.physics.CollisionHandler;
 import dev.csu.survivor.action.MoveAction;
 import dev.csu.survivor.enums.Direction;
+import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.scene.input.KeyCode;
@@ -78,9 +80,22 @@ public class SurvivorGameApp extends GameApplication
                 )
                 {
                     @Override
+                    protected void onCollisionBegin(Entity a, Entity b)
+                    {
+                        StateComponent stateComponent = b.getComponent(StateComponent.class);
+                        stateComponent.changeState(EntityStates.ATTACK);
+                    }
+
+                    @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.removeFromWorld();
+                    }
+
+                    @Override
+                    protected void onCollisionEnd(Entity a, Entity b)
+                    {
+                        StateComponent stateComponent = b.getComponent(StateComponent.class);
+                        stateComponent.changeState(EntityStates.RUN);
                     }
                 }
         );

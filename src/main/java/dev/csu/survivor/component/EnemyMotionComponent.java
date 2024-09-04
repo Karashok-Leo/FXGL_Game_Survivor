@@ -19,6 +19,6 @@ public class EnemyMotionComponent extends MotionComponent
                 .getFirst()
                 .getPosition();
         this.getVelocity().set(center.subtract(entity.getPosition()));
-//        super.onUpdate(tpf);
+        super.onUpdate(tpf);
     }
 }

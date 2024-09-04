@@ -6,19 +6,15 @@ import dev.csu.survivor.enums.Direction;
 
 public class MathUtil
 {
+    public static final double SQRT2 = FXGLMath.sqrt(2) / 2;
+
     public static Direction getDirectionByVec2(Vec2 v)
     {
-        Direction result = Direction.DOWN;
-        float angle = 180;
-        for (Direction direction : Direction.values())
-        {
-            float abs = FXGLMath.abs(direction.vector.angle(v));
-            if (abs < angle)
-            {
-                result = direction;
-                angle = abs;
-            }
-        }
-        return result;
+        Direction direction = Direction.DOWN;
+        Vec2 normalize = v.normalize();
+        if (normalize.x < -SQRT2) direction = Direction.LEFT;
+        else if (normalize.x > SQRT2) direction = Direction.RIGHT;
+        else if (normalize.y < -SQRT2) direction = Direction.UP;
+        return direction;
     }
 }

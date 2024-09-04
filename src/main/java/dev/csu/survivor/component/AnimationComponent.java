@@ -2,6 +2,8 @@ package dev.csu.survivor.component;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.entity.state.EntityState;
+import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import dev.csu.survivor.enums.Direction;
@@ -15,19 +17,14 @@ import java.util.Map;
 public abstract class AnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
-    protected final AnimatedTexture texture;
-    protected final Dimension2D dimension;
-    protected Direction direction;
+    protected StateComponent state;
+    protected AnimatedTexture texture;
+    protected Dimension2D dimension;
+    protected Direction direction = Direction.DOWN;
 
-    public AnimationComponent(AnimationMap animationMap, String defaultState, Direction defaultDirection)
+    public AnimationComponent(AnimationMap animationMap)
     {
         this.animationMap = animationMap;
-        this.texture = new AnimatedTexture(animationMap.get(defaultState, defaultDirection));
-        this.dimension = new Dimension2D(
-                texture.getAnimationChannel().getFrameWidth(0),
-                texture.getAnimationChannel().getFrameHeight(0)
-        );
-        this.direction = defaultDirection;
     }
 
     public Dimension2D getDimension()
@@ -43,13 +40,25 @@ public abstract class AnimationComponent extends Component
     @Override
     public void onAdded()
     {
-        entity.getViewComponent().addChild(texture);
-        texture.setTranslateX(-dimension.getWidth() / 2);
-        texture.setTranslateY(-dimension.getHeight() / 2);
-//        entity.getTransformComponent().translate(-dimension.getWidth(), -dimension.getHeight());
+        this.state = entity.getComponent(StateComponent.class);
+        this.texture = new AnimatedTexture(animationMap.get(state.getCurrentState(), direction));
+        this.dimension = new Dimension2D(
+                texture.getAnimationChannel().getFrameWidth(0),
+                texture.getAnimationChannel().getFrameHeight(0)
+        );
+        this.entity.getViewComponent().addChild(texture);
+        this.texture.setTranslateX(-dimension.getWidth() / 2.0);
+        this.texture.setTranslateY(-dimension.getHeight() / 2.0);
+        this.texture.loop();
         // TODO: dimension scaling
-        entity.setScaleX(2);
-        entity.setScaleY(2);
+        this.entity.setScaleX(2);
+        this.entity.setScaleY(2);
+    }
+
+    @Override
+    public void onUpdate(double tpf)
+    {
+        loopAnimation(animationMap.get(state.getCurrentState(), direction));
     }
 
     protected void loopAnimation(AnimationChannel channel)
@@ -58,9 +67,9 @@ public abstract class AnimationComponent extends Component
             texture.loopAnimationChannel(channel);
     }
 
-    public record StateEntry(String state, double duration, EnumMap<Direction, Integer> nums)
+    public record StateEntry(EntityState state, double duration, EnumMap<Direction, Integer> nums)
     {
-        public StateEntry(String state, double duration, int[] nums)
+        public StateEntry(EntityState state, double duration, int[] nums)
         {
             this(state, duration, new EnumMap<>(Direction.class));
             if (nums.length != Direction.values().length) throw new IllegalArgumentException();
@@ -68,7 +77,7 @@ public abstract class AnimationComponent extends Component
                 this.nums.put(direction, nums[direction.ordinal()]);
         }
 
-        public StateEntry(String state, double duration, int num)
+        public StateEntry(EntityState state, double duration, int num)
         {
             this(state, duration, new EnumMap<>(Direction.class));
             for (Direction direction : Direction.values())
@@ -76,7 +85,7 @@ public abstract class AnimationComponent extends Component
         }
     }
 
-    public record AnimationMap(Map<String, EnumMap<Direction, AnimationChannel>> animations)
+    public record AnimationMap(Map<EntityState, EnumMap<Direction, AnimationChannel>> animations)
     {
         AnimationMap(String owner, StateEntry... statesEntries)
         {
@@ -97,7 +106,7 @@ public abstract class AnimationComponent extends Component
             }
         }
 
-        public AnimationChannel get(String state, Direction direction)
+        public AnimationChannel get(EntityState state, Direction direction)
         {
             return animations.get(state).get(direction);
         }
