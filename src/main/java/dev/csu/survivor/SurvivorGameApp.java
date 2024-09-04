@@ -45,10 +45,10 @@ public class SurvivorGameApp extends GameApplication
     protected void initInput()
     {
         Input input = FXGL.getInput();
-        input.addAction(new MoveAction("UP", () -> world.getPlayer(), Direction.UP), KeyCode.W);
-        input.addAction(new MoveAction("DOWN", () -> world.getPlayer(), Direction.DOWN), KeyCode.S);
-        input.addAction(new MoveAction("LEFT", () -> world.getPlayer(), Direction.LEFT), KeyCode.A);
-        input.addAction(new MoveAction("RIGHT", () -> world.getPlayer(), Direction.RIGHT), KeyCode.D);
+        input.addAction(new MoveAction(Direction.UP), KeyCode.W);
+        input.addAction(new MoveAction(Direction.DOWN), KeyCode.S);
+        input.addAction(new MoveAction(Direction.LEFT), KeyCode.A);
+        input.addAction(new MoveAction(Direction.RIGHT), KeyCode.D);
         input.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
             FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());

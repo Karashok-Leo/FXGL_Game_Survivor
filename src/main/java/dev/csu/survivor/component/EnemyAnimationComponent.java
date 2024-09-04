@@ -2,7 +2,7 @@ package dev.csu.survivor.component;
 
 import com.almasb.fxgl.core.math.Vec2;
 import dev.csu.survivor.enums.Direction;
-import javafx.geometry.Point2D;
+import dev.csu.survivor.util.MathUtil;
 
 public class EnemyAnimationComponent extends AnimationComponent
 {
@@ -24,11 +24,10 @@ public class EnemyAnimationComponent extends AnimationComponent
     @Override
     public void onUpdate(double tpf)
     {
-        Vec2 velocity = entity.getComponent(MotionComponent.class).getVelocity();
-        boolean isIdle = velocity.isNearlyEqualTo(Point2D.ZERO);
-
+        Vec2 velocity = entity.getComponent(EnemyMotionComponent.class).getVelocity();
+        direction = MathUtil.getDirectionByVec2(velocity);
         // TODO: attack & hurt & death
 
-        if (isIdle) loopAnimation(animationMap.get("run", direction));
+        loopAnimation(animationMap.get("run", direction));
     }
 }

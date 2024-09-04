@@ -44,7 +44,9 @@ public abstract class AnimationComponent extends Component
     public void onAdded()
     {
         entity.getViewComponent().addChild(texture);
-        entity.getTransformComponent().translate(-dimension.getWidth(), -dimension.getHeight());
+        texture.setTranslateX(-dimension.getWidth() / 2);
+        texture.setTranslateY(-dimension.getHeight() / 2);
+//        entity.getTransformComponent().translate(-dimension.getWidth(), -dimension.getHeight());
         // TODO: dimension scaling
         entity.setScaleX(2);
         entity.setScaleY(2);
