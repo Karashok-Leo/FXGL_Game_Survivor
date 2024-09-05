@@ -1,4 +1,4 @@
-package dev.csu.survivor.action;
+package dev.csu.survivor.input.action;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.state.StateComponent;

@@ -1,11 +1,13 @@
 package dev.csu.survivor.factory;
 
+import com.almasb.fxgl.dsl.components.view.GenericBarViewComponent;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.collision.shapes.CircleShape;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import dev.csu.survivor.component.AnimationComponent;
 import dev.csu.survivor.enums.EntityStates;
+import javafx.scene.paint.Color;
 
 public class ComponentFactory
 {
@@ -19,7 +21,7 @@ public class ComponentFactory
 
     public static final AnimationComponent.AnimationMap ENEMY_ANIMATION_MAP = new AnimationComponent.AnimationMap(
             "enemy",
-            new AnimationComponent.StateEntry(EntityStates.IDLE, 0.8, 8),
+            new AnimationComponent.StateEntry(EntityStates.IDLE, 0.4, 4),
             new AnimationComponent.StateEntry(EntityStates.RUN, 0.8, 8),
             new AnimationComponent.StateEntry(EntityStates.ATTACK, 0.8, 8),
             new AnimationComponent.StateEntry(EntityStates.HURT, 0.3, 6),
@@ -46,4 +48,9 @@ public class ComponentFactory
         physicsComponent.setFixtureDef(fixtureDef);
         return physicsComponent;
     }
+
+//    public static GenericBarViewComponent newHealthBarViewComponent()
+//    {
+//        new GenericBarViewComponent(0,0, Color.RED,,40)
+//    }
 }

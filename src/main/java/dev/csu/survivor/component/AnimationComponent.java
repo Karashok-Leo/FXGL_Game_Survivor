@@ -63,6 +63,10 @@ public class AnimationComponent extends Component
         this.entity.getViewComponent().addChild(texture);
         this.texture.setTranslateX(-dimension.getWidth() / 2.0);
         this.texture.setTranslateY(-dimension.getHeight() / 2.0);
+
+        // Bind zIndex to yPos
+        this.entity.getViewComponent().zIndexProperty().bind(entity.yProperty());
+
         this.texture.loop();
         // TODO: dimension scaling
         this.entity.setScaleX(2);

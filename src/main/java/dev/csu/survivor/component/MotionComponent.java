@@ -38,7 +38,7 @@ public class MotionComponent extends Component
     {
         if (isUnmoving())
         {
-            if (!state.isIn(EntityStates.HURT, EntityStates.ATTACK))
+            if (state.isIn(EntityStates.RUN))
                 state.changeState(EntityStates.IDLE);
         } else
         {
