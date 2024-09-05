@@ -36,6 +36,8 @@ public class MotionComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
+        if (state.isIn(EntityStates.DEATH)) return;
+
         if (isUnmoving())
         {
             if (state.isIn(EntityStates.RUN))

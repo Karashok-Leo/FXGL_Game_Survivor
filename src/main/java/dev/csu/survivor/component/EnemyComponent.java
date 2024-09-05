@@ -26,9 +26,10 @@ public class EnemyComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
-        if (!state.isIn(EntityStates.ATTACK))
-        {
+        if (state.isIn(EntityStates.IDLE))
             state.changeState(EntityStates.RUN);
+        if (state.isIn(EntityStates.RUN, EntityStates.HURT))
+        {
             Point2D target = FXGL.getGameWorld()
                     .getEntitiesByType(EntityType.PLAYER)
                     .getFirst()

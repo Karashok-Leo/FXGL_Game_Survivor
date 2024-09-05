@@ -23,13 +23,13 @@ public class SurvivorEntityFactory implements EntityFactory
         return FXGL.entityBuilder()
                 .type(EntityType.PLAYER)
                 .at(data.getX(), data.getY())
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.PLAYER_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
                 .with(new MotionComponent(Constants.Common.PLAYER_SPEED))
                 .with(ComponentFactory.newPlayerAnimationComponent())
                 .with(new HealthIntComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
                 .with(new KeepOnScreenComponent())
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.PLAYER_HIT_BOX_RADIUS)))
                 .collidable()
                 .build();
     }
@@ -40,7 +40,8 @@ public class SurvivorEntityFactory implements EntityFactory
         return FXGL.entityBuilder()
                 .type(EntityType.ENEMY)
                 .at(data.getX(), data.getY())
-                .with(new StateComponent(EntityStates.RUN))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
+                .with(new StateComponent(EntityStates.IDLE))
                 .with(ComponentFactory.newRandomMotionComponent(Constants.Common.ENEMY_MIN_SPEED, Constants.Common.ENEMY_MAX_SPEED))
                 .with(ComponentFactory.newEnemyAnimationComponent())
                 .with(new HealthIntComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
@@ -48,7 +49,6 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new EnemyComponent())
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .collidable()
                 .build();
     }

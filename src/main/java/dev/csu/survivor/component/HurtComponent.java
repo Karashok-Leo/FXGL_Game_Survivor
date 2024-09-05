@@ -7,14 +7,13 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.time.LocalTimer;
 import com.almasb.fxgl.time.Timer;
+import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EntityStates;
+import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
-import javafx.util.Duration;
 
 public class HurtComponent extends Component
 {
-    protected static final Duration HURT_DURATION = Duration.seconds(0.3);
-
     protected final Timer timer;
     protected final LocalTimer hurtCooldown;
     protected StateComponent state;
@@ -42,7 +41,7 @@ public class HurtComponent extends Component
     public void hurt(Entity attacker)
     {
         // Add cooldown for hurt
-        if (hurtCooldown.elapsed(HURT_DURATION))
+        if (hurtCooldown.elapsed(Constants.Common.HURT_DURATION))
         {
             hurtCooldown.capture();
 
@@ -52,10 +51,15 @@ public class HurtComponent extends Component
 
             if (health.isZero())
             {
-                FXGL.getWindowService().pushSubScene(new GameOverMenu());
-            }
+                state.changeState(EntityStates.DEATH);
+                timer.runOnceAfter(() ->
+                {
+                    if (entity.isType(EntityType.PLAYER))
+                        FXGL.getWindowService().pushSubScene(new GameOverMenu());
+                    else entity.removeFromWorld();
+                }, Constants.Common.DEATH_DELAY);
 
-            else timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), HURT_DURATION);
+            } else timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.Common.HURT_DURATION);
         }
     }
 }

@@ -31,12 +31,16 @@ public interface Constants
         int ENEMY_INITIAL_MAX_HEALTH = 10;
         double ENEMY_MIN_SPEED = 0.6;
         double ENEMY_MAX_SPEED = 1.2;
-        double ENEMY_HIT_BOX_RADIUS = 9;
+        double ENEMY_HIT_BOX_RADIUS = 11;
 
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
-        Duration ENEMY_SPAWN_DURATION = Duration.seconds(6.0);
+        Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
+        Duration ENEMY_IDLE_DURATION = Duration.seconds(0.4);
         Duration ATTACK_DURATION = Duration.seconds(0.8);
         Duration HURT_DELAY = Duration.seconds(0.2);
+        Duration HURT_DURATION = Duration.seconds(0.3);
+        Duration DEATH_DURATION = Duration.seconds(1.0);
+        Duration DEATH_DELAY = Duration.seconds(2.0);
     }
 
     interface Client
@@ -52,19 +56,19 @@ public interface Constants
     {
         AnimationComponent.AnimationMap PLAYER_ANIMATION_MAP = new AnimationComponent.AnimationMap(
                 "player",
-                new AnimationComponent.StateEntry(EntityStates.IDLE, 2, new int[]{4, 12, 12, 12}),
+                new AnimationComponent.StateEntry(EntityStates.IDLE, Duration.seconds(2), new int[]{4, 12, 12, 12}),
                 new AnimationComponent.StateEntry(EntityStates.RUN, 0.8, 8),
-                new AnimationComponent.StateEntry(EntityStates.HURT, 0.3, 5),
-                new AnimationComponent.StateEntry(EntityStates.DEATH, 0.9, 7)
+                new AnimationComponent.StateEntry(EntityStates.HURT, Common.HURT_DURATION, 5),
+                new AnimationComponent.StateEntry(EntityStates.DEATH, Common.DEATH_DURATION, 7)
         );
 
         AnimationComponent.AnimationMap ENEMY_ANIMATION_MAP = new AnimationComponent.AnimationMap(
                 "enemy",
-                new AnimationComponent.StateEntry(EntityStates.IDLE, 0.4, 4),
+                new AnimationComponent.StateEntry(EntityStates.IDLE, Common.ENEMY_IDLE_DURATION, 4),
                 new AnimationComponent.StateEntry(EntityStates.RUN, 0.8, 8),
-                new AnimationComponent.StateEntry(EntityStates.ATTACK, 0.8, 8),
-                new AnimationComponent.StateEntry(EntityStates.HURT, 0.3, 6),
-                new AnimationComponent.StateEntry(EntityStates.DEATH, 1.2, 8)
+                new AnimationComponent.StateEntry(EntityStates.ATTACK, Common.ATTACK_DURATION, 8),
+                new AnimationComponent.StateEntry(EntityStates.HURT, Common.HURT_DURATION, 6),
+                new AnimationComponent.StateEntry(EntityStates.DEATH, Common.DEATH_DURATION, 8)
         );
     }
 }
