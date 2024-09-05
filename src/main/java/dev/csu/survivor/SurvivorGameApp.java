@@ -1,9 +1,9 @@
 package dev.csu.survivor;
 
-import com.almasb.fxgl.app.ApplicationMode;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.GameWorld;
 import dev.csu.survivor.factory.SurvivorEntityFactory;
 import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
@@ -24,12 +24,12 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initSettings(GameSettings gameSettings)
     {
-        gameSettings.setTitle("Survivor");
-        gameSettings.setWidth(1000);
-        gameSettings.setHeight(800);
-        gameSettings.setVersion("0.1.0");
-        gameSettings.setMainMenuEnabled(true);
-        gameSettings.setApplicationMode(ApplicationMode.DEVELOPER);
+        gameSettings.setTitle(Constants.GameProperties.GAME_NAME);
+        gameSettings.setVersion(Constants.GameProperties.GAME_VERSION);
+        gameSettings.setWidth(Constants.GameProperties.GAME_SCENE_WIDTH);
+        gameSettings.setHeight(Constants.GameProperties.GAME_SCENE_HEIGHT);
+        gameSettings.setMainMenuEnabled(Constants.GameProperties.MAIN_MENU_ENABLED);
+        gameSettings.setApplicationMode(Constants.GameProperties.APP_MODE);
     }
 
     @Override
@@ -47,8 +47,9 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initGame()
     {
-        FXGL.getGameWorld().addEntityFactory(new SurvivorEntityFactory());
-        world = new SurvivorGameWorld();
+        GameWorld gameWorld = FXGL.getGameWorld();
+        gameWorld.addEntityFactory(new SurvivorEntityFactory());
+        world = new SurvivorGameWorld(gameWorld);
     }
 
     @Override

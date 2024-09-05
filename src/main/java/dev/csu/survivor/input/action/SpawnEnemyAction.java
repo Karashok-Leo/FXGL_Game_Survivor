@@ -14,7 +14,7 @@ public class SpawnEnemyAction extends UserAction
     @Override
     protected void onActionEnd()
     {
-
+        // NYI
         FXGL.getGameWorld().spawn("enemy");
     }
 }

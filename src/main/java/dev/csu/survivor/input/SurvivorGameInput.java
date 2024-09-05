@@ -21,7 +21,7 @@ public class SurvivorGameInput
             {
                 case PRIMARY ->
                 {
-                    FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());
+//                    FXGL.getGameWorld().spawn("enemy", e.getX(), e.getY());
                 }
             }
         });
