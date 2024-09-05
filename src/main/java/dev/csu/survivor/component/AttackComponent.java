@@ -35,8 +35,8 @@ public class AttackComponent extends Component
 
         state.changeState(EntityStates.ATTACK);
 
-        timer.runOnceAfter(() -> target.getComponent(HurtComponent.class).hurt(entity), Constants.GameData.HURT_DELAY);
+        timer.runOnceAfter(() -> target.getComponent(HurtComponent.class).hurt(entity), Constants.Common.HURT_DELAY);
 
-        timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.GameData.ATTACK_DURATION);
+        timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.Common.ATTACK_DURATION);
     }
 }

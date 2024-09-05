@@ -24,14 +24,14 @@ public class SurvivorEntityFactory implements EntityFactory
                 .type(EntityType.PLAYER)
                 .at(data.getX(), data.getY())
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(new MotionComponent(Constants.GameData.PLAYER_SPEED))
+                .with(new MotionComponent(Constants.Common.PLAYER_SPEED))
                 .with(ComponentFactory.newPlayerAnimationComponent())
-                .with(new HealthIntComponent(Constants.GameData.PLAYER_INITIAL_MAX_HEALTH))
+                .with(new HealthIntComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
                 .with(new KeepOnScreenComponent())
-                .bbox(new HitBox(BoundingShape.circle(Constants.GameData.PLAYER_HIT_BOX_RADIUS)))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.PLAYER_HIT_BOX_RADIUS)))
                 .collidable()
-                .buildAndAttach();
+                .build();
     }
 
     @Spawns("enemy")
@@ -41,15 +41,15 @@ public class SurvivorEntityFactory implements EntityFactory
                 .type(EntityType.ENEMY)
                 .at(data.getX(), data.getY())
                 .with(new StateComponent(EntityStates.RUN))
-                .with(ComponentFactory.newRandomMotionComponent(Constants.GameData.ENEMY_MIN_SPEED, Constants.GameData.ENEMY_MAX_SPEED))
+                .with(ComponentFactory.newRandomMotionComponent(Constants.Common.ENEMY_MIN_SPEED, Constants.Common.ENEMY_MAX_SPEED))
                 .with(ComponentFactory.newEnemyAnimationComponent())
-                .with(new HealthIntComponent(Constants.GameData.ENEMY_INITIAL_MAX_HEALTH))
-                .with(new HealthBarComponent(-36, -64, Constants.GameData.ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthIntComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthBarComponent(-36, -64, Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new EnemyComponent())
-                .bbox(new HitBox(BoundingShape.circle(Constants.GameData.ENEMY_HIT_BOX_RADIUS)))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .collidable()
-                .buildAndAttach();
+                .build();
     }
 }

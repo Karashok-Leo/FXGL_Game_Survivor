@@ -24,12 +24,13 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initSettings(GameSettings gameSettings)
     {
-        gameSettings.setTitle(Constants.GameProperties.GAME_NAME);
-        gameSettings.setVersion(Constants.GameProperties.GAME_VERSION);
-        gameSettings.setWidth(Constants.GameProperties.GAME_SCENE_WIDTH);
-        gameSettings.setHeight(Constants.GameProperties.GAME_SCENE_HEIGHT);
-        gameSettings.setMainMenuEnabled(Constants.GameProperties.MAIN_MENU_ENABLED);
-        gameSettings.setApplicationMode(Constants.GameProperties.APP_MODE);
+        gameSettings.setTitle(Constants.GAME_NAME);
+        gameSettings.setVersion(Constants.GAME_VERSION);
+        gameSettings.setWidth(Constants.GAME_SCENE_WIDTH);
+        gameSettings.setHeight(Constants.GAME_SCENE_HEIGHT);
+        gameSettings.setMainMenuEnabled(Constants.MAIN_MENU_ENABLED);
+        gameSettings.setDeveloperMenuEnabled(Constants.DEVELOPER_MENU_ENABLED);
+        gameSettings.setApplicationMode(Constants.APP_MODE);
     }
 
     @Override

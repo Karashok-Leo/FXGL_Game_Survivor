@@ -17,15 +17,15 @@ public class SurvivorGameWorld
     {
         this.localTimer = FXGL.newLocalTimer();
         this.internalWorld = internalWorld;
-        this.player = internalWorld.spawn("player", Constants.GameData.PLAYER_SPAWN_POINT);
+        this.player = this.internalWorld.spawn("player", Constants.Common.PLAYER_SPAWN_POINT);
     }
 
     public void tick()
     {
-        if (localTimer.elapsed(Constants.GameData.ENEMY_SPAWN_DURATION))
+        if (localTimer.elapsed(Constants.Common.ENEMY_SPAWN_DURATION))
         {
             localTimer.capture();
-            internalWorld.spawn("enemy", FXGLMath.randomPoint(Constants.GameProperties.GAME_SCENE_RECT));
+            internalWorld.spawn("enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
         }
     }
 

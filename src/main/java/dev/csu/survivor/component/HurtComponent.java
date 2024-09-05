@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.time.LocalTimer;
 import com.almasb.fxgl.time.Timer;
 import dev.csu.survivor.enums.EntityStates;
+import dev.csu.survivor.ui.menu.GameOverMenu;
 import javafx.util.Duration;
 
 public class HurtComponent extends Component
@@ -49,7 +50,12 @@ public class HurtComponent extends Component
 
             health.damage(1);
 
-            timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), HURT_DURATION);
+            if (health.isZero())
+            {
+                FXGL.getWindowService().pushSubScene(new GameOverMenu());
+            }
+
+            else timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), HURT_DURATION);
         }
     }
 }
