@@ -67,7 +67,7 @@ public abstract class BaseMenu extends FXGLMenu
         menu = createMenuBodyGameMenu();
 
         double menuX = 50.0;
-        double menuLayoutHeight = menu.getChildren().size() * 10.0;
+        double menuLayoutHeight = menu.getLayoutHeight();
         double menuY = getAppHeight() / 2.0 - menuLayoutHeight / 2;
 
         menuRoot.setTranslateX(menuX);
@@ -83,12 +83,14 @@ public abstract class BaseMenu extends FXGLMenu
 
         this.getContentRoot().getChildren().addAll(
                 createBackground(getAppWidth(), getAppHeight()),
-                createTitleView("Game Over"),
+                createTitleView(getTitle()),
                 particleSystem.getPane(),
                 menuRoot,
                 menuContentRoot
         );
     }
+
+    protected abstract String getTitle();
 
     protected ArrayList<Animation<?>> animations = new ArrayList<>();
 
@@ -122,6 +124,10 @@ public abstract class BaseMenu extends FXGLMenu
     @Override
     protected void onUpdate(double tpf)
     {
+        // extract hardcoded string
+//        if (type == MenuType.MAIN_MENU && getSettings().isUserProfileEnabled && getSettings().profileName.value == "DEFAULT")
+//            showProfileDialog()
+
         animations.forEach(animation -> animation.onUpdate(tpf));
 
         double frequency = 1.7;
@@ -156,7 +162,7 @@ public abstract class BaseMenu extends FXGLMenu
             oldMenu.setOpacity(1.0);
 
             FadeTransition ft2 = new FadeTransition(Duration.seconds(0.33), menu);
-            ft.setToValue(1.0);
+            ft2.setToValue(1.0);
             ft2.play();
         });
 
@@ -277,7 +283,6 @@ public abstract class BaseMenu extends FXGLMenu
 
     protected MenuBox createOptionsMenu()
     {
-
         MenuButton itemGameplay = new MenuButton("menu.gameplay");
         itemGameplay.setMenuContent(this::createContentGameplay, true);
 
@@ -363,7 +368,7 @@ public abstract class BaseMenu extends FXGLMenu
         hBox.setAlignment(Pos.CENTER);
         hBox.getChildren().add(triggerView);
 
-        int controlsRow = ((int) grid.getUserData());
+        int controlsRow = (int) grid.getUserData();
         grid.addRow(controlsRow++, actionName, hBox);
         grid.setUserData(controlsRow);
     }
@@ -531,12 +536,15 @@ public abstract class BaseMenu extends FXGLMenu
 
     protected class MenuBox extends VBox
     {
-        public double layoutHeight;
-
         public MenuBox(MenuButton... items)
         {
+            super();
             this.add(items);
-            layoutHeight = 10 * this.getChildren().size();
+        }
+
+        public int getLayoutHeight()
+        {
+            return 10 * this.getChildren().size();
         }
 
         public void add(MenuButton... items)
@@ -549,13 +557,13 @@ public abstract class BaseMenu extends FXGLMenu
 
     protected class PressAnyKeyState extends SubScene
     {
-
         protected UserAction actionContext = null;
 
         protected boolean isActive = false;
 
         public PressAnyKeyState()
         {
+            super();
             getInput().addEventFilter(KeyEvent.KEY_PRESSED, e ->
             {
                 if (Input.isIllegal(e.getCode()))

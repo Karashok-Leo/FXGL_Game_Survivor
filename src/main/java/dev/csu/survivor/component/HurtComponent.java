@@ -56,7 +56,7 @@ public class HurtComponent extends Component
                 timer.runOnceAfter(() ->
                 {
                     if (entity.isType(EntityType.PLAYER))
-                        FXGL.getWindowService().pushSubScene(new GameOverMenu());
+                        FXGL.getSceneService().pushSubScene(new GameOverMenu());
                     else entity.removeFromWorld();
                 }, Constants.Common.DEATH_DELAY);
 
