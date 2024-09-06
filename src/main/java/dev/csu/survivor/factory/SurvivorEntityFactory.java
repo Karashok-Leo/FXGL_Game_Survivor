@@ -66,8 +66,8 @@ public class SurvivorEntityFactory implements EntityFactory
         return FXGL.entityBuilder()
                 .type(EntityType.GOLD)
                 .at(data.getX(),data.getY())
-                .view(FXGL.getAssetLoader().loadTexture("gold.jpg"))
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.GOLD_HIT_BOX_RADIUS)))
+                .with(new GoldAnimationComponent())
                 .collidable()
                 .build();
     }

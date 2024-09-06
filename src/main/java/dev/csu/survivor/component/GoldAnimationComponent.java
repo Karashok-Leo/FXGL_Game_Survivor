@@ -7,7 +7,7 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import javafx.util.Duration;
 
-public class CoinAnimationComponent extends Component
+public class GoldAnimationComponent extends Component
 {
     public static final AnimationChannel CHANNEL = new AnimationChannel(
             FXGL.image("coin.png"), 9, 20, 20,
@@ -16,7 +16,7 @@ public class CoinAnimationComponent extends Component
 
     protected final AnimatedTexture texture = new AnimatedTexture(CHANNEL);
 
-    public CoinAnimationComponent()
+    public GoldAnimationComponent()
     {
     }
 

@@ -5,9 +5,6 @@ import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.BoundingShape;
-import com.almasb.fxgl.physics.HitBox;
-import dev.csu.survivor.component.CoinAnimationComponent;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 

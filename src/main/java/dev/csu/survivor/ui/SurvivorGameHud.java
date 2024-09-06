@@ -7,6 +7,7 @@ import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.ui.Position;
 import com.almasb.fxgl.ui.ProgressBar;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
 import javafx.geometry.Insets;
@@ -74,7 +75,12 @@ public class SurvivorGameHud
     {
         GoldView goldView = new GoldView();
         goldView.setTranslateX(14);
-        goldView.bindGolds(FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).getFirst().getComponent(HealthIntComponent.class).valueProperty());
+        goldView.bindGolds(
+                FXGL.getGameWorld()
+                        .getEntitiesByType(EntityType.PLAYER)
+                        .getFirst()
+                        .getComponent(GoldComponent.class).valueProperty()
+        );
         return goldView;
     }
 
