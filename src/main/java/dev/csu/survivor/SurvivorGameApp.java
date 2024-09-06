@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.GameWorld;
+import dev.csu.survivor.factory.MenuFactory;
 import dev.csu.survivor.factory.SurvivorEntityFactory;
 import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
@@ -31,6 +32,7 @@ public class SurvivorGameApp extends GameApplication
         gameSettings.setMainMenuEnabled(Constants.MAIN_MENU_ENABLED);
         gameSettings.setDeveloperMenuEnabled(Constants.DEVELOPER_MENU_ENABLED);
         gameSettings.setApplicationMode(Constants.APP_MODE);
+        gameSettings.setSceneFactory(new MenuFactory());
     }
 
     @Override
