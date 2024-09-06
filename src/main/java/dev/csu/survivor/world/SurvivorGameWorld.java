@@ -16,6 +16,7 @@ public class SurvivorGameWorld
     public SurvivorGameWorld(GameWorld internalWorld)
     {
         this.localTimer = FXGL.newLocalTimer();
+        this.localTimer.capture();
         this.internalWorld = internalWorld;
         this.player = this.internalWorld.spawn("player", Constants.Common.PLAYER_SPAWN_POINT);
     }

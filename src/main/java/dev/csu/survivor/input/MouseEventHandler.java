@@ -1,14 +1,12 @@
 package dev.csu.survivor.input;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
-import com.almasb.fxgl.dsl.components.ProjectileComponent;
+import com.almasb.fxgl.entity.GameWorld;
+import com.almasb.fxgl.entity.SpawnData;
 import dev.csu.survivor.enums.EntityType;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class MouseEventHandler implements EventHandler<MouseEvent>
 {
@@ -19,19 +17,15 @@ public class MouseEventHandler implements EventHandler<MouseEvent>
         {
             case PRIMARY ->
             {
-                Point2D center = FXGL.getGameWorld()
+                GameWorld world = FXGL.getGameWorld();
+                Point2D center = world
                         .getEntitiesByType(EntityType.PLAYER)
                         .getFirst()
                         .getCenter();
-                Point2D subtract = center.subtract(event.getX(), event.getY()).multiply(-1);
-                FXGL.entityBuilder()
-                        .type(EntityType.BULLET)
-                        .at(center)
-                        .viewWithBBox(new Circle(30, Color.RED))
-                        .with(new ProjectileComponent(subtract, 600))
-                        .with(new OffscreenCleanComponent())
-                        .collidable()
-                        .buildAndAttach();
+                SpawnData data = new SpawnData();
+                data.put("position", center);
+                data.put("target", new Point2D(event.getX(), event.getY()));
+                world.spawn("test_bullet", data);
             }
         }
     }
