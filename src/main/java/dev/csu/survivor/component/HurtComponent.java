@@ -1,5 +1,6 @@
 package dev.csu.survivor.component;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
@@ -57,7 +58,10 @@ public class HurtComponent extends Component
                 {
                     if (entity.isType(EntityType.PLAYER))
                         FXGL.getWindowService().pushSubScene(new GameOverMenu());
-                    else entity.removeFromWorld();
+                    else {
+                        FXGL.getGameWorld().spawn("gold", entity.getPosition());
+                        entity.removeFromWorld();
+                    }
                 }, Constants.Common.DEATH_DELAY);
 
             } else timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.Common.HURT_DURATION);

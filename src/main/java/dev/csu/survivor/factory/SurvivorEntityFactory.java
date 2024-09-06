@@ -29,6 +29,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(ComponentFactory.newPlayerAnimationComponent())
                 .with(new HealthIntComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
+                .with(new GoldComponent())
                 .with(new KeepOnScreenComponent())
                 .collidable()
                 .build();
@@ -49,6 +50,18 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new EnemyComponent())
+                .collidable()
+                .build();
+    }
+
+    @Spawns("gold")
+    public Entity newGold(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .type(EntityType.GOLD)
+                .at(data.getX(),data.getY())
+                .view(FXGL.getAssetLoader().loadTexture("gold.jpg"))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.GOLD_HIT_BOX_RADIUS)))
                 .collidable()
                 .build();
     }

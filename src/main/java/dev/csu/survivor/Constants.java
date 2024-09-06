@@ -41,6 +41,10 @@ public interface Constants
         Duration HURT_DURATION = Duration.seconds(0.3);
         Duration DEATH_DURATION = Duration.seconds(1.0);
         Duration DEATH_DELAY = Duration.seconds(1.5);
+
+        double GOLD_HIT_BOX_RADIUS = 12;
+        int INITIAL_GOLDS = 10;
+        int MAX_GOLDS = 999;
     }
 
     interface Client

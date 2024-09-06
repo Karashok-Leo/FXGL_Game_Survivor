@@ -4,6 +4,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import dev.csu.survivor.component.AttackComponent;
+import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.component.HurtComponent;
 import dev.csu.survivor.enums.EntityType;
 
@@ -35,6 +36,19 @@ public class SurvivorPhysicsHandler
                     protected void onCollision(Entity a, Entity b)
                     {
                         b.getComponent(HurtComponent.class).hurt(a);
+                    }
+                }
+        );
+        physicsWorld.addCollisionHandler(
+                new CollisionHandler(
+                        EntityType.GOLD,
+                        EntityType.PLAYER
+                )
+                {
+                    @Override
+                    protected void onCollision(Entity a, Entity b)
+                    {
+                        b.getComponent(GoldComponent.class).collect(a);
                     }
                 }
         );
