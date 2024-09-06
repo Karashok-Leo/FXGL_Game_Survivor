@@ -10,6 +10,9 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 import dev.csu.survivor.enums.Direction;
 import dev.csu.survivor.enums.EntityStates;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Dimension2D;
 import javafx.util.Duration;
 
@@ -22,11 +25,13 @@ import static dev.csu.survivor.util.MathUtil.SQRT2;
 public class AnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
-    protected StateComponent state;
     protected MotionComponent motion;
     protected AnimatedTexture texture;
     protected Dimension2D dimension;
-    protected Direction direction = Direction.DOWN;
+
+    protected ReadOnlyObjectProperty<EntityState> stateProperty;
+    protected SimpleObjectProperty<Direction> directionProperty;
+    protected SimpleObjectProperty<AnimationChannel> channelProperty;
 
     public AnimationComponent(AnimationMap animationMap)
     {
@@ -40,27 +45,29 @@ public class AnimationComponent extends Component
 
     public void setDirection(Direction direction)
     {
-        this.direction = direction;
+        this.directionProperty.set(direction);
     }
 
     public void updateDirection(Vec2 velocity)
     {
         Vec2 normalize = velocity.normalize();
-        if (normalize.x < -SQRT2) direction = Direction.LEFT;
-        else if (normalize.x > SQRT2) direction = Direction.RIGHT;
-        else if (normalize.y < -SQRT2) direction = Direction.UP;
-        else if (normalize.y > SQRT2) direction = Direction.DOWN;
+        if (normalize.x < -SQRT2) setDirection(Direction.LEFT);
+        else if (normalize.x > SQRT2) setDirection(Direction.RIGHT);
+        else if (normalize.y < -SQRT2) setDirection(Direction.UP);
+        else if (normalize.y > SQRT2) setDirection(Direction.DOWN);
     }
 
     @Override
     public void onAdded()
     {
-        this.state = entity.getComponent(StateComponent.class);
+        this.initProperties();
+
         this.motion = entity.getComponent(MotionComponent.class);
-        this.texture = new AnimatedTexture(animationMap.get(state.getCurrentState(), direction));
+        AnimationChannel defaultChannel = this.getCurrentAnimationChannel();
+        this.texture = new AnimatedTexture(defaultChannel);
         this.dimension = new Dimension2D(
-                texture.getAnimationChannel().getFrameWidth(0),
-                texture.getAnimationChannel().getFrameHeight(0)
+                defaultChannel.getFrameWidth(0),
+                defaultChannel.getFrameHeight(0)
         );
         this.entity.getViewComponent().addChild(texture);
 
@@ -77,14 +84,38 @@ public class AnimationComponent extends Component
         this.entity.setScaleY(2);
     }
 
-    @Override
-    public void onUpdate(double tpf)
+    protected void initProperties()
     {
-        AnimationChannel channel = animationMap.get(state.getCurrentState(), direction);
-        if (state.isIn(EntityStates.DEATH))
+        this.stateProperty = entity.getComponent(StateComponent.class).currentStateProperty();
+        this.directionProperty = new SimpleObjectProperty<>(Direction.DOWN);
+        this.channelProperty = new SimpleObjectProperty<>();
+
+        this.channelProperty.bind(
+                Bindings.createObjectBinding(
+                        () -> animationMap.get(stateProperty.get(), directionProperty.get()),
+                        stateProperty, directionProperty
+                )
+        );
+
+        this.channelProperty.addListener((observableValue, oldState, newState) -> updateAnimation());
+    }
+
+    protected void updateAnimation()
+    {
+        AnimationChannel channel = this.getCurrentAnimationChannel();
+        if (stateProperty.get() == EntityStates.DEATH) playAnimation(channel);
+        else loopAnimation(channel);
+    }
+
+    private AnimationChannel getCurrentAnimationChannel()
+    {
+        return this.channelProperty.get();
+    }
+
+    protected void playAnimation(AnimationChannel channel)
+    {
+        if (texture.getAnimationChannel() != channel)
             texture.playAnimationChannel(channel);
-        else
-            loopAnimation(channel);
     }
 
     protected void loopAnimation(AnimationChannel channel)

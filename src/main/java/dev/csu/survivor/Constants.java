@@ -40,7 +40,7 @@ public interface Constants
         Duration HURT_DELAY = Duration.seconds(0.2);
         Duration HURT_DURATION = Duration.seconds(0.3);
         Duration DEATH_DURATION = Duration.seconds(1.0);
-        Duration DEATH_DELAY = Duration.seconds(2.0);
+        Duration DEATH_DELAY = Duration.seconds(1.5);
     }
 
     interface Client

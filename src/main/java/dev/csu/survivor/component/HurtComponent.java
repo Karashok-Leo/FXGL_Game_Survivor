@@ -41,7 +41,8 @@ public class HurtComponent extends Component
     public void hurt(Entity attacker)
     {
         // Add cooldown for hurt
-        if (hurtCooldown.elapsed(Constants.Common.HURT_DURATION))
+        if (hurtCooldown.elapsed(Constants.Common.HURT_DURATION) &&
+                !health.isZero())
         {
             hurtCooldown.capture();
 
