@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.scene.MenuType;
 
 public class MainMenu extends BaseMenu
 {
+
     public MainMenu()
     {
         super(MenuType.MAIN_MENU);
@@ -12,13 +13,23 @@ public class MainMenu extends BaseMenu
     @Override
     protected void initMenuBox(MenuBox menuBox)
     {
-        MenuButton itemOnline = new MenuButton("menu.online");
-        itemOnline.setOnAction(e ->
-        {
-            System.out.println("online");
-        });
-        menuBox.add(itemOnline);
+        MenuButton itemNewGame = new MenuButton("menu.newGame");
+        itemNewGame.setOnAction(e -> fireNewGame());
 
-        super.initMenuBox(menuBox);
+        MenuButton itemExit = new MenuButton("menu.exit");
+        itemExit.setOnAction(e -> fireExit());
+
+        MenuButton itemOptions = new MenuButton("menu.options");
+        itemOptions.setOnAction(e -> System.out.println("online"));
+
+        MenuButton itemOnline = new MenuButton("menu.online");
+        itemOnline.setOnAction(e -> System.out.println("online"));
+
+        menuBox.add(itemNewGame);
+        menuBox.add(itemOptions);
+        menuBox.add(itemOnline);
+        menuBox.add(itemExit);
+
+        itemOptions.setChild(createOptionsMenu());
     }
 }

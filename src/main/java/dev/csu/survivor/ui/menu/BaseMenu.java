@@ -7,30 +7,40 @@ import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.InputModifier;
+import com.almasb.fxgl.input.Trigger;
+import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.input.view.TriggerView;
+import com.almasb.fxgl.localization.Language;
 import com.almasb.fxgl.particle.ParticleEmitter;
 import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.particle.ParticleSystem;
+import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.ui.FXGLScrollPane;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,7 +49,7 @@ import java.util.function.Supplier;
 /**
  * Copy from FXGLDefaultMenu
  */
-public class BaseMenu extends FXGLMenu
+public abstract class BaseMenu extends FXGLMenu
 {
     protected final ParticleSystem particleSystem = new ParticleSystem();
     protected final SimpleObjectProperty<Color> titleColor = new SimpleObjectProperty<>(Color.WHITE);
@@ -47,6 +57,7 @@ public class BaseMenu extends FXGLMenu
     protected final Pane menuRoot = new Pane();
     protected final Pane menuContentRoot = new Pane();
     protected final FXGLDefaultMenu.MenuContent EMPTY = new FXGLDefaultMenu.MenuContent();
+    protected final PressAnyKeyState pressAnyKeyState = new PressAnyKeyState();
     protected final MenuBox menu;
 
     public BaseMenu(@NotNull MenuType type)
@@ -180,11 +191,7 @@ public class BaseMenu extends FXGLMenu
     /**
      * Core method
      */
-    protected void initMenuBox(MenuBox menuBox)
-    {
-        menuBox.add(createResumeButton());
-        menuBox.add(createExitButton());
-    }
+    protected abstract void initMenuBox(MenuBox menuBox);
 
     protected MenuBox createMenuBodyGameMenu()
     {
@@ -266,6 +273,173 @@ public class BaseMenu extends FXGLMenu
             particleSystem.addParticleEmitter(emitter, getAppWidth() / 2.0 - 30, titleRoot.getTranslateY() + border.getHeight() - 16);
 
         return titleRoot;
+    }
+
+    protected MenuBox createOptionsMenu()
+    {
+
+        MenuButton itemGameplay = new MenuButton("menu.gameplay");
+        itemGameplay.setMenuContent(this::createContentGameplay, true);
+
+        MenuButton itemControls = new MenuButton("menu.controls");
+        itemControls.setMenuContent(this::createContentControls, true);
+
+        MenuButton itemVideo = new MenuButton("menu.video");
+        itemVideo.setMenuContent(this::createContentVideo, true);
+
+        MenuButton itemAudio = new MenuButton("menu.audio");
+        itemAudio.setMenuContent(this::createContentAudio, true);
+
+        MenuButton btnRestore = new MenuButton("menu.restore");
+        btnRestore.setOnAction(e ->
+                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes ->
+                {
+                    if (yes)
+                    {
+                        switchMenuContentTo(EMPTY);
+                        restoreDefaultSettings();
+                    }
+                })
+        );
+
+        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, btnRestore);
+    }
+
+    /**
+     * @return menu content with difficulty and playtime
+     */
+    protected FXGLDefaultMenu.MenuContent createContentGameplay()
+    {
+        return new FXGLDefaultMenu.MenuContent();
+    }
+
+    /**
+     * @return menu content containing input mappings (action -> key/mouse)
+     */
+    protected FXGLDefaultMenu.MenuContent createContentControls()
+    {
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10.0);
+        grid.setVgap(10.0);
+        grid.setPadding(new Insets(10.0, 10.0, 10.0, 10.0));
+        grid.getColumnConstraints().add(new ColumnConstraints(200.0, 200.0, 200.0, Priority.ALWAYS, HPos.LEFT, true));
+        grid.getRowConstraints().add(new RowConstraints(40.0, 40.0, 40.0, Priority.ALWAYS, VPos.CENTER, true));
+
+        // row 0
+        grid.setUserData(0);
+
+        getInput().getAllBindings().forEach((action, trigger) -> addNewInputBinding(action, trigger, grid));
+
+        FXGLScrollPane scroll = new FXGLScrollPane(grid);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scroll.setMaxHeight(getAppHeight() / 2.5);
+
+        HBox hbox = new HBox(scroll);
+        hbox.setAlignment(Pos.CENTER);
+
+        return new FXGLDefaultMenu.MenuContent(hbox);
+    }
+
+
+    protected void addNewInputBinding(UserAction action, Trigger trigger, GridPane grid)
+    {
+        Text actionName = FXGL.getUIFactoryService().newText(action.getName(), Color.WHITE, 18.0);
+
+        TriggerView triggerView = new TriggerView(trigger);
+        triggerView.triggerProperty().bind(getInput().triggerProperty(action));
+
+        triggerView.setOnMouseClicked(event ->
+        {
+            if (pressAnyKeyState.isActive) return;
+
+            pressAnyKeyState.isActive = true;
+            pressAnyKeyState.actionContext = action;
+            FXGL.getSceneService().pushSubScene(pressAnyKeyState);
+        });
+
+        HBox hBox = new HBox();
+        hBox.setPrefWidth(100.0);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.getChildren().add(triggerView);
+
+        int controlsRow = ((int) grid.getUserData());
+        grid.addRow(controlsRow++, actionName, hBox);
+        grid.setUserData(controlsRow);
+    }
+
+    /**
+     * https://github.com/AlmasB/FXGL/issues/493
+     *
+     * @return menu content with video settings
+     */
+    protected FXGLDefaultMenu.MenuContent createContentVideo()
+    {
+        var languageBox = FXGL.getUIFactoryService().newChoiceBox(FXCollections.observableArrayList(FXGL.getSettings().getSupportedLanguages()));
+        languageBox.setValue(FXGL.getSettings().getLanguage().getValue());
+        languageBox.setConverter(new StringConverter<Language>()
+        {
+
+            @Override
+            public String toString(Language language)
+            {
+                return language.getNativeName();
+            }
+
+            @Override
+            public Language fromString(String s)
+            {
+                return FXGL.getSettings().getSupportedLanguages().stream().filter(language -> language.getNativeName().equals(s)).findFirst().orElse(Language.NONE);
+            }
+        });
+
+        FXGL.getSettings().getLanguage().bindBidirectional(languageBox.valueProperty());
+
+        VBox vbox = new VBox();
+
+        if (FXGL.getSettings().isFullScreenAllowed())
+        {
+            var cbFullScreen = FXGL.getUIFactoryService().newCheckBox();
+            cbFullScreen.selectedProperty().bindBidirectional(FXGL.getSettings().getFullScreen());
+
+            vbox.getChildren().add(new HBox(25.0, FXGL.getUIFactoryService().newText(FXGL.localize("menu.fullscreen") + ": "), cbFullScreen));
+        }
+
+        return new FXGLDefaultMenu.MenuContent(
+                new HBox(25.0, FXGL.getUIFactoryService().newText(FXGL.localizedStringProperty("menu.language").concat(":")), languageBox),
+                vbox
+        );
+    }
+
+    /**
+     * @return menu content containing music and sound volume sliders
+     */
+    protected FXGLDefaultMenu.MenuContent createContentAudio()
+    {
+        Slider sliderMusic = FXGL.getUIFactoryService().newSlider();
+        sliderMusic.setMin(0.0);
+        sliderMusic.setMax(1.0);
+        sliderMusic.valueProperty().bindBidirectional(FXGL.getSettings().globalMusicVolumeProperty());
+
+        Text textMusic = FXGL.getUIFactoryService().newText(FXGL.localizedStringProperty("menu.music.volume").concat(": "));
+        Text percentMusic = FXGL.getUIFactoryService().newText("");
+        percentMusic.textProperty().bind(sliderMusic.valueProperty().multiply(100).asString("%.0f"));
+
+        Slider sliderSound = FXGL.getUIFactoryService().newSlider();
+        sliderSound.setMin(0.0);
+        sliderSound.setMax(1.0);
+        sliderSound.valueProperty().bindBidirectional(FXGL.getSettings().globalSoundVolumeProperty());
+
+        Text textSound = FXGL.getUIFactoryService().newText(FXGL.localizedStringProperty("menu.sound.volume").concat(": "));
+        Text percentSound = FXGL.getUIFactoryService().newText("");
+        percentSound.textProperty().bind(sliderSound.valueProperty().multiply(100).asString("%.0f"));
+
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(15.0);
+        gridPane.addRow(0, textMusic, sliderMusic, percentMusic);
+        gridPane.addRow(1, textSound, sliderSound, percentSound);
+
+        return new FXGLDefaultMenu.MenuContent(gridPane);
     }
 
     protected class MenuButton extends Pane
@@ -370,6 +544,58 @@ public class BaseMenu extends FXGLMenu
             for (MenuButton item : items)
                 item.setParent(this);
             this.getChildren().addAll(items);
+        }
+    }
+
+    protected class PressAnyKeyState extends SubScene
+    {
+
+        protected UserAction actionContext = null;
+
+        protected boolean isActive = false;
+
+        public PressAnyKeyState()
+        {
+            getInput().addEventFilter(KeyEvent.KEY_PRESSED, e ->
+            {
+                if (Input.isIllegal(e.getCode()))
+                    return;
+
+                boolean rebound = getInput().rebind(actionContext, e.getCode(), InputModifier.from(e));
+
+                if (rebound)
+                {
+                    FXGL.getSceneService().popSubScene();
+                    isActive = false;
+                }
+            });
+
+            getInput().addEventFilter(MouseEvent.MOUSE_PRESSED,
+                    e ->
+                    {
+                        boolean rebound = getInput().rebind(actionContext, e.getButton(), InputModifier.from(e));
+
+                        if (rebound)
+                        {
+                            FXGL.getSceneService().popSubScene();
+                            isActive = false;
+                        }
+                    });
+
+            Rectangle rect = new Rectangle(250.0, 100.0);
+            rect.setStroke(Color.color(0.85, 0.9, 0.9, 0.95));
+            rect.setStrokeWidth(10.0);
+            rect.setArcWidth(15.0);
+            rect.setArcHeight(15.0);
+
+            Text text = FXGL.getUIFactoryService().newText("", 24.0);
+            text.textProperty().bind(FXGL.localizedStringProperty("menu.pressAnyKey"));
+
+            StackPane pane = new StackPane(rect, text);
+            pane.setTranslateX(getAppWidth() / 2.0 - 125);
+            pane.setTranslateY(getAppHeight() / 2.0 - 50);
+
+            getContentRoot().getChildren().add(pane);
         }
     }
 }
