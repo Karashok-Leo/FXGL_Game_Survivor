@@ -47,7 +47,9 @@ public interface Constants
     {
         int PLAYER_HEALTH_BAR_WIDTH = 300;
         int PLAYER_HEALTH_BAR_HEIGHT = 30;
-        int PLAYER_HEALTH_BAR_OFFSET = 20;
+        int HUD_PADDING = 16;
+        int HUD_SPACING = 14;
+        int HUD_FONT = 30;
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
     }

@@ -9,7 +9,14 @@ import com.almasb.fxgl.ui.ProgressBar;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+import java.lang.reflect.Field;
 
 public class SurvivorGameHud
 {
@@ -19,7 +26,15 @@ public class SurvivorGameHud
     {
         gameOver = new GameOverMenu();
         // Add to the scene graph
-        scene.addUINode(createHealthBar());
+        ProgressBar healthBar = createHealthBar();
+        GoldView goldView = createGoldView();
+        VBox box = new VBox(healthBar, goldView);
+        box.setPadding(new Insets(Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING));
+        box.setSpacing(Constants.Client.HUD_SPACING);
+        box.setAlignment(Pos.TOP_LEFT);
+        // Add goldView as update listener to the scene
+        scene.addListener(goldView);
+        scene.addUINode(box);
     }
 
     private ProgressBar createHealthBar()
@@ -27,12 +42,12 @@ public class SurvivorGameHud
         ProgressBar healthBar = new ProgressBar();
         healthBar.setWidth(Constants.Client.PLAYER_HEALTH_BAR_WIDTH);
         healthBar.setHeight(Constants.Client.PLAYER_HEALTH_BAR_HEIGHT);
-        healthBar.setLayoutX(Constants.Client.PLAYER_HEALTH_BAR_OFFSET);
-        healthBar.setLayoutY(Constants.Client.PLAYER_HEALTH_BAR_OFFSET);
+        healthBar.setTranslateX(-10);
         healthBar.setLabelVisible(true);
         healthBar.setLabelPosition(Position.RIGHT);
-        healthBar.setLabelFill(Color.GREEN);
-        healthBar.setFill(Color.GREEN);
+        healthBar.setFill(Color.GREEN.brighter());
+        healthBar.setTraceFill(Color.WHITE.brighter());
+        healthBar.setLabelFill(Color.GREEN.brighter());
 
         HealthIntComponent hp = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).getFirst().getComponent(HealthIntComponent.class);
 
@@ -41,7 +56,26 @@ public class SurvivorGameHud
         healthBar.currentValueProperty().bind(hp.valueProperty());
         healthBar.setMinValue(0);
 
+        try
+        {
+            Field field = ProgressBar.class.getDeclaredField("label");
+            field.setAccessible(true);
+            Label label = (Label) field.get(healthBar);
+            label.setFont(Font.font(Constants.Client.HUD_FONT));
+        } catch (Exception e)
+        {
+            throw new AssertionError(e);
+        }
+
         return healthBar;
+    }
+
+    private GoldView createGoldView()
+    {
+        GoldView goldView = new GoldView();
+        goldView.setTranslateX(14);
+        goldView.bindGolds(FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).getFirst().getComponent(HealthIntComponent.class).valueProperty());
+        return goldView;
     }
 
     public void switchToGameOverScene()
