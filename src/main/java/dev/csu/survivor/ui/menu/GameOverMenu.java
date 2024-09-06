@@ -10,6 +10,12 @@ public class GameOverMenu extends BaseMenu
     }
 
     @Override
+    protected String getTitle()
+    {
+        return "Game Over";
+    }
+
+    @Override
     protected void initMenuBox(MenuBox menuBox)
     {
         menuBox.add(createRestartButton());

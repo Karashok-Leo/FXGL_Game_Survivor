@@ -13,7 +13,6 @@ import dev.csu.survivor.enums.EntityStates;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Dimension2D;
 import javafx.util.Duration;
 
 import java.util.EnumMap;
@@ -27,7 +26,6 @@ public class AnimationComponent extends Component
     protected final AnimationMap animationMap;
     protected MotionComponent motion;
     protected AnimatedTexture texture;
-    protected Dimension2D dimension;
 
     protected ReadOnlyObjectProperty<EntityState> stateProperty;
     protected SimpleObjectProperty<Direction> directionProperty;
@@ -36,11 +34,6 @@ public class AnimationComponent extends Component
     public AnimationComponent(AnimationMap animationMap)
     {
         this.animationMap = animationMap;
-    }
-
-    public Dimension2D getDimension()
-    {
-        return this.dimension;
     }
 
     public void setDirection(Direction direction)
@@ -65,21 +58,17 @@ public class AnimationComponent extends Component
         this.motion = entity.getComponent(MotionComponent.class);
         AnimationChannel defaultChannel = this.getCurrentAnimationChannel();
         this.texture = new AnimatedTexture(defaultChannel);
-        this.dimension = new Dimension2D(
-                defaultChannel.getFrameWidth(0),
-                defaultChannel.getFrameHeight(0)
-        );
+
         this.entity.getViewComponent().addChild(texture);
 
         BoundingBoxComponent bbox = this.entity.getBoundingBoxComponent();
-        this.texture.setTranslateX((bbox.getWidth() - dimension.getWidth()) / 2.0);
-        this.texture.setTranslateY((bbox.getHeight() - dimension.getHeight()) / 2.0);
+        this.texture.setTranslateX((bbox.getWidth() - defaultChannel.getFrameWidth(0)) / 2.0);
+        this.texture.setTranslateY((bbox.getHeight() - defaultChannel.getFrameHeight(0)) / 2.0);
 
         // Bind zIndex to yPos
         this.entity.getViewComponent().zIndexProperty().bind(entity.yProperty());
 
         this.texture.loop();
-        // TODO: dimension scaling
         this.entity.setScaleX(2);
         this.entity.setScaleY(2);
     }
