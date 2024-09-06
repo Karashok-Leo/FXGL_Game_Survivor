@@ -41,6 +41,23 @@ public class SurvivorEntityFactory implements EntityFactory
                 .build();
     }
 
+    @Spawns("land")
+    public Entity newLand(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .with(new RandomLandComponent())
+                .build();
+    }
+
+    @Spawns("bush")
+    public Entity newBush(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .at(data.getX(), data.getY())
+                .with(new RandomBushComponent())
+                .build();
+    }
+
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data)
     {

@@ -28,12 +28,5 @@ public class ShootBulletAction extends UserAction
         data.put("position", center);
         data.put("target", new Point2D(input.getMouseXWorld(), input.getMouseYWorld()));
         world.spawn("test_bullet", data);
-
-        // use for coin anim testing
-//        FXGL.entityBuilder()
-//                .at(input.getMouseXWorld(), input.getMouseYWorld())
-//                .bbox(new HitBox(BoundingShape.box(7, 7)))
-//                .with(new CoinAnimationComponent())
-//                .buildAndAttach();
     }
 }
