@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -29,16 +30,21 @@ public class RandomLandComponent extends Component
     {
         ViewComponent viewComponent = this.entity.getViewComponent();
         viewComponent.setZIndex(-99);
+        // create empty grass land
         viewComponent.addChild(createEmptyGrass());
-        for (int x = 0; x < Constants.GAME_SCENE_WIDTH; x += 48)
-            for (int y = 0; y < Constants.GAME_SCENE_HEIGHT; y += 48)
-                if (FXGLMath.randomBoolean(0.4))
-                    viewComponent.addChild(createRandomFeature(x, y));
+        // create random features (flower...)
+        for (int i = 0; i < Constants.Common.RANDOM_FEATURE_COUNTS; i++)
+            viewComponent.addChild(createRandomFeature(FXGLMath.randomPoint(Constants.GAME_SCENE_RECT)));
     }
 
     public Rectangle createEmptyGrass()
     {
         return new Rectangle(Constants.GAME_SCENE_WIDTH, Constants.GAME_SCENE_HEIGHT, Color.rgb(129, 186, 68));
+    }
+
+    public Texture createRandomFeature(Point2D point)
+    {
+        return createRandomFeature(point.getX(), point.getY());
     }
 
     public Texture createRandomFeature(double x, double y)

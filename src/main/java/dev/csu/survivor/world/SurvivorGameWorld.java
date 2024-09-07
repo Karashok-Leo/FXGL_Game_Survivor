@@ -22,8 +22,9 @@ public class SurvivorGameWorld
         this.player = this.internalWorld.spawn("player", Constants.Common.PLAYER_SPAWN_POINT);
         this.land = this.internalWorld.spawn("land");
 
-        for (int i = 0; i < 32; i++)
-            internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+        // create random bushes
+        for (int i = 0; i < Constants.Common.RANDOM_BUSH_COUNTS; i++)
+            this.internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
     }
 
     public void tick()

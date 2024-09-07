@@ -31,7 +31,7 @@ public class AttackComponent extends Component
 
     public void attack(Entity target)
     {
-        if (state.isIn(EntityStates.ATTACK)) return;
+        if (state.isIn(EntityStates.ATTACK, EntityStates.DEATH)) return;
 
         state.changeState(EntityStates.ATTACK);
 

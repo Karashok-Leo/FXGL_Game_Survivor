@@ -45,6 +45,9 @@ public interface Constants
         double GOLD_HIT_BOX_RADIUS = 12;
         int INITIAL_GOLDS = 10;
         int MAX_GOLDS = 999;
+
+        int RANDOM_FEATURE_COUNTS = 96;
+        int RANDOM_BUSH_COUNTS = 32;
     }
 
     interface Client
@@ -53,7 +56,7 @@ public interface Constants
         int PLAYER_HEALTH_BAR_HEIGHT = 30;
         int HUD_PADDING = 16;
         int HUD_SPACING = 14;
-        int HUD_FONT = 30;
+        int HUD_FONT = 24;
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
     }

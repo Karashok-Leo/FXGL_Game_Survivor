@@ -4,31 +4,37 @@ import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.scene.SubScene;
+import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.Position;
-import com.almasb.fxgl.ui.ProgressBar;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-
-import java.lang.reflect.Field;
+import javafx.util.Duration;
 
 public class SurvivorGameHud
 {
+    public static SurvivorGameHud INSTANCE;
+
+    private GameScene gameScene;
     private SubScene gameOver;
+    private GoldView goldView;
 
     public void init(GameScene scene)
     {
-        gameOver = new GameOverMenu();
+        INSTANCE = this;
+        this.gameScene = scene;
+        this.gameOver = new GameOverMenu();
         // Add to the scene graph
-        ProgressBar healthBar = createHealthBar();
-        GoldView goldView = createGoldView();
+        SurvivorProgressBar healthBar = createHealthBar();
+        this.goldView = createGoldView();
         VBox box = new VBox(healthBar, goldView);
         box.setPadding(new Insets(Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING));
         box.setSpacing(Constants.Client.HUD_SPACING);
@@ -38,17 +44,17 @@ public class SurvivorGameHud
         scene.addUINode(box);
     }
 
-    private ProgressBar createHealthBar()
+    private SurvivorProgressBar createHealthBar()
     {
-        ProgressBar healthBar = new ProgressBar();
+        SurvivorProgressBar healthBar = new SurvivorProgressBar();
         healthBar.setWidth(Constants.Client.PLAYER_HEALTH_BAR_WIDTH);
         healthBar.setHeight(Constants.Client.PLAYER_HEALTH_BAR_HEIGHT);
         healthBar.setTranslateX(-10);
         healthBar.setLabelVisible(true);
         healthBar.setLabelPosition(Position.RIGHT);
         healthBar.setFill(Color.GREEN.brighter());
-        healthBar.setTraceFill(Color.WHITE.brighter());
-        healthBar.setLabelFill(Color.GREEN.brighter());
+        healthBar.setTraceFill(inc -> inc ? Color.GREEN : Color.RED);
+        healthBar.setLabelFill(Color.BLACK);
 
         HealthIntComponent hp = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).getFirst().getComponent(HealthIntComponent.class);
 
@@ -57,16 +63,14 @@ public class SurvivorGameHud
         healthBar.currentValueProperty().bind(hp.valueProperty());
         healthBar.setMinValue(0);
 
-        try
-        {
-            Field field = ProgressBar.class.getDeclaredField("label");
-            field.setAccessible(true);
-            Label label = (Label) field.get(healthBar);
-            label.setFont(Font.font(Constants.Client.HUD_FONT));
-        } catch (Exception e)
-        {
-            throw new AssertionError(e);
-        }
+        Label label = healthBar.getLabel();
+        label.setFont(Font.font(Constants.Client.HUD_FONT));
+        label.setStyle("""
+                -fx-background-color: rgba(255, 255, 255, 0.4);
+                -fx-background-radius: 10;
+                -fx-border-radius: 10;
+                -fx-padding: 2, 6;
+                """);
 
         return healthBar;
     }
@@ -82,6 +86,17 @@ public class SurvivorGameHud
                         .getComponent(GoldComponent.class).valueProperty()
         );
         return goldView;
+    }
+
+    public void createGoldCollectingAnimation(AnimatedTexture texture, double x, double y)
+    {
+        gameScene.addChild(texture);
+
+        TranslateTransition tt = new TranslateTransition(Duration.seconds(1.0), texture);
+        tt.setToX(goldView.getLayoutX() - x);
+        tt.setToY(goldView.getLayoutY() - y);
+        tt.setOnFinished(event -> gameScene.removeChild(texture));
+        tt.play();
     }
 
     public void switchToGameOverScene()
