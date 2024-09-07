@@ -8,11 +8,13 @@ import com.almasb.fxgl.entity.state.EntityState;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
+import com.almasb.fxgl.texture.FrameData;
 import dev.csu.survivor.enums.Direction;
 import dev.csu.survivor.enums.EntityStates;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Dimension2D;
 import javafx.util.Duration;
 
 import java.util.EnumMap;
@@ -99,6 +101,12 @@ public class AnimationComponent extends Component
     private AnimationChannel getCurrentAnimationChannel()
     {
         return this.channelProperty.get();
+    }
+
+    public Dimension2D getDimension()
+    {
+        FrameData frameData = getCurrentAnimationChannel().getFrameData(0);
+        return new Dimension2D(frameData.getWidth(), frameData.getHeight());
     }
 
     protected void playAnimation(AnimationChannel channel)

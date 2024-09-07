@@ -49,6 +49,9 @@ public interface Constants
         int HEALTH_CRYSTAL_VALUE = 5;
         int HEALING_MEDICINE_VALUE = 5;
         double ACCELERATE_CRYSTAL_DEGREE = 1.2;
+
+        int RANDOM_FEATURE_COUNTS = 96;
+        int RANDOM_BUSH_COUNTS = 32;
     }
 
     interface Client
@@ -57,7 +60,7 @@ public interface Constants
         int PLAYER_HEALTH_BAR_HEIGHT = 30;
         int HUD_PADDING = 16;
         int HUD_SPACING = 14;
-        int HUD_FONT = 30;
+        int HUD_FONT = 24;
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
     }

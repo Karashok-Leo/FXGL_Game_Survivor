@@ -42,6 +42,23 @@ public class SurvivorEntityFactory implements EntityFactory
                 .build();
     }
 
+    @Spawns("land")
+    public Entity newLand(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .with(new RandomLandComponent())
+                .build();
+    }
+
+    @Spawns("bush")
+    public Entity newBush(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .at(data.getX(), data.getY())
+                .with(new RandomBushComponent())
+                .build();
+    }
+
     @Spawns("enemy")
     public Entity newEnemy(SpawnData data)
     {
@@ -53,7 +70,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(ComponentFactory.newRandomMotionComponent(Constants.Common.ENEMY_MIN_SPEED, Constants.Common.ENEMY_MAX_SPEED))
                 .with(ComponentFactory.newEnemyAnimationComponent())
                 .with(new HealthIntComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
-                .with(new HealthBarComponent(-36, -64, Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new EnemyComponent())
@@ -66,7 +83,7 @@ public class SurvivorEntityFactory implements EntityFactory
     {
         return FXGL.entityBuilder()
                 .type(EntityType.GOLD)
-                .at(data.getX(),data.getY())
+                .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.GOLD_HIT_BOX_RADIUS)))
                 .with(new GoldAnimationComponent())
                 .collidable()

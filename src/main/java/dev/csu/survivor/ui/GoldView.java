@@ -1,6 +1,7 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.core.Updatable;
+import com.almasb.fxgl.core.UpdatableRunner;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.GoldAnimationComponent;
@@ -11,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class GoldView extends Parent implements Updatable
+public class GoldView extends Parent implements Updatable, UpdatableRunner
 {
     protected final AnimatedTexture texture = new AnimatedTexture(GoldAnimationComponent.CHANNEL);
     protected final Label label;
@@ -23,11 +24,22 @@ public class GoldView extends Parent implements Updatable
         this.texture.loop();
 
         this.label = new Label();
+        this.label.setStyle("""
+                -fx-background-color: rgba(255, 255, 255, 0.4);
+                -fx-background-radius: 10;
+                -fx-border-radius: 10;
+                -fx-padding: 2, 6;
+                """);
         this.label.setFont(Font.font(Constants.Client.HUD_FONT));
-        this.label.setTextFill(Color.GOLD);
+        this.label.setTextFill(Color.BLACK);
         this.label.translateXProperty().bind(texture.fitWidthProperty().add(16));
         this.label.translateYProperty().bind(texture.fitHeightProperty().divide(2).subtract(label.heightProperty().divide(2)));
         this.getChildren().addAll(texture, label);
+    }
+
+    public Label getLabel()
+    {
+        return label;
     }
 
     public void bindGolds(ObservableValue<?> golds)
@@ -39,5 +51,17 @@ public class GoldView extends Parent implements Updatable
     public void onUpdate(double tpf)
     {
         this.texture.onUpdate(tpf);
+    }
+
+    @Override
+    public void addListener(Updatable updatable)
+    {
+
+    }
+
+    @Override
+    public void removeListener(Updatable updatable)
+    {
+
     }
 }
