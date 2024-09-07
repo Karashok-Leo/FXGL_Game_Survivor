@@ -36,6 +36,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new HealthIntComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
                 .with(new GoldComponent())
+                .with(new InventoryComponent())
                 .with(new KeepOnScreenComponent())
                 .collidable()
                 .build();

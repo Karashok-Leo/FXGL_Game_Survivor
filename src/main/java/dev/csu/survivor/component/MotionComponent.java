@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 
 public class MotionComponent extends Component
 {
-    protected final double speed;
+    protected double speed;
     protected final Vec2 velocity = new Vec2();
     protected StateComponent state;
 
@@ -63,5 +63,13 @@ public class MotionComponent extends Component
     protected boolean isUnmoving()
     {
         return velocity.isNearlyEqualTo(Point2D.ZERO);
+    }
+
+    public double getSpeed(){
+        return speed;
+    }
+
+    public void setSpeed(double speed){
+        this.speed = speed;
     }
 }

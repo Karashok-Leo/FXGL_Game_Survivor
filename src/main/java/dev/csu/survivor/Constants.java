@@ -45,6 +45,10 @@ public interface Constants
         double GOLD_HIT_BOX_RADIUS = 12;
         int INITIAL_GOLDS = 10;
         int MAX_GOLDS = 999;
+
+        int HEALTH_CRYSTAL_VALUE = 5;
+        int HEALING_MEDICINE_VALUE = 5;
+        double ACCELERATE_CRYSTAL_DEGREE = 1.2;
     }
 
     interface Client
