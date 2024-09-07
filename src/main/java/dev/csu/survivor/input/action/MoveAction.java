@@ -5,6 +5,7 @@ import com.almasb.fxgl.input.UserAction;
 import dev.csu.survivor.component.MotionComponent;
 import dev.csu.survivor.enums.Direction;
 import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.util.StringUtil;
 
 public class MoveAction extends UserAction
 {
@@ -12,7 +13,7 @@ public class MoveAction extends UserAction
 
     public MoveAction(Direction direction)
     {
-        super(direction.name);
+        super(StringUtil.uppercaseFirstLetter(direction.name));
         this.direction = direction;
     }
 

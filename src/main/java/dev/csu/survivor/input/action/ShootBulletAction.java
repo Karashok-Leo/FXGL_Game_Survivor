@@ -12,7 +12,7 @@ public class ShootBulletAction extends UserAction
 {
     public ShootBulletAction()
     {
-        super("SHOOT");
+        super("Shoot Bullet");
     }
 
     @Override

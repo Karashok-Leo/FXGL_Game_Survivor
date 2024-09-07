@@ -1,8 +1,7 @@
 package dev.csu.survivor.enums;
 
 import com.almasb.fxgl.core.math.Vec2;
-
-import java.util.Locale;
+import dev.csu.survivor.util.StringUtil;
 
 public enum Direction
 {
@@ -17,6 +16,6 @@ public enum Direction
     Direction(Vec2 vector)
     {
         this.vector = vector;
-        this.name = name().toLowerCase(Locale.ROOT);
+        this.name = StringUtil.lowercase(this.name());
     }
 }

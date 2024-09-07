@@ -1,5 +1,6 @@
 package dev.csu.survivor.component;
 
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
@@ -21,8 +22,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import static dev.csu.survivor.util.MathUtil.SQRT2;
-
 public class AnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
@@ -43,6 +42,7 @@ public class AnimationComponent extends Component
         this.directionProperty.set(direction);
     }
 
+    protected static final double SQRT2 = FXGLMath.sqrt(2) / 2;
     public void updateDirection(Vec2 velocity)
     {
         Vec2 normalize = velocity.normalize();

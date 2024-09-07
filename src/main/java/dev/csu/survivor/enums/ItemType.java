@@ -5,22 +5,30 @@ import dev.csu.survivor.item.AccelerateCrystal;
 import dev.csu.survivor.item.HealingMedicine;
 import dev.csu.survivor.item.HealthCrystal;
 import dev.csu.survivor.item.Item;
+import dev.csu.survivor.util.StringUtil;
 
-import java.util.Locale;
+import java.util.function.Supplier;
 
 public enum ItemType
 {
-    HEALTH_CRYSTAL(new HealthCrystal(Constants.Common.HEALTH_CRYSTAL_VALUE), 3, true),
-    ACCELERATE_CRYSTAL(new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
-    HEALING_MEDICINE(new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
+    HEALTH_CRYSTAL(() -> new HealthCrystal(Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
+    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
+    HEALING_MEDICINE(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
 
     /**
-     * The identifier of the item.
+     * The identifier of the item, default to be lowercase of the enum name.
      * The texture of the item will be located at "assets/textures/item/{id}.png"
      */
     public final String id;
 
-    public final Item item;
+    public interface ItemFactory extends Supplier<Item>
+    {
+    }
+
+    /**
+     * Used to create a new item every time the shop refreshes
+     */
+    public final ItemFactory itemFactory;
 
     /**
      * The higher the rarity, the less likely it is to be sold in the shop
@@ -32,20 +40,28 @@ public enum ItemType
      */
     public final boolean stackable;
 
-    ItemType(Item item)
+    ItemType(ItemFactory itemFactory)
     {
-        this(item, 0);
+        this(itemFactory, 0);
     }
 
-    ItemType(Item item, int rarity)
+    ItemType(ItemFactory itemFactory, int rarity)
     {
-        this(item, rarity, true);
+        this(itemFactory, rarity, true);
     }
 
-    ItemType(Item item, int rarity, boolean stackable)
+    ItemType(ItemFactory itemFactory, int rarity, boolean stackable)
     {
-        this.id = this.name().toLowerCase(Locale.ROOT);
-        this.item = item;
+        this.id = StringUtil.lowercase(this.name());
+        this.itemFactory = itemFactory;
+        this.rarity = rarity;
+        this.stackable = stackable;
+    }
+
+    ItemType(String id, ItemFactory itemFactory, int rarity, boolean stackable)
+    {
+        this.id = id;
+        this.itemFactory = itemFactory;
         this.rarity = rarity;
         this.stackable = stackable;
     }

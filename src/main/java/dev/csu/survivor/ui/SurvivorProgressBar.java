@@ -3,6 +3,7 @@ package dev.csu.survivor.ui;
 import com.almasb.fxgl.logging.Logger;
 import com.almasb.fxgl.ui.Position;
 import com.almasb.fxgl.ui.ProgressBar;
+import dev.csu.survivor.Constants;
 import javafx.animation.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -94,7 +95,8 @@ public class SurvivorProgressBar extends Parent
                 return;
 
             double newWidth = (width.get() - 10) *
-                    (currentValue.get() - minValue.get()) / (maxValue.get() - minValue.get());
+                              (currentValue.get() - minValue.get()) /
+                              (maxValue.get() - minValue.get());
             int diff = newValue.intValue() - oldValue.intValue();
 
             // text value animation
@@ -104,16 +106,22 @@ public class SurvivorProgressBar extends Parent
                 // allows reacting to width changes without showing a label
                 Text text = new Text((diff > 0 ? "+" : "") + diff);
                 text.setTranslateX(newWidth + (diff > 0 ? 5 : 25));
-                text.setTranslateY(height.get() / 2);
+                text.setTranslateY(height.get());
                 text.setFill(traceFillProvider.get(diff > 0));
-                text.setFont(Font.font(14));
+                text.setFont(Font.font(18 + height.get() / 5));
+
+                text.setStroke(traceFillProvider.get(diff > 0));
+                text.setStrokeWidth(2);
+                DropShadow shadow = new DropShadow(10, Color.BLACK);
+                shadow.setInput(new Glow(0.3));
+                text.setEffect(shadow);
 
                 barGroup.getChildren().add(text);
 
-                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.66), text);
+                TranslateTransition tt = new TranslateTransition(Constants.Client.TEXT_FADE_DURATION, text);
                 tt.setToY(0);
 
-                FadeTransition ft = new FadeTransition(Duration.seconds(0.66), text);
+                FadeTransition ft = new FadeTransition(Constants.Client.TEXT_FADE_DURATION, text);
                 ft.setToValue(0);
 
                 ParallelTransition pt = new ParallelTransition(ft);
@@ -169,7 +177,7 @@ public class SurvivorProgressBar extends Parent
                 protected double computeValue()
                 {
                     return (currentValue.get() - minValue.get())
-                            / (maxValue.get() - minValue.get());
+                           / (maxValue.get() - minValue.get());
                 }
             }));
         }

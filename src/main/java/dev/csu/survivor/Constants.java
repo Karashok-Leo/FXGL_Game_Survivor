@@ -63,6 +63,8 @@ public interface Constants
         int HUD_FONT = 24;
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
+
+        Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
     }
 
     interface AnimationMaps

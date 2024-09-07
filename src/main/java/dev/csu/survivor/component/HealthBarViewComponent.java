@@ -22,7 +22,7 @@ public class HealthBarViewComponent extends ChildViewComponent
         this.bar.setLabelVisible(false);
         this.bar.setLabelPosition(Position.RIGHT);
         this.bar.setFill(color);
-        this.bar.setTraceFill(inc -> inc ? Color.GREEN : Color.RED);
+        this.bar.setTraceFill(inc -> inc ? Color.GREEN.brighter() : Color.RED.brighter());
         this.getViewRoot().getChildren().add(bar);
     }
 
