@@ -20,6 +20,7 @@ public interface Constants
     Rectangle2D GAME_SCENE_RECT = new Rectangle2D(0, 0, GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT);
     boolean MAIN_MENU_ENABLED = true;
     boolean DEVELOPER_MENU_ENABLED = true;
+    int SERVER_PORT = 7777;
     ApplicationMode APP_MODE = ApplicationMode.DEVELOPER;
 
     interface Common

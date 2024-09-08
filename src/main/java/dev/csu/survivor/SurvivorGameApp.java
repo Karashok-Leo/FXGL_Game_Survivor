@@ -4,9 +4,10 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.GameWorld;
+
 import dev.csu.survivor.factory.MenuFactory;
 import dev.csu.survivor.factory.SurvivorEntityFactory;
-import dev.csu.survivor.input.SurvivorGameInput;
+import dev.csu.survivor.network.NetworkController;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
 import dev.csu.survivor.ui.SurvivorGameHud;
 import dev.csu.survivor.world.SurvivorGameWorld;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class SurvivorGameApp extends GameApplication
 {
     private SurvivorGameWorld world;
+    private NetworkController networkController;
 
     public static void main(String[] args)
     {
@@ -44,7 +46,7 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initInput()
     {
-        new SurvivorGameInput().init(FXGL.getInput());
+//        new SurvivorGameInput().init(FXGL.getInput());
     }
 
     @Override
@@ -53,12 +55,17 @@ public class SurvivorGameApp extends GameApplication
         GameWorld gameWorld = FXGL.getGameWorld();
         gameWorld.addEntityFactory(new SurvivorEntityFactory());
         world = new SurvivorGameWorld(gameWorld);
+
+        networkController = new NetworkController();
+        networkController.init();
     }
 
     @Override
     protected void onUpdate(double tpf)
     {
         world.tick();
+
+        networkController.onUpdate(tpf);
     }
 
     @Override
