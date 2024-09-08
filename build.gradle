@@ -1,4 +1,3 @@
-//file:noinspection VulnerableLibrariesLocal
 plugins {
     id 'java'
     id 'application'
@@ -30,6 +29,9 @@ dependencies {
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // 尝试更换为其他可用版本
+    implementation 'mysql:mysql-connector-java:8.0.33'
 }
 
 javafx {
