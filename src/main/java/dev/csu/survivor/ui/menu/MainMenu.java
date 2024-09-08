@@ -20,10 +20,14 @@ public class MainMenu extends BaseMenu {
     private static Stage loginStage;
     private static final double BUTTON_WIDTH = 200;
     private static final double BUTTON_HEIGHT = 50;
+    private static final double MENU_POSITION_X =700;
+    private static final double MENU_POSITION_Y = 500;
     private final Button newGameButton;
     private final Button loginButton;
     private final Button exitButton;
     private final Button optionsButton;
+    private  VBox box;
+    private VBox optionsMenu;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -55,16 +59,15 @@ public class MainMenu extends BaseMenu {
         optionsButton.setOnAction(event -> {
             handleButtonClick(optionsButton, "OPTIONS_p.png", "OPTIONS.png", 500);
             // 调用FXGL的选项菜单
-            VBox optionsMenu = createOptionsMenu();  // 创建选项菜单
-            getContentRoot().getChildren().add(optionsMenu);  // 添加到内容根布局中
+            showOptionsMenu();
         });
 
 
         // 创建按钮布局
-        VBox box = new VBox(0, newGameButton, loginButton, optionsButton, exitButton);
+        box = new VBox(0, newGameButton, loginButton, optionsButton, exitButton);
         box.setAlignment(Pos.CENTER);
-        box.setLayoutX(700);
-        box.setLayoutY(500);
+        box.setLayoutX(MENU_POSITION_X);
+        box.setLayoutY(MENU_POSITION_Y);
         getContentRoot().getChildren().add(box);
 
         // 绑定按钮的宽度和高度到布局大小
@@ -84,7 +87,7 @@ public class MainMenu extends BaseMenu {
 
     @Override
     protected String getTitle() {
-        return "Main Menu";
+        return "Survivor";
     }
 
     @Override
@@ -106,6 +109,38 @@ public class MainMenu extends BaseMenu {
         button.setBorder(null);
 
         return button;
+    }
+
+    protected MenuBox createOptionsMenu()
+    {
+        MenuButton itemGameplay = new MenuButton("menu.gameplay");
+        itemGameplay.setMenuContent(this::createContentGameplay, true);
+
+        MenuButton itemControls = new MenuButton("menu.controls");
+        itemControls.setMenuContent(this::createContentControls, true);
+
+        MenuButton itemVideo = new MenuButton("menu.video");
+        itemVideo.setMenuContent(this::createContentVideo, true);
+
+        MenuButton itemAudio = new MenuButton("menu.audio");
+        itemAudio.setMenuContent(this::createContentAudio, true);
+
+        MenuButton itemRestore = new MenuButton("menu.restore");
+        itemRestore.setOnAction(e ->
+                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes ->
+                {
+                    if (yes)
+                    {
+                        switchMenuContentTo(EMPTY);
+                        restoreDefaultSettings();
+                    }
+                })
+        );
+
+        MenuButton itemBack = new MenuButton("menu.back");
+        itemBack.setOnAction(e -> showMainMenu()); // 点击“Back”按钮时显示主菜单
+
+        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, itemRestore,itemBack);
     }
 
     // 处理按钮点击事件，显示点击后的图片并延时恢复默认图片
@@ -151,6 +186,34 @@ public class MainMenu extends BaseMenu {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    private void showOptionsMenu() {
+        if (box != null) {
+            box.setVisible(false); // 隐藏主菜单
+        }
+
+        optionsMenu = createOptionsMenu();
+
+        optionsMenu.setAlignment(Pos.CENTER);
+        optionsMenu.setLayoutX(MENU_POSITION_X);
+        optionsMenu.setLayoutY(MENU_POSITION_Y);
+
+        optionsMenu.setVisible(true); // 显示选项菜单
+        if (!getContentRoot().getChildren().contains(optionsMenu)) {
+            getContentRoot().getChildren().add(optionsMenu);
+        }
+    }
+
+    public void showMainMenu() {
+
+        // 隐藏选项菜单
+        if (optionsMenu != null) {
+            optionsMenu.setVisible(false);
+        }
+        if (box != null) {
+            box.setVisible(true); // 显示主菜单
         }
     }
 

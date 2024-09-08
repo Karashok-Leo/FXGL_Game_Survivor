@@ -552,6 +552,8 @@ public abstract class BaseMenu extends FXGLMenu
         {
             super();
             this.add(items);
+
+
         }
 
         public int getLayoutHeight()
