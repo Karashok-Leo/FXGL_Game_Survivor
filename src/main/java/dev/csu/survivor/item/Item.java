@@ -11,6 +11,15 @@ public interface Item
     {
     }
 
+    default void onRemove(Entity entity)
+    {
+    }
+
+    default List<Text> getTooltip()
+    {
+        return List.of();
+    }
+
     default void attributeChange(Entity entity) {
         AttributeComponent attributeComponent = entity.getComponent(AttributeComponent.class);
 
@@ -20,12 +29,4 @@ public interface Item
     }
 
     default void applyAttributeChange(AttributeComponent attributeComponent) {}
-    default void onRemove(Entity entity)
-    {
-    }
-
-    default List<Text> getTooltip()
-    {
-        return List.of();
-    }
 }

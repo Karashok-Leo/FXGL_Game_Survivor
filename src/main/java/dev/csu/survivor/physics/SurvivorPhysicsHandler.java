@@ -50,8 +50,8 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        //b.getComponent(InventoryComponent.class).addItemToList(b,ItemType.HealingMedicine.getItem());
-                        //b.getComponent(InventoryComponent.class).addItemToList(b, ItemType.ACCELERATE_CRYSTAL.itemFactory.get());
+                        //b.getComponent(InventoryComponent.class).addItemToList(b,ItemType.HEALING_MEDICINE.itemFactory.get());
+                        b.getComponent(InventoryComponent.class).addItemToList(b, ItemType.ACCELERATE_CRYSTAL.itemFactory.get());
                         //b.getComponent(InventoryComponent.class).addItemToList(b,ItemType.HEALTH_CRYSTAL.itemFactory.get());
                         b.getComponent(GoldComponent.class).collect(a);
                     }

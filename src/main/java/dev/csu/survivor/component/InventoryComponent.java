@@ -28,6 +28,7 @@ public class InventoryComponent extends Component
 
     public void removeItemFromList(Entity entity, Item item) {
         itemList.remove(item);
+        item.attributeChange(entity);
         item.onRemove(entity);
         updateEntityAttributes(entity);
     }
