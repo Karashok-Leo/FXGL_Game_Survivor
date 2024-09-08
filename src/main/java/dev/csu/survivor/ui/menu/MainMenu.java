@@ -1,8 +1,11 @@
 package dev.csu.survivor.ui.menu;
 
+import com.almasb.fxgl.app.scene.FXGLScene;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.scene.Scene;
 import dev.csu.survivor.ui.login.LoginUI;
+import dev.csu.survivor.user.User;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
@@ -14,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.Objects;
+import dev.csu.survivor.ui.AchievementView;
 
 public class MainMenu extends BaseMenu {
 
@@ -26,8 +30,12 @@ public class MainMenu extends BaseMenu {
     private final Button loginButton;
     private final Button exitButton;
     private final Button optionsButton;
-    private  VBox box;
+    private final Button achievementButton;
+    private final VBox box;
     private VBox optionsMenu;
+    private Scene achievementScene;
+    // 成就场景
+    private Pane achievementPane;
 
     public MainMenu() {
         super(MenuType.MAIN_MENU);
@@ -62,9 +70,16 @@ public class MainMenu extends BaseMenu {
             showOptionsMenu();
         });
 
+        // 创建成就按钮，点击后显示成就视图
+        achievementButton = createButton("ACHIEVEMENT.png", "ACHIEVEMENT_p.png");
+        achievementButton.setOnAction(event -> {
+            handleButtonClick(optionsButton, "ACHIEVEMENT_p.png", "ACHIEVEMENT.png", 500);
+            showAchievementView();
+        });
+
 
         // 创建按钮布局
-        box = new VBox(0, newGameButton, loginButton, optionsButton, exitButton);
+        box = new VBox(0, newGameButton, loginButton, optionsButton, achievementButton, exitButton);
         box.setAlignment(Pos.CENTER);
         box.setLayoutX(MENU_POSITION_X);
         box.setLayoutY(MENU_POSITION_Y);
@@ -83,6 +98,11 @@ public class MainMenu extends BaseMenu {
 
         // 设置背景图片
         setBackgroundImage("BG.png");
+
+        // 监听用户登录事件
+        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> {
+             enableButtons(event.isClosed());
+        });
     }
 
     @Override
@@ -189,6 +209,12 @@ public class MainMenu extends BaseMenu {
         }
     }
 
+    //关闭登录窗口
+    private void closeLoginWindow(){
+        enableButtons(true);
+    }
+
+    //展示选项页面
     private void showOptionsMenu() {
         if (box != null) {
             box.setVisible(false); // 隐藏主菜单
@@ -206,16 +232,41 @@ public class MainMenu extends BaseMenu {
         }
     }
 
+    //展示主菜单
     public void showMainMenu() {
 
         // 隐藏选项菜单
         if (optionsMenu != null) {
             optionsMenu.setVisible(false);
         }
+
+        // 隐藏成就页面
+        if (achievementPane != null) {
+            achievementPane.setVisible(false);
+        }
+
+        // 显示主菜单
         if (box != null) {
-            box.setVisible(true); // 显示主菜单
+            box.setVisible(true);
         }
     }
+
+    // 展示成就页面
+    public void showAchievementView() {
+        AchievementView achievementView = new AchievementView();
+        achievementPane = achievementView.getContentRootPane();
+
+        // 隐藏主菜单
+        if (box != null) {
+            box.setVisible(false);
+        }
+
+        achievementPane.setLayoutX(MENU_POSITION_X);
+        achievementPane.setLayoutY(MENU_POSITION_Y);
+
+        getContentRoot().getChildren().add(achievementPane); // 将Pane添加到主菜单的内容中
+    }
+
 
     // 启用或禁用所有按钮
     private void enableButtons(boolean enable) {
