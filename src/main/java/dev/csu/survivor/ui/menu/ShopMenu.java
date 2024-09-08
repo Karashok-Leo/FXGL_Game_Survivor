@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,7 +51,8 @@ public class ShopMenu extends BaseMenu
             ItemView itemView = new ItemView(itemType);
 
             Button buttonBuy = FXGL.getUIFactoryService().newButton(FXGL.localizedStringProperty("menu.buy"));
-            buttonBuy.setAlignment(Pos.CENTER_LEFT);
+            buttonBuy.setAlignment(Pos.CENTER);
+            buttonBuy.setTextFill(Color.WHITE);
             buttonBuy.setStyle("-fx-background-color: transparent");
             BorderStackPane paneBuy = new BorderStackPane(Constants.Client.SHOP_ENTRY_WIDTH, 40, buttonBuy);
 

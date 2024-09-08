@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 import java.util.List;
 
@@ -40,10 +42,13 @@ public class ItemView extends BorderStackPane
         Text text = new Text(itemType.getItemName());
         text.setFill(Color.WHITE);
         text.setFont(Font.font(Constants.Client.HUD_FONT));
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setTextAlignment(TextAlignment.CENTER);
+        textFlow.setPrefWidth(Constants.Client.SHOP_ENTRY_WIDTH);
 
         List<Text> tooltip = this.item.getTooltip();
 
-        box.getChildren().addAll(itemPane, text);
+        box.getChildren().addAll(itemPane, textFlow);
         box.getChildren().addAll(tooltip);
 
         return box;

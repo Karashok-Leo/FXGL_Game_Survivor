@@ -4,7 +4,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import org.jetbrains.annotations.Nullable;
 
 public class BorderStackPane extends StackPane
 {
@@ -18,16 +17,10 @@ public class BorderStackPane extends StackPane
         return border;
     }
 
-    public BorderStackPane(double width, double height)
-    {
-        this(width, height, null);
-    }
-
-    public BorderStackPane(double width, double height, @Nullable Node node)
+    public BorderStackPane(double width, double height, Node... nodes)
     {
         super();
         this.getChildren().add(createBorder(width, height));
-        if (node != null)
-            this.getChildren().add(node);
+        this.getChildren().addAll(nodes);
     }
 }
