@@ -40,7 +40,7 @@ public class SurvivorGameHud
         SurvivorProgressBar healthBar = createHealthBar();
         this.goldView = createGoldView();
         VBox box = new VBox(healthBar, goldView);
-        box.setPadding(new Insets(Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING, Constants.Client.HUD_PADDING));
+        box.setPadding(new Insets(Constants.Client.HUD_PADDING));
         box.setSpacing(Constants.Client.HUD_SPACING);
         box.setAlignment(Pos.TOP_LEFT);
         // Add goldView as update listener to the scene

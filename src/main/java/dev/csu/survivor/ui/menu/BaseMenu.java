@@ -28,7 +28,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.BlendMode;
@@ -383,7 +382,7 @@ public abstract class BaseMenu extends FXGLMenu
     }
 
     /**
-     * https://github.com/AlmasB/FXGL/issues/493
+     * <a href="https://github.com/AlmasB/FXGL/issues/493">...</a>
      *
      * @return menu content with video settings
      */
@@ -552,8 +551,6 @@ public abstract class BaseMenu extends FXGLMenu
         {
             super();
             this.add(items);
-
-
         }
 
         public int getLayoutHeight()

@@ -1,4 +1,9 @@
 menu.restart = RESTART
+menu.buy = Buy
+
+item.accelerate_feather = Accelerate Feather
+item.healing_potion = Healing Potion
+item.health_crystal = Health Crystal
 
 #
 # FXGL - JavaFX Game Library. The MIT License (MIT).

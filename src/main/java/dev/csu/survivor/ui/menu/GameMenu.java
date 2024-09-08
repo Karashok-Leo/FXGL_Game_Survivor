@@ -15,9 +15,7 @@ public class GameMenu extends BaseMenu
     {
 //        var enabledItems = FXGL.getSettings().getEnabledMenuItems();
 
-        var itemResume = new MenuButton("menu.resume");
-        itemResume.setOnAction(e -> fireResume());
-        menuBox.add(itemResume);
+        menuBox.add(createResumeButton());
 
 //        if (enabledItems.contains(MenuItem.SAVE_LOAD))
 //        {
