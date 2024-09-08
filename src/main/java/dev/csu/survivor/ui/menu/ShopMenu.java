@@ -5,7 +5,10 @@ import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.ItemType;
+import dev.csu.survivor.ui.BorderStackPane;
 import dev.csu.survivor.ui.ItemView;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -39,11 +42,19 @@ public class ShopMenu extends BaseMenu
         HBox hbox = new HBox();
         hbox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
 
-        for (ItemType itemType : randomSelectItem(4))
+        for (ItemType itemType : randomSelectItem(3))
         {
             VBox subVBox = new VBox();
-            new ItemView(itemType);
-            subVBox.getChildren().add(subVBox);
+            subVBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+
+            ItemView itemView = new ItemView(itemType);
+
+            Button buttonBuy = FXGL.getUIFactoryService().newButton(FXGL.localizedStringProperty("menu.buy"));
+            buttonBuy.setAlignment(Pos.CENTER_LEFT);
+            buttonBuy.setStyle("-fx-background-color: transparent");
+            BorderStackPane paneBuy = new BorderStackPane(Constants.Client.SHOP_ENTRY_WIDTH, 40, buttonBuy);
+
+            subVBox.getChildren().addAll(itemView, paneBuy);
 
             hbox.getChildren().add(subVBox);
         }

@@ -1,4 +1,5 @@
 menu.restart = RESTART
+menu.buy = Buy
 
 item.accelerate_feather = Accelerate Feather
 item.healing_potion = Healing Potion

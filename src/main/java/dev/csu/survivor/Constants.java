@@ -64,6 +64,8 @@ public interface Constants
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
 
+        int SHOP_ENTRY_WIDTH = 200;
+        int SHOP_ENTRY_HEIGHT = 480;
         int SHOP_ENTRY_PADDING = 20;
         int SHOP_ENTRY_OUTER_SPACING = 20;
         int SHOP_ENTRY_INNER_SPACING = 30;

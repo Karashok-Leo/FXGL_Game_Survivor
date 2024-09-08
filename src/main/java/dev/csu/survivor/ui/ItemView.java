@@ -15,27 +15,17 @@ import javafx.scene.text.Text;
 
 import java.util.List;
 
-public class ItemView extends StackPane
+public class ItemView extends BorderStackPane
 {
     protected final ItemType itemType;
     protected final Item item;
 
     public ItemView(ItemType itemType)
     {
-        super();
+        super(Constants.Client.SHOP_ENTRY_WIDTH, Constants.Client.SHOP_ENTRY_HEIGHT);
         this.itemType = itemType;
         this.item = itemType.createItem();
-        this.getChildren().addAll(createBorder(200, 480), createVBox());
-    }
-
-    protected Rectangle createBorder(double width, double height)
-    {
-        Rectangle border = new Rectangle(width, height, null);
-        border.setStroke(Color.WHITE);
-        border.setStrokeWidth(4.0);
-        border.setArcWidth(25.0);
-        border.setArcHeight(25.0);
-        return border;
+        this.getChildren().add(createVBox());
     }
 
     protected VBox createVBox()
