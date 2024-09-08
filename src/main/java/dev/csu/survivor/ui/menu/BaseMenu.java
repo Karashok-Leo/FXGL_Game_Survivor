@@ -79,7 +79,7 @@ public abstract class BaseMenu extends FXGLMenu
         initParticles();
 
         menuRoot.getChildren().addAll(menu);
-        menuContentRoot.getChildren().add(EMPTY);
+        menuContentRoot.getChildren().add(createMenuContent());
 
         this.getContentRoot().getChildren().addAll(
                 createBackground(getAppWidth(), getAppHeight()),
@@ -199,6 +199,11 @@ public abstract class BaseMenu extends FXGLMenu
      */
     protected abstract void initMenuBox(MenuBox menuBox);
 
+    protected FXGLDefaultMenu.MenuContent createMenuContent()
+    {
+        return EMPTY;
+    }
+
     protected MenuBox createMenuBodyGameMenu()
     {
         MenuBox box = new MenuBox();
@@ -295,8 +300,8 @@ public abstract class BaseMenu extends FXGLMenu
         MenuButton itemAudio = new MenuButton("menu.audio");
         itemAudio.setMenuContent(this::createContentAudio, true);
 
-        MenuButton btnRestore = new MenuButton("menu.restore");
-        btnRestore.setOnAction(e ->
+        MenuButton itemRestore = new MenuButton("menu.restore");
+        itemRestore.setOnAction(e ->
                 FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes ->
                 {
                     if (yes)
@@ -307,7 +312,7 @@ public abstract class BaseMenu extends FXGLMenu
                 })
         );
 
-        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, btnRestore);
+        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, itemRestore);
     }
 
     /**
@@ -334,7 +339,7 @@ public abstract class BaseMenu extends FXGLMenu
         // row 0
         grid.setUserData(0);
 
-        getInput().getAllBindings().forEach((action, trigger) -> addNewInputBinding(action, trigger, grid));
+        FXGL.getInput().getAllBindings().forEach((action, trigger) -> addNewInputBinding(action, trigger, grid));
 
         FXGLScrollPane scroll = new FXGLScrollPane(grid);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -352,7 +357,7 @@ public abstract class BaseMenu extends FXGLMenu
         Text actionName = FXGL.getUIFactoryService().newText(action.getName(), Color.WHITE, 18.0);
 
         TriggerView triggerView = new TriggerView(trigger);
-        triggerView.triggerProperty().bind(getInput().triggerProperty(action));
+        triggerView.triggerProperty().bind(FXGL.getInput().triggerProperty(action));
 
         triggerView.setOnMouseClicked(event ->
         {
@@ -382,9 +387,8 @@ public abstract class BaseMenu extends FXGLMenu
     {
         var languageBox = FXGL.getUIFactoryService().newChoiceBox(FXCollections.observableArrayList(FXGL.getSettings().getSupportedLanguages()));
         languageBox.setValue(FXGL.getSettings().getLanguage().getValue());
-        languageBox.setConverter(new StringConverter<Language>()
+        languageBox.setConverter(new StringConverter<>()
         {
-
             @Override
             public String toString(Language language)
             {
@@ -450,7 +454,7 @@ public abstract class BaseMenu extends FXGLMenu
     protected class MenuButton extends Pane
     {
         private MenuBox parent = null;
-        private FXGLDefaultMenu.MenuContent cachedContent = null;
+        private FXGLDefaultMenu.MenuContent cachedContent = EMPTY;
         private final Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
         private final Button btn;
         private boolean isAnimating = false;
@@ -516,7 +520,7 @@ public abstract class BaseMenu extends FXGLMenu
         {
             btn.addEventHandler(ActionEvent.ACTION, actionEvent ->
             {
-                if (cachedContent == null || !isCached)
+                if (cachedContent == EMPTY || !isCached)
                     cachedContent = contentSupplier.get();
 
                 switchMenuContentTo(cachedContent);
@@ -528,7 +532,11 @@ public abstract class BaseMenu extends FXGLMenu
             MenuButton back = new MenuButton("menu.back");
             menu.getChildren().addFirst(back);
 
-            back.addEventHandler(ActionEvent.ACTION, actionEvent -> switchMenuTo(this.parent));
+            back.addEventHandler(ActionEvent.ACTION, actionEvent ->
+            {
+                switchMenuTo(MenuButton.this.parent);
+                switchMenuContentTo(cachedContent);
+            });
 
             btn.addEventHandler(ActionEvent.ACTION, actionEvent -> switchMenuTo(menu));
         }
@@ -557,19 +565,19 @@ public abstract class BaseMenu extends FXGLMenu
 
     protected class PressAnyKeyState extends SubScene
     {
-        protected UserAction actionContext = null;
+        protected UserAction actionContext;
 
         protected boolean isActive = false;
 
         public PressAnyKeyState()
         {
             super();
-            getInput().addEventFilter(KeyEvent.KEY_PRESSED, e ->
+            PressAnyKeyState.this.getInput().addEventFilter(KeyEvent.KEY_PRESSED, e ->
             {
                 if (Input.isIllegal(e.getCode()))
                     return;
 
-                boolean rebound = getInput().rebind(actionContext, e.getCode(), InputModifier.from(e));
+                boolean rebound = FXGL.getInput().rebind(actionContext, e.getCode(), InputModifier.from(e));
 
                 if (rebound)
                 {
@@ -578,10 +586,10 @@ public abstract class BaseMenu extends FXGLMenu
                 }
             });
 
-            getInput().addEventFilter(MouseEvent.MOUSE_PRESSED,
+            PressAnyKeyState.this.getInput().addEventFilter(MouseEvent.MOUSE_PRESSED,
                     e ->
                     {
-                        boolean rebound = getInput().rebind(actionContext, e.getButton(), InputModifier.from(e));
+                        boolean rebound = FXGL.getInput().rebind(actionContext, e.getButton(), InputModifier.from(e));
 
                         if (rebound)
                         {

@@ -12,12 +12,14 @@ import java.util.function.Supplier;
 public enum ItemType
 {
     HEALTH_CRYSTAL(() -> new HealthCrystal(Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
-    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
-    HEALING_MEDICINE(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
+    ACCELERATE_FEATHER(() -> new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
+    HEALING_POTION(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
 
     /**
      * The identifier of the item, default to be lowercase of the enum name.
      * The texture of the item will be located at "assets/textures/item/{id}.png"
+     * The texture must be 32x32
+     * The localized name of the item will be found by key "item.{id}"
      */
     public final String id;
 

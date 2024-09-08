@@ -1,7 +1,9 @@
 package dev.csu.survivor.ui.menu;
 
+import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import javafx.scene.layout.HBox;
 
 public class ShopMenu extends BaseMenu
 {
@@ -14,6 +16,15 @@ public class ShopMenu extends BaseMenu
     protected String getTitle()
     {
         return "Shop";
+    }
+
+    @Override
+    protected FXGLDefaultMenu.MenuContent createMenuContent()
+    {
+        HBox hbox = new HBox();
+        hbox.setSpacing(10);
+        hbox.getChildren().addAll();
+        return new FXGLDefaultMenu.MenuContent();
     }
 
     @Override
