@@ -1,6 +1,6 @@
 package dev.csu.survivor.ui.login;
 
-import dev.csu.survivor.util.jdbcUtils;
+import dev.csu.survivor.util.JDBCUtil;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -84,13 +84,13 @@ public class LoginUI extends Application {
     public boolean userExist() {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try {
-            Connection conn = jdbcUtils.getConnection();
+            Connection conn = JDBCUtil.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, tfUser.getText()); // 设置查询的用户名
             ResultSet rs = ps.executeQuery();
             rs.next();
             boolean exists = rs.getInt(1) == 1; // 检查结果是否为1（用户存在）
-            jdbcUtils.close(conn, ps, rs); // 关闭数据库资源
+            JDBCUtil.close(conn, ps, rs); // 关闭数据库资源
             return exists;
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -102,14 +102,14 @@ public class LoginUI extends Application {
     public boolean userRight() {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND password_hash = ?";
         try {
-            Connection conn = jdbcUtils.getConnection();
+            Connection conn = JDBCUtil.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, tfUser.getText()); // 设置查询的用户名
             ps.setString(2, tfPassword.getText()); // 设置查询的密码
             ResultSet rs = ps.executeQuery();
             rs.next();
             boolean correct = rs.getInt(1) == 1; // 检查结果是否为1（用户名和密码正确）
-            jdbcUtils.close(conn, ps, rs); // 关闭数据库资源
+            JDBCUtil.close(conn, ps, rs); // 关闭数据库资源
             if (!correct) {
                 showErrorDialog("Incorrect username or password.");
             }
@@ -134,12 +134,12 @@ public class LoginUI extends Application {
     private void registerUser() {
         String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
         try {
-            Connection conn = jdbcUtils.getConnection();
+            Connection conn = JDBCUtil.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, tfUser.getText()); // 设置注册的用户名
             ps.setString(2, tfPassword.getText()); // 设置注册的密码
             ps.executeUpdate(); // 执行SQL语句
-            jdbcUtils.close(conn, ps); // 关闭数据库资源
+            JDBCUtil.close(conn, ps); // 关闭数据库资源
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }

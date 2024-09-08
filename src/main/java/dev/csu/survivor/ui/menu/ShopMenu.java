@@ -3,11 +3,14 @@ package dev.csu.survivor.ui.menu;
 import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.ui.ItemView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ShopMenu extends BaseMenu
@@ -23,13 +26,27 @@ public class ShopMenu extends BaseMenu
         return "Shop";
     }
 
+    protected static List<ItemType> randomSelectItem(int n)
+    {
+        List<ItemType> items = Arrays.asList(ItemType.values());
+        Collections.shuffle(items);
+        return items.subList(0, n);
+    }
+
     @Override
     protected FXGLDefaultMenu.MenuContent createMenuContent()
     {
         HBox hbox = new HBox();
-        hbox.setSpacing(10);
-        List<ItemView> list = Arrays.stream(ItemType.values()).map(ItemView::new).toList();
-        hbox.getChildren().addAll(list);
+        hbox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+
+        for (ItemType itemType : randomSelectItem(4))
+        {
+            VBox subVBox = new VBox();
+            new ItemView(itemType);
+            subVBox.getChildren().add(subVBox);
+
+            hbox.getChildren().add(subVBox);
+        }
         hbox.setTranslateX(-480);
         hbox.setTranslateY(-240);
         return new FXGLDefaultMenu.MenuContent(hbox);

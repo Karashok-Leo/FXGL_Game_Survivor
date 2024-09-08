@@ -1,12 +1,12 @@
 package dev.csu.survivor.util;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
-public class jdbcUtils {
+public class JDBCUtil
+{
     //获取数据连接对象时数据写死，怎么办，传参数呗，把参数放进文件里，这样就比较灵活
     private static String driver;
     private static String url;
@@ -18,7 +18,7 @@ public class jdbcUtils {
             // 给这些变量赋值，用到配置文件
             Properties p = new Properties();
             // 将文件中的数据加载到集合里(classpath路径下)
-            InputStream inStream = jdbcUtils.class.getClassLoader().getResourceAsStream("db.properties");
+            InputStream inStream = JDBCUtil.class.getClassLoader().getResourceAsStream("db.properties");
 
             // 检查 inStream 是否为 null
             if (inStream == null) {

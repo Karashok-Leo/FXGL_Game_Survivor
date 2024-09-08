@@ -64,6 +64,12 @@ public interface Constants
         int ENEMY_HEALTH_BAR_WIDTH = 50;
         int ENEMY_HEALTH_BAR_HEIGHT = 10;
 
+        int SHOP_ENTRY_PADDING = 20;
+        int SHOP_ENTRY_OUTER_SPACING = 20;
+        int SHOP_ENTRY_INNER_SPACING = 30;
+        double SHOP_ITEM_TEXTURE_SCALE = 3.6;
+        int SHOP_ITEM_BORDER_SIZE = 160;
+
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
     }
 

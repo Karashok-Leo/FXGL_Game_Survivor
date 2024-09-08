@@ -94,4 +94,9 @@ public enum ItemType
     {
         return lazyItemTexture.get();
     }
+
+    public Item createItem()
+    {
+        return itemFactory.get();
+    }
 }
