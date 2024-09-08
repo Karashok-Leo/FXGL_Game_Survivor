@@ -3,7 +3,8 @@ package dev.csu.survivor.item;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 
-public record HealingMedicine(int HealingHealth) implements Item{
+public record HealingMedicine(int HealingHealth) implements Item
+{
     @Override
     public void onApply(Entity entity) {
 

@@ -38,6 +38,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new GoldComponent())
                 .with(new InventoryComponent())
                 .with(new KeepOnScreenComponent())
+                .with(new AttributeComponent())
                 .collidable()
                 .build();
     }
