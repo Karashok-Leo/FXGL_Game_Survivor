@@ -1,10 +1,22 @@
 package dev.csu.survivor.item;
 
 import com.almasb.fxgl.entity.Entity;
+import javafx.scene.text.Text;
 
-public interface Item {
+import java.util.List;
 
-    default void onApply(Entity entity){}
+public interface Item
+{
+    default void onApply(Entity entity)
+    {
+    }
 
-    default void onRemove(Entity entity){}
+    default void onRemove(Entity entity)
+    {
+    }
+
+    default List<Text> getTooltip()
+    {
+        return List.of();
+    }
 }

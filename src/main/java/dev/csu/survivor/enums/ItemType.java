@@ -1,5 +1,8 @@
 package dev.csu.survivor.enums;
 
+import com.almasb.fxgl.core.util.LazyValue;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.item.AccelerateCrystal;
 import dev.csu.survivor.item.HealingMedicine;
@@ -42,6 +45,10 @@ public enum ItemType
      */
     public final boolean stackable;
 
+    // Lazy initialized fields
+    private LazyValue<String> lazyItemName;
+    private LazyValue<Texture> lazyItemTexture;
+
     ItemType(ItemFactory itemFactory)
     {
         this(itemFactory, 0);
@@ -58,6 +65,8 @@ public enum ItemType
         this.itemFactory = itemFactory;
         this.rarity = rarity;
         this.stackable = stackable;
+
+        initLazyValues();
     }
 
     ItemType(String id, ItemFactory itemFactory, int rarity, boolean stackable)
@@ -66,5 +75,23 @@ public enum ItemType
         this.itemFactory = itemFactory;
         this.rarity = rarity;
         this.stackable = stackable;
+
+        initLazyValues();
+    }
+
+    private void initLazyValues()
+    {
+        this.lazyItemName = new LazyValue<>(() -> FXGL.localize("item.%s".formatted(this.id)));
+        this.lazyItemTexture = new LazyValue<>(() -> FXGL.texture("item/%s.png".formatted(id)));
+    }
+
+    public String getItemName()
+    {
+        return lazyItemName.get();
+    }
+
+    public Texture getItemTexture()
+    {
+        return lazyItemTexture.get();
     }
 }

@@ -1,6 +1,7 @@
 package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.app.scene.*;
+import dev.csu.survivor.ui.menu.GameMenu;
 import dev.csu.survivor.ui.menu.MainMenu;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ public class MenuFactory extends SceneFactory
     @Override
     public FXGLMenu newGameMenu()
     {
-        return super.newGameMenu();
+        return new GameMenu();
     }
 
     @NotNull

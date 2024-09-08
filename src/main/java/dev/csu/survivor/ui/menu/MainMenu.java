@@ -1,7 +1,6 @@
 package dev.csu.survivor.ui.menu;
 
 import com.almasb.fxgl.app.scene.MenuType;
-import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -40,11 +39,5 @@ public class MainMenu extends BaseMenu
         Rectangle bg = new Rectangle(width, height);
         bg.setFill(Color.rgb(10, 1, 1, 1.0));
         return bg;
-    }
-
-    @Override
-    protected String getTitle()
-    {
-        return FXGL.getSettings().getTitle();
     }
 }

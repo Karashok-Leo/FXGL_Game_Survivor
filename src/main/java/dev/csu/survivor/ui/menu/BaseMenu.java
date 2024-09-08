@@ -90,7 +90,10 @@ public abstract class BaseMenu extends FXGLMenu
         );
     }
 
-    protected abstract String getTitle();
+    protected String getTitle()
+    {
+        return FXGL.getSettings().getTitle();
+    }
 
     protected ArrayList<Animation<?>> animations = new ArrayList<>();
 
