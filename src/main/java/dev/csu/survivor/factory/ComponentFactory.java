@@ -1,13 +1,11 @@
 package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.core.math.FXGLMath;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.collision.shapes.CircleShape;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.almasb.fxgl.physics.box2d.dynamics.FixtureDef;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.AnimationComponent;
-import dev.csu.survivor.component.MotionComponent;
+import dev.csu.survivor.component.AttributeComponent;
+import dev.csu.survivor.enums.AttributeType;
+import dev.csu.survivor.world.attribute.AttributeInstance;
 
 public class ComponentFactory
 {
@@ -27,19 +25,22 @@ public class ComponentFactory
         return new AnimationComponent(Constants.AnimationMaps.ENEMY_ANIMATION_MAP);
     }
 
-    public static PhysicsComponent newPhysicsComponent(float radius)
+    public static AttributeComponent newPlayerAttributeComponent()
     {
-        PhysicsComponent physicsComponent = new PhysicsComponent();
-        physicsComponent.setBodyType(BodyType.DYNAMIC);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density(0.8F);
-        fixtureDef.shape(new CircleShape(radius));
-        physicsComponent.setFixtureDef(fixtureDef);
-        return physicsComponent;
+        return new AttributeComponent(
+                new AttributeInstance(AttributeType.MAX_HEALTH, Constants.Common.PLAYER_INITIAL_MAX_HEALTH),
+                new AttributeInstance(AttributeType.SPEED, Constants.Common.PLAYER_INITIAL_SPEED),
+                new AttributeInstance(AttributeType.DAMAGE, Constants.Common.PLAYER_INITIAL_DAMAGE),
+                new AttributeInstance(AttributeType.REGENERATION, 0)
+        );
     }
 
-    public static MotionComponent newRandomMotionComponent(double minSpeed, double maxSpeed)
+    public static AttributeComponent newEnemyAttributeComponent()
     {
-        return new MotionComponent(FXGLMath.random(minSpeed, maxSpeed));
+        return new AttributeComponent(
+                new AttributeInstance(AttributeType.MAX_HEALTH, Constants.Common.ENEMY_INITIAL_MAX_HEALTH),
+                new AttributeInstance(AttributeType.SPEED, FXGLMath.random(Constants.Common.ENEMY_INITIAL_MIN_SPEED, Constants.Common.ENEMY_INITIAL_MAX_SPEED)),
+                new AttributeInstance(AttributeType.DAMAGE, Constants.Common.ENEMY_INITIAL_DAMAGE)
+        );
     }
 }

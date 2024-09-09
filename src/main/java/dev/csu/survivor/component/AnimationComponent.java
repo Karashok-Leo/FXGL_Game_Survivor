@@ -22,10 +22,12 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Should be added after StateComponent
+ */
 public class AnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
-    protected MotionComponent motion;
     protected AnimatedTexture texture;
 
     protected ReadOnlyObjectProperty<EntityState> stateProperty;
@@ -57,7 +59,6 @@ public class AnimationComponent extends Component
     {
         this.initProperties();
 
-        this.motion = entity.getComponent(MotionComponent.class);
         AnimationChannel defaultChannel = this.getCurrentAnimationChannel();
         this.texture = new AnimatedTexture(defaultChannel);
 

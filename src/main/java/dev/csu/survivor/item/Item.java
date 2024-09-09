@@ -15,7 +15,7 @@ public interface Item
     {
     }
 
-    default List<Text> getTooltip()
+    default List<Text> getTooltip(Entity entity)
     {
         return List.of();
     }

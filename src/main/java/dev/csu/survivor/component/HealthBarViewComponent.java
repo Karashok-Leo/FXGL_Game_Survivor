@@ -1,6 +1,6 @@
 package dev.csu.survivor.component;
 
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
+import com.almasb.fxgl.dsl.components.HealthDoubleComponent;
 import com.almasb.fxgl.dsl.components.view.ChildViewComponent;
 import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.ui.SurvivorProgressBar;
@@ -30,7 +30,7 @@ public class HealthBarViewComponent extends ChildViewComponent
     public void onAdded()
     {
         // bind to health component
-        HealthIntComponent hp = this.entity.getComponent(HealthIntComponent.class);
+        HealthComponent hp = this.entity.getComponent(HealthComponent.class);
         this.maxValueProperty().bind(hp.maxValueProperty());
         this.valueProperty().bind(hp.valueProperty());
         this.bar.setMinValue(0);

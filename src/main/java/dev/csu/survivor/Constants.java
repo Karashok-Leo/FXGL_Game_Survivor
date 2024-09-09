@@ -20,18 +20,19 @@ public interface Constants
     Rectangle2D GAME_SCENE_RECT = new Rectangle2D(0, 0, GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT);
     boolean MAIN_MENU_ENABLED = true;
     boolean DEVELOPER_MENU_ENABLED = true;
-    int SERVER_PORT = 7777;
     ApplicationMode APP_MODE = ApplicationMode.DEVELOPER;
 
     interface Common
     {
-        int PLAYER_INITIAL_MAX_HEALTH = 10;
-        double PLAYER_SPEED = 2;
+        double PLAYER_INITIAL_MAX_HEALTH = 10;
+        double PLAYER_INITIAL_SPEED = 2;
+        double PLAYER_INITIAL_DAMAGE = 2;
         double PLAYER_HIT_BOX_RADIUS = 7;
 
-        int ENEMY_INITIAL_MAX_HEALTH = 10;
-        double ENEMY_MIN_SPEED = 0.6;
-        double ENEMY_MAX_SPEED = 1.2;
+        double ENEMY_INITIAL_MAX_HEALTH = 10;
+        double ENEMY_INITIAL_MIN_SPEED = 0.6;
+        double ENEMY_INITIAL_MAX_SPEED = 1.2;
+        double ENEMY_INITIAL_DAMAGE = 2;
         double ENEMY_HIT_BOX_RADIUS = 11;
 
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
@@ -47,8 +48,8 @@ public interface Constants
         int INITIAL_GOLDS = 10;
         int MAX_GOLDS = 999;
 
-        int HEALTH_CRYSTAL_VALUE = 5;
-        int HEALING_MEDICINE_VALUE = 5;
+        double HEALTH_CRYSTAL_VALUE = 5;
+        double HEALING_MEDICINE_VALUE = 0.2;
         double ACCELERATE_CRYSTAL_DEGREE = 1.2;
 
         int RANDOM_FEATURE_COUNTS = 96;

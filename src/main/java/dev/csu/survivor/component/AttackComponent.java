@@ -7,6 +7,9 @@ import com.almasb.fxgl.time.Timer;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EntityStates;
 
+/**
+ * Should be added after StateComponent
+ */
 public class AttackComponent extends Component
 {
     protected final Timer timer;

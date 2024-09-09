@@ -6,6 +6,9 @@ import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
 
+/**
+ * Should be added after StateComponent and MotionComponent
+ */
 public class EnemyComponent extends Component
 {
     protected StateComponent state;

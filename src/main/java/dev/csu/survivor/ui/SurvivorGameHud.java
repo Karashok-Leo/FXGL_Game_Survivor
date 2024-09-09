@@ -2,12 +2,12 @@ package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.GoldComponent;
+import dev.csu.survivor.component.HealthComponent;
 import dev.csu.survivor.ui.menu.GameOverMenu;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
@@ -60,9 +60,9 @@ public class SurvivorGameHud
         healthBar.setTraceFill(inc -> inc ? Color.GREEN.brighter() : Color.RED.brighter());
         healthBar.setLabelFill(Color.BLACK);
 
-        HealthIntComponent hp = SurvivorGameWorld
+        HealthComponent hp = SurvivorGameWorld
                 .getPlayer()
-                .getComponent(HealthIntComponent.class);
+                .getComponent(HealthComponent.class);
 
         healthBar.maxValueProperty().bind(hp.maxValueProperty());
         // The max value binding should be done before the current value binding so that the progress of the bar works fine
