@@ -5,7 +5,7 @@ import dev.csu.survivor.achievements.Achievement;
 import java.util.List;
 
 public class AchievementChecker {
-    private AchievementManager achievementManager;
+    private final AchievementManager achievementManager;
 
     public AchievementChecker(AchievementManager achievementManager) {
         this.achievementManager = achievementManager;
