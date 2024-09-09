@@ -1,9 +1,17 @@
 menu.restart = RESTART
 menu.buy = Buy
+menu.shop = SHOP
+menu.inventory = INVENTORY
 
 item.accelerate_feather = Accelerate Feather
 item.healing_potion = Healing Potion
 item.health_crystal = Health Crystal
+
+attribute.max_health = Max Health
+attribute.speed = Speed
+attribute.damage = Attack Damage
+attribute.armor = Armor
+attribute.regeneration = Health Regeneration
 
 #
 # FXGL - JavaFX Game Library. The MIT License (MIT).

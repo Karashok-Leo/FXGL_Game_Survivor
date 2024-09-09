@@ -40,7 +40,7 @@ public class HurtComponent extends Component
         timer.update(tpf);
     }
 
-    public void hurt(Entity attacker)
+    public void hurt(Entity attacker, double damage)
     {
         // Add cooldown for hurt
         if (hurtCooldown.elapsed(Constants.Common.HURT_DURATION) &&
@@ -50,7 +50,7 @@ public class HurtComponent extends Component
 
             state.changeState(EntityStates.HURT);
 
-            health.damage(1);
+            health.damage(damage);
 
             if (health.isZero())
             {

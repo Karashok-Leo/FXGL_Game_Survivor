@@ -60,11 +60,11 @@ public class SurvivorEntityFactory implements EntityFactory
                 .build();
     }
 
-    @Spawns("enemy")
-    public Entity newEnemy(SpawnData data)
+    @Spawns("melee_enemy")
+    public Entity newMeleeEnemy(SpawnData data)
     {
         return FXGL.entityBuilder()
-                .type(EntityType.ENEMY)
+                .type(EntityType.MELEE_ENEMY)
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
@@ -75,7 +75,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new AttackComponent())
                 .with(new HurtComponent())
-                .with(new EnemyComponent())
+                .with(new MeleeEnemyComponent())
                 .with(new AttributeComponent())
                 .collidable()
                 .build();

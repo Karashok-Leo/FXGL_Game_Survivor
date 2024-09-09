@@ -33,7 +33,7 @@ public class SurvivorGameWorld
         if (localTimer.elapsed(Constants.Common.ENEMY_SPAWN_DURATION))
         {
             localTimer.capture();
-            internalWorld.spawn("enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+            internalWorld.spawn("melee_enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
         }
     }
 

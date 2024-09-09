@@ -78,22 +78,20 @@ public class AttributeInstance
     public void addModifier(AttributeModifier modifier)
     {
         modifiers.put(modifier.className(), modifier);
-        calculateTotalValue();
         markDirty();
+        calculateTotalValue();
     }
 
     public void removeModifier(AttributeModifier modifier)
     {
-        modifiers.remove(modifier.className());
-        calculateTotalValue();
-        markDirty();
+        this.removeModifier(modifier.className());
     }
 
     public void removeModifier(String className)
     {
         modifiers.remove(className);
-        calculateTotalValue();
         markDirty();
+        calculateTotalValue();
     }
 
     public double getTotalValue()
