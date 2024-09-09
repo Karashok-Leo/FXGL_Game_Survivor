@@ -76,6 +76,11 @@ public interface Constants
         int SHOP_ITEM_NAME_FONT = 20;
         int SHOP_ITEM_DESC_FONT = 14;
 
+        int INVENTORY_COLS = 4;
+        int INVENTORY_ROWS = 6;
+        int INVENTORY_BORDER_SIZE = 80;
+        double INVENTORY_ITEM_TEXTURE_SCALE = 3;
+
         Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
     }

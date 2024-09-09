@@ -11,12 +11,12 @@ import dev.csu.survivor.enums.EntityStates;
 /**
  * Should be added after StateComponent
  */
-public class AttackComponent extends Component
+public class MeleeAttackComponent extends Component
 {
     protected final Timer timer;
     protected StateComponent state;
 
-    public AttackComponent()
+    public MeleeAttackComponent()
     {
         timer = new Timer();
     }

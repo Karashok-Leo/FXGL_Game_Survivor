@@ -1,18 +1,18 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.core.Updatable;
-import com.almasb.fxgl.core.UpdatableRunner;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.GoldAnimationComponent;
+import dev.csu.survivor.component.GoldComponent;
+import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class GoldView extends Parent implements Updatable, UpdatableRunner
+public class GoldView extends Parent implements Updatable
 {
     protected final AnimatedTexture texture = new AnimatedTexture(GoldAnimationComponent.CHANNEL);
     protected final Label label;
@@ -24,12 +24,13 @@ public class GoldView extends Parent implements Updatable, UpdatableRunner
         this.texture.loop();
 
         this.label = new Label();
-        this.label.setStyle("""
-                -fx-background-color: rgba(255, 255, 255, 0.4);
-                -fx-background-radius: 10;
-                -fx-border-radius: 10;
-                -fx-padding: 2, 6;
-                """);
+        this.label.textProperty().bind(
+                Bindings.convert(
+                        SurvivorGameWorld.getPlayer()
+                                .getComponent(GoldComponent.class)
+                                .valueProperty()
+                )
+        );
         this.label.setFont(Font.font(Constants.Client.HUD_FONT));
         this.label.setTextFill(Color.BLACK);
         this.label.translateXProperty().bind(texture.fitWidthProperty().add(16));
@@ -37,31 +38,24 @@ public class GoldView extends Parent implements Updatable, UpdatableRunner
         this.getChildren().addAll(texture, label);
     }
 
+    public void addLabelBackground()
+    {
+        this.label.setStyle("""
+                -fx-background-color: rgba(255, 255, 255, 0.4);
+                -fx-background-radius: 10;
+                -fx-border-radius: 10;
+                -fx-padding: 2, 6;
+                """);
+    }
+
     public Label getLabel()
     {
         return label;
-    }
-
-    public void bindGolds(ObservableValue<?> golds)
-    {
-        this.label.textProperty().bind(Bindings.convert(golds));
     }
 
     @Override
     public void onUpdate(double tpf)
     {
         this.texture.onUpdate(tpf);
-    }
-
-    @Override
-    public void addListener(Updatable updatable)
-    {
-
-    }
-
-    @Override
-    public void removeListener(Updatable updatable)
-    {
-
     }
 }
