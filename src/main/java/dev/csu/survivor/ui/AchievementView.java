@@ -1,9 +1,105 @@
 package dev.csu.survivor.ui;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.app.scene.FXGLScene;
-import com.almasb.fxgl.core.View;
+import dev.csu.survivor.user.User;
+import dev.csu.survivor.util.JDBCUtil;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
+import java.sql.*;
+import java.util.Objects;
 
 public class AchievementView extends FXGLScene {
 
-    
+    private static final int ACHIEVEMENTS_PER_ROW = 3; // 每行三个成就
+    private final Pane contentRoot; // 用于返回给主菜单的容器
+
+    public AchievementView() {
+        super(800, 600);
+
+        contentRoot = new Pane();
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setHgap(20);
+        gridPane.setVgap(20);
+
+        User user = User.getInstance();
+
+        try {
+            // 连接数据库查询数据
+            String query = "SELECT name, description, image_path, created_at FROM achievements";
+            Connection conn = JDBCUtil.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            // 设定位置
+            int column = 0;
+            int row = 0;
+
+            // 遍历查询结果，创建成就显示
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                String imagePath = rs.getString("image_path");
+                String unlockTime = rs.getString("created_at");
+
+                // 创建成就的显示组件
+                VBox achievementBox = createAchievementBox(name, description, imagePath, unlockTime);
+
+                gridPane.add(achievementBox, column, row);
+
+                // 控制成就展示为每行3个
+                column++;
+                if (column >= ACHIEVEMENTS_PER_ROW) {
+                    column = 0;
+                    row++;
+                }
+            }
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        contentRoot.getChildren().add(gridPane); // 将GridPane添加到容器中
+    }
+
+    /**
+     * 获取成就视图的内容容器
+     * @return Pane 容器
+     */
+    public Pane getContentRootPane() {
+        return contentRoot;
+    }
+
+    // 创建单个成就的显示框，包含成就图片、名称、描述和达成时间
+    private VBox createAchievementBox(String name, String description, String imagePath, String unlockTime) {
+        VBox box = new VBox(10);
+        box.setAlignment(Pos.CENTER);
+
+        // 成就图片
+        ImageView imageView = new ImageView(String.valueOf(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/menu/" + imagePath))));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+
+        // 成就名称
+        Label nameLabel = new Label(name);
+        nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        // 成就描述
+        Label descriptionLabel = new Label(description);
+
+        // 达成时间
+        Label timeLabel = new Label("达成时间: " + unlockTime);
+
+        box.getChildren().addAll(imageView, nameLabel, descriptionLabel, timeLabel);
+        return box;
+    }
 }
+

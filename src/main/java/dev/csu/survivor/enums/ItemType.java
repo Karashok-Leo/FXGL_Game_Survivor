@@ -33,7 +33,7 @@ public enum ItemType
     /**
      * Used to create a new item every time the shop refreshes
      */
-    public final ItemFactory itemFactory;
+    private final ItemFactory itemFactory;
 
     /**
      * The higher the rarity, the less likely it is to be sold in the shop

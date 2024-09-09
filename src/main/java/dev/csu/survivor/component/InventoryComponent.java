@@ -1,6 +1,5 @@
 package dev.csu.survivor.component;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import dev.csu.survivor.item.Item;
 
@@ -9,23 +8,27 @@ import java.util.List;
 
 public class InventoryComponent extends Component
 {
-    private final List<Item> itemList;
+    private final List<Item> inventory;
 
-    public InventoryComponent() {
-        itemList = new ArrayList<>();
+    public InventoryComponent()
+    {
+        inventory = new ArrayList<>();
     }
 
-    public List<Item> getItemList() {
-        return itemList;
+    public List<Item> getInventory()
+    {
+        return inventory;
     }
 
-    public void addItemToList(Entity entity, Item item) {
-        itemList.add(item);
+    public void addItem(Item item)
+    {
+        inventory.add(item);
         item.onApply(entity);
     }
 
-    public void removeItemFromList(Entity entity, Item item) {
-        itemList.remove(item);
+    public void removeItem(Item item)
+    {
+        inventory.remove(item);
         item.onRemove(entity);
     }
 }

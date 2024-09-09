@@ -6,9 +6,7 @@ import com.almasb.fxgl.physics.PhysicsWorld;
 import dev.csu.survivor.component.AttackComponent;
 import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.component.HurtComponent;
-import dev.csu.survivor.component.InventoryComponent;
 import dev.csu.survivor.enums.EntityType;
-import dev.csu.survivor.enums.ItemType;
 
 public class SurvivorPhysicsHandler
 {
@@ -50,9 +48,6 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        //b.getComponent(InventoryComponent.class).addItemToList(b,ItemType.HEALING_MEDICINE.itemFactory.get());
-                        //b.getComponent(InventoryComponent.class).addItemToList(b, ItemType.ACCELERATE_CRYSTAL.itemFactory.get());
-                        //b.getComponent(InventoryComponent.class).addItemToList(b,ItemType.HEALTH_CRYSTAL.itemFactory.get());
                         b.getComponent(GoldComponent.class).collect(a);
                     }
                 }

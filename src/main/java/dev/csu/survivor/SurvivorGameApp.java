@@ -9,6 +9,7 @@ import dev.csu.survivor.factory.SurvivorEntityFactory;
 import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
 import dev.csu.survivor.ui.SurvivorGameHud;
+import dev.csu.survivor.user.User;
 import dev.csu.survivor.world.SurvivorGameWorld;
 
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class SurvivorGameApp extends GameApplication
 {
     private SurvivorGameWorld world;
+    private User user;
 
     public static void main(String[] args)
     {

@@ -20,6 +20,7 @@ public interface Constants
     Rectangle2D GAME_SCENE_RECT = new Rectangle2D(0, 0, GAME_SCENE_WIDTH, GAME_SCENE_HEIGHT);
     boolean MAIN_MENU_ENABLED = true;
     boolean DEVELOPER_MENU_ENABLED = true;
+    int SERVER_PORT = 7777;
     ApplicationMode APP_MODE = ApplicationMode.DEVELOPER;
 
     interface Common
@@ -72,6 +73,7 @@ public interface Constants
         double SHOP_ITEM_TEXTURE_SCALE = 3.6;
         int SHOP_ITEM_BORDER_SIZE = 160;
 
+        Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
     }
 

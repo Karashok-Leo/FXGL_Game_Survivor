@@ -8,8 +8,8 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.GoldComponent;
-import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -60,7 +60,9 @@ public class SurvivorGameHud
         healthBar.setTraceFill(inc -> inc ? Color.GREEN.brighter() : Color.RED.brighter());
         healthBar.setLabelFill(Color.BLACK);
 
-        HealthIntComponent hp = FXGL.getGameWorld().getEntitiesByType(EntityType.PLAYER).getFirst().getComponent(HealthIntComponent.class);
+        HealthIntComponent hp = SurvivorGameWorld
+                .getPlayer()
+                .getComponent(HealthIntComponent.class);
 
         healthBar.maxValueProperty().bind(hp.maxValueProperty());
         // The max value binding should be done before the current value binding so that the progress of the bar works fine
@@ -84,9 +86,7 @@ public class SurvivorGameHud
         GoldView goldView = new GoldView();
         goldView.setTranslateX(14);
         goldView.bindGolds(
-                FXGL.getGameWorld()
-                        .getEntitiesByType(EntityType.PLAYER)
-                        .getFirst()
+                SurvivorGameWorld.getPlayer()
                         .getComponent(GoldComponent.class).valueProperty()
         );
         return goldView;
@@ -125,7 +125,6 @@ public class SurvivorGameHud
 
         ft.setOnFinished(event -> gameScene.removeChild(text));
         ft.play();
-
     }
 
     public void switchToGameOverScene()
