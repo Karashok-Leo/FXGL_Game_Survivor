@@ -52,5 +52,31 @@ public class SurvivorPhysicsHandler
                     }
                 }
         );
+        physicsWorld.addCollisionHandler(
+                new CollisionHandler(
+                        EntityType.BULLET,
+                        EntityType.RANGED_ENEMY
+                )
+                {
+                    @Override
+                    protected void onCollision(Entity a, Entity b)
+                    {
+                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                    }
+                }
+        );
+        physicsWorld.addCollisionHandler(
+                new CollisionHandler(
+                        EntityType.ENEMY_BULLET,
+                        EntityType.PLAYER
+                )
+                {
+                    @Override
+                    protected void onCollision(Entity a, Entity b)
+                    {
+                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                    }
+                }
+        );
     }
 }

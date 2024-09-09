@@ -19,6 +19,7 @@ import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class SurvivorEntityFactory implements EntityFactory
 {
@@ -38,7 +39,6 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new GoldComponent())
                 .with(new InventoryComponent())
                 .with(new KeepOnScreenComponent())
-                .with(new AttributeComponent())
                 .collidable()
                 .build();
     }
@@ -76,7 +76,6 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new MeleeEnemyComponent())
-                .with(new AttributeComponent())
                 .collidable()
                 .build();
     }
@@ -94,10 +93,9 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(ComponentFactory.newEnemyAnimationComponent())
                 .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16,-32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH,Constants.Client.ENEMY_HEALTH_BAR_HEIGHT,Color.RED))
-                .with(new AttackComponent())
                 .with(new HurtComponent())
-                .with(new EnemyComponent())
-                .with(new AttributeComponent())
+                .with(new RangedAttackComponent(Duration.seconds(1.0)))
+                .with(new RangedEnemyComponent())
                 .collidable()
                 .build();
 
@@ -123,7 +121,26 @@ public class SurvivorEntityFactory implements EntityFactory
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.BULLET)
                 .viewWithBBox(new Rectangle(80, 30, Color.RED))
-                .with(new ProjectileComponent(target.subtract(position), 600))
+                .with(new ProjectileComponent(target.subtract(position), Constants.Common.PLAYER_BULLET_SPEED))
+                .with(new OffscreenCleanComponent())
+                .collidable()
+                .build();
+        BoundingBoxComponent bbox = bullet.getBoundingBoxComponent();
+        bullet.setPosition(position.subtract(bbox.getWidth() / 2, bbox.getHeight() / 2));
+        return bullet;
+    }
+
+    @Spawns("enemy_bullet")
+    public Entity newEnemyBullet(SpawnData data)
+    {
+        Point2D position = data.get("position");
+        Point2D target = data.get("target");
+        double rotationSpeed = Constants.Common.ENEMY_BULLET_ROTATE_SPEED;
+        Entity bullet = FXGL.entityBuilder()
+                .type(EntityType.ENEMY_BULLET)
+                .viewWithBBox(new Rectangle(80, 30, Color.BLUE))
+                .with(new ProjectileComponent(target.subtract(position), Constants.Common.ENEMY_BULLET_SPEED))
+                .with(new RotateComponent(rotationSpeed))
                 .with(new OffscreenCleanComponent())
                 .collidable()
                 .build();
