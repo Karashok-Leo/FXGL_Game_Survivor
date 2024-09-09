@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.item.AttributeItem;
+import dev.csu.survivor.item.ComponentItem;
 import dev.csu.survivor.item.Item;
 import dev.csu.survivor.util.StringUtil;
 import dev.csu.survivor.world.attribute.AttributeModifier;
@@ -35,6 +36,12 @@ public enum ItemType
                     new AttributeModifier("HealingPotion", AttributeModifier.Operation.ADDITION, Constants.Common.HEALING_POTION_VALUE)
             ),
             20
+    ),
+    BOOMERANG_ATTACK(
+            () -> new ComponentItem(
+                    EntityType.BOOMERANG
+            ),
+            10
     );
 
     /**

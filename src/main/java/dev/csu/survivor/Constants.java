@@ -28,12 +28,22 @@ public interface Constants
         double PLAYER_INITIAL_SPEED = 2;
         double PLAYER_INITIAL_DAMAGE = 2;
         double PLAYER_HIT_BOX_RADIUS = 7;
+        double PLAYER_BULLET_SPEED = 600;
 
         double ENEMY_INITIAL_MAX_HEALTH = 10;
         double ENEMY_INITIAL_MIN_SPEED = 0.6;
         double ENEMY_INITIAL_MAX_SPEED = 1.2;
         double ENEMY_INITIAL_DAMAGE = 2;
         double ENEMY_HIT_BOX_RADIUS = 11;
+
+        double RANGED_ENEMY_INITIAL_MAX_HEALTH = 10;
+        double RANGED_ENEMY_INITIAL_MIN_SPEED = 0.6;
+        double RANGED_ENEMY_INITIAL_MAX_SPEED = 1.2;
+        double RANGED_ENEMY_INITIAL_DAMAGE = 2;
+        double RANGED_ENEMY_HIT_BOX_RADIUS = 11;
+        double RANGED_ENEMY_ATTACK_RANGE = 300;
+        double ENEMY_BULLET_SPEED = 300;
+        double ENEMY_BULLET_ROTATE_SPEED = 1080;
 
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
         Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
@@ -54,6 +64,11 @@ public interface Constants
 
         int RANDOM_FEATURE_COUNTS = 96;
         int RANDOM_BUSH_COUNTS = 32;
+
+        double BOOMERANG_ROTATION_SPEED = 600;
+        double BOOMERANG_REVOLUTION_SPEED = 7;
+        double BOOMERANG_REVOLUTION_RADIUS = 100;
+        double BOOMERANG_HIT_BOX_RADIUS = 10;
     }
 
     interface Client

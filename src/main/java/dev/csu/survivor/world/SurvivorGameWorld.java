@@ -26,6 +26,8 @@ public class SurvivorGameWorld
         // create random bushes
         for (int i = 0; i < Constants.Common.RANDOM_BUSH_COUNTS; i++)
             this.internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+
+        this.internalWorld.spawn("boomerang");
     }
 
     public void tick()
@@ -34,6 +36,7 @@ public class SurvivorGameWorld
         {
             localTimer.capture();
             internalWorld.spawn("melee_enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+            internalWorld.spawn("ranged_enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
         }
     }
 
