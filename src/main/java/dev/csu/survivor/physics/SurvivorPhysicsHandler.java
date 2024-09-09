@@ -16,7 +16,7 @@ public class SurvivorPhysicsHandler
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.PLAYER,
-                        EntityType.ENEMY
+                        EntityType.MELEE_ENEMY
                 )
                 {
                     @Override
@@ -29,13 +29,13 @@ public class SurvivorPhysicsHandler
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.BULLET,
-                        EntityType.ENEMY
+                        EntityType.MELEE_ENEMY
                 )
                 {
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a);
+                        b.getComponent(HurtComponent.class).hurt(a, 2);
                     }
                 }
         );

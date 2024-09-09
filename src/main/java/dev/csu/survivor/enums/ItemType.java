@@ -4,7 +4,8 @@ import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.item.*;
+import dev.csu.survivor.item.AttributeItem;
+import dev.csu.survivor.item.Item;
 import dev.csu.survivor.util.StringUtil;
 import dev.csu.survivor.world.attribute.AttributeModifier;
 
@@ -23,13 +24,13 @@ public enum ItemType
     ACCELERATE_FEATHER(
             () -> new AttributeItem(
                     AttributeType.SPEED,
-                    new AttributeModifier("AccelerateFeather", AttributeModifier.Operation.MULTIPLICATION, Constants.Common.ACCELERATE_CRYSTAL_DEGREE)
+                    new AttributeModifier("AccelerateFeather", AttributeModifier.Operation.MULTIPLICATION, Constants.Common.ACCELERATE_FEATHER_DEGREE)
             )
     ),
     HEALING_POTION(
             () -> new AttributeItem(
                     AttributeType.REGENERATION,
-                    new AttributeModifier("HealingPotion", AttributeModifier.Operation.ADDITION, Constants.Common.HEALING_MEDICINE_VALUE)
+                    new AttributeModifier("HealingPotion", AttributeModifier.Operation.ADDITION, Constants.Common.HEALING_POTION_VALUE)
             ));
 
     /**
@@ -60,8 +61,8 @@ public enum ItemType
     public final boolean stackable;
 
     // Lazy initialized fields
-    private LazyValue<String> lazyItemName;
-    private LazyValue<Texture> lazyItemTexture;
+    private LazyValue<String> lazyName;
+    private LazyValue<Texture> lazyTexture;
 
     ItemType(ItemFactory itemFactory)
     {
@@ -95,18 +96,18 @@ public enum ItemType
 
     private void initLazyValues()
     {
-        this.lazyItemName = new LazyValue<>(() -> FXGL.localize("item.%s".formatted(this.id)));
-        this.lazyItemTexture = new LazyValue<>(() -> FXGL.texture("item/%s.png".formatted(id)));
+        this.lazyName = new LazyValue<>(() -> FXGL.localize("item.%s".formatted(this.id)));
+        this.lazyTexture = new LazyValue<>(() -> FXGL.texture("item/%s.png".formatted(id)));
     }
 
-    public String getItemName()
+    public String getName()
     {
-        return lazyItemName.get();
+        return lazyName.get();
     }
 
-    public Texture getItemTexture()
+    public Texture getTexture()
     {
-        return lazyItemTexture.get();
+        return lazyTexture.get();
     }
 
     public Item createItem()

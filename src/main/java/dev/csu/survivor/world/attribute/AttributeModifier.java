@@ -8,7 +8,19 @@ public record AttributeModifier(
 {
     public enum Operation
     {
-        ADDITION,
-        MULTIPLICATION
+        ADDITION("    + %.2f"),
+        MULTIPLICATION("    × %.2f"),
+        ;
+        private final String formatter;
+
+        Operation(String formatter)
+        {
+            this.formatter = formatter;
+        }
+
+        public String formatModifier(double value)
+        {
+            return formatter.formatted(value);
+        }
     }
 }
