@@ -6,4 +6,5 @@ public enum EntityType
     MELEE_ENEMY,
     BULLET,
     GOLD,
+    BOOMERANG,
 }

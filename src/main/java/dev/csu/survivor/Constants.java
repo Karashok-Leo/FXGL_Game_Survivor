@@ -54,6 +54,11 @@ public interface Constants
 
         int RANDOM_FEATURE_COUNTS = 96;
         int RANDOM_BUSH_COUNTS = 32;
+
+        double BOOMERANG_ROTATION_SPEED = 600;
+        double BOOMERANG_REVOLUTION_SPEED = 7;
+        double BOOMERANG_REVOLUTION_RADIUS = 100;
+        double BOOMERANG_HIT_BOX_RADIUS = 10;
     }
 
     interface Client

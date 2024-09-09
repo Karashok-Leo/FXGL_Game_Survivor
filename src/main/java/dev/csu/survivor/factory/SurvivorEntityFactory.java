@@ -109,4 +109,17 @@ public class SurvivorEntityFactory implements EntityFactory
         bullet.setPosition(position.subtract(bbox.getWidth() / 2, bbox.getHeight() / 2));
         return bullet;
     }
+
+    @Spawns("boomerang")
+    public Entity newBoomerang(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .type(EntityType.BOOMERANG)
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.BOOMERANG_HIT_BOX_RADIUS)))
+                .at(data.getX(), data.getY())
+                .view("item/boomerang_attack.png")
+                .with(new BoomerangComponent())
+                .collidable()
+                .build();
+    }
 }

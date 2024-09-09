@@ -6,6 +6,7 @@ menu.inventory = INVENTORY
 item.accelerate_feather = Accelerate Feather
 item.healing_potion = Healing Potion
 item.health_crystal = Health Crystal
+item.boomerang_attack = Boomerang
 
 attribute.max_health = Max Health
 attribute.speed = Speed

@@ -52,5 +52,18 @@ public class SurvivorPhysicsHandler
                     }
                 }
         );
+        physicsWorld.addCollisionHandler(
+                new CollisionHandler(
+                        EntityType.BOOMERANG,
+                        EntityType.MELEE_ENEMY
+                )
+                {
+                    @Override
+                    protected void onCollision(Entity a, Entity b)
+                    {
+                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                    }
+                }
+        );
     }
 }
