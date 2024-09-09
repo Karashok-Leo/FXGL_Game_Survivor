@@ -22,7 +22,7 @@ public class ComponentFactory
      */
     public static AnimationComponent newEnemyAnimationComponent()
     {
-        return new AnimationComponent(Constants.AnimationMaps.ENEMY_ANIMATION_MAP);
+        return new AnimationComponent(Constants.AnimationMaps.MELEE_ENEMY_ANIMATION_MAP);
     }
 
     public static AttributeComponent newPlayerAttributeComponent()

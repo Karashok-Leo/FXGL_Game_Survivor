@@ -49,8 +49,8 @@ public interface Constants
         int MAX_GOLDS = 999;
 
         double HEALTH_CRYSTAL_VALUE = 5;
-        double HEALING_MEDICINE_VALUE = 0.2;
-        double ACCELERATE_CRYSTAL_DEGREE = 1.2;
+        double HEALING_POTION_VALUE = 0.2;
+        double ACCELERATE_FEATHER_DEGREE = 1.2;
 
         int RANDOM_FEATURE_COUNTS = 96;
         int RANDOM_BUSH_COUNTS = 32;
@@ -73,6 +73,8 @@ public interface Constants
         int SHOP_ENTRY_INNER_SPACING = 30;
         double SHOP_ITEM_TEXTURE_SCALE = 3.6;
         int SHOP_ITEM_BORDER_SIZE = 160;
+        int SHOP_ITEM_NAME_FONT = 20;
+        int SHOP_ITEM_DESC_FONT = 14;
 
         Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
@@ -88,10 +90,19 @@ public interface Constants
                 new AnimationComponent.StateEntry(EntityStates.DEATH, Common.DEATH_DURATION, 7)
         );
 
-        AnimationComponent.AnimationMap ENEMY_ANIMATION_MAP = new AnimationComponent.AnimationMap(
-                "enemy",
+        AnimationComponent.AnimationMap MELEE_ENEMY_ANIMATION_MAP = new AnimationComponent.AnimationMap(
+                "melee_enemy",
                 new AnimationComponent.StateEntry(EntityStates.IDLE, Common.ENEMY_IDLE_DURATION, 4),
                 new AnimationComponent.StateEntry(EntityStates.RUN, 0.8, 8),
+                new AnimationComponent.StateEntry(EntityStates.ATTACK, Common.ATTACK_DURATION, 8),
+                new AnimationComponent.StateEntry(EntityStates.HURT, Common.HURT_DURATION, 6),
+                new AnimationComponent.StateEntry(EntityStates.DEATH, Common.DEATH_DURATION, 8)
+        );
+
+        AnimationComponent.AnimationMap RANGED_ENEMY_ANIMATION_MAP = new AnimationComponent.AnimationMap(
+                "ranged_enemy",
+                new AnimationComponent.StateEntry(EntityStates.IDLE, Common.ENEMY_IDLE_DURATION, 4),
+                new AnimationComponent.StateEntry(EntityStates.RUN, 0.6, 6),
                 new AnimationComponent.StateEntry(EntityStates.ATTACK, Common.ATTACK_DURATION, 8),
                 new AnimationComponent.StateEntry(EntityStates.HURT, Common.HURT_DURATION, 6),
                 new AnimationComponent.StateEntry(EntityStates.DEATH, Common.DEATH_DURATION, 8)

@@ -9,12 +9,12 @@ import javafx.geometry.Point2D;
 /**
  * Should be added after StateComponent and MotionComponent
  */
-public class EnemyComponent extends Component
+public class MeleeEnemyComponent extends Component
 {
     protected StateComponent state;
     protected MotionComponent motion;
 
-    public EnemyComponent()
+    public MeleeEnemyComponent()
     {
     }
 

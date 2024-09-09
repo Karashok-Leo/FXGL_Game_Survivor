@@ -3,7 +3,7 @@ package dev.csu.survivor.enums;
 public enum EntityType
 {
     PLAYER,
-    ENEMY,
+    MELEE_ENEMY,
     BULLET,
     GOLD,
 }

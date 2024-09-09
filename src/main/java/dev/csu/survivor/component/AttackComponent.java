@@ -5,6 +5,7 @@ import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.time.Timer;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EntityStates;
 
 /**
@@ -38,7 +39,15 @@ public class AttackComponent extends Component
 
         state.changeState(EntityStates.ATTACK);
 
-        timer.runOnceAfter(() -> target.getComponent(HurtComponent.class).hurt(entity), Constants.Common.HURT_DELAY);
+        timer.runOnceAfter(
+                () -> target.getComponent(HurtComponent.class)
+                        .hurt(
+                                entity,
+                                entity.getComponent(AttributeComponent.class)
+                                        .getAttributeValue(AttributeType.DAMAGE)
+                        ),
+                Constants.Common.HURT_DELAY
+        );
 
         timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.Common.ATTACK_DURATION);
     }

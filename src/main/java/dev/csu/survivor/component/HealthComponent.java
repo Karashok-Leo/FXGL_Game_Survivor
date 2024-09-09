@@ -1,22 +1,48 @@
 package dev.csu.survivor.component;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.RechargeableDoubleComponent;
+import com.almasb.fxgl.time.LocalTimer;
 import dev.csu.survivor.enums.AttributeType;
+import javafx.util.Duration;
 
 /**
  * Should be added after AttributeComponent
  */
 public class HealthComponent extends RechargeableDoubleComponent
 {
+    protected final LocalTimer regenTimer;
+    protected AttributeComponent attribute;
+
     public HealthComponent(double maxValue)
     {
         super(maxValue, maxValue);
+        this.regenTimer = FXGL.newLocalTimer();
     }
 
     @Override
     public void onAdded()
     {
-        AttributeComponent attributeComponent = this.entity.getComponent(AttributeComponent.class);
-        this.maxValueProperty().bind(attributeComponent.getAttributeInstance(AttributeType.MAX_HEALTH).valueProperty());
+        this.regenTimer.capture();
+        this.attribute = this.entity.getComponent(AttributeComponent.class);
+        this.maxValueProperty().bind(attribute.getAttributeInstance(AttributeType.MAX_HEALTH).valueProperty());
+
+        // If max health increase, then set current health to max health
+        this.maxValueProperty().addListener((observableValue, oldValue, newValue) ->
+        {
+            if (newValue.doubleValue() > oldValue.doubleValue())
+                this.restoreFully();
+        });
+    }
+
+    @Override
+    public void onUpdate(double tpf)
+    {
+        double regen = attribute.getAttributeValue(AttributeType.REGENERATION);
+        if (regenTimer.elapsed(Duration.seconds(1 / regen)))
+        {
+            regenTimer.capture();
+            this.restore(1);
+        }
     }
 }
