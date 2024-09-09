@@ -21,6 +21,8 @@ public class BorderStackPane extends StackPane
     {
         super();
         this.getChildren().add(createBorder(width, height));
+        System.out.println("createBorder");
         this.getChildren().addAll(nodes);
+        System.out.println(nodes.length);
     }
 }

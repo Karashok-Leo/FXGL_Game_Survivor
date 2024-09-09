@@ -37,7 +37,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new HealthComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
                 .with(new GoldComponent())
-                .with(new InventoryComponent())
+                .with(ComponentFactory.newPlayerInventoryComponent())
                 .with(new KeepOnScreenComponent())
                 .collidable()
                 .build();
@@ -73,7 +73,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(ComponentFactory.newEnemyAnimationComponent())
                 .with(new HealthComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
-                .with(new AttackComponent())
+                .with(new MeleeAttackComponent())
                 .with(new HurtComponent())
                 .with(new MeleeEnemyComponent())
                 .collidable()
