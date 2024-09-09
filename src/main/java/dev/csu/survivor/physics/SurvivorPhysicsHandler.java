@@ -1,18 +1,23 @@
 package dev.csu.survivor.physics;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import dev.csu.survivor.component.MeleeAttackComponent;
 import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.component.HurtComponent;
+import dev.csu.survivor.component.AttributeComponent;
+import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.world.SurvivorGameWorld;
 
 public class SurvivorPhysicsHandler
 {
     public void init(PhysicsWorld physicsWorld)
     {
         physicsWorld.setGravity(0, 0);
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.PLAYER,
@@ -26,6 +31,7 @@ public class SurvivorPhysicsHandler
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.BULLET,
@@ -35,10 +41,11 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                        applyPlayerDamage(a, b);
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.GOLD,
@@ -52,6 +59,7 @@ public class SurvivorPhysicsHandler
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.BULLET,
@@ -61,10 +69,11 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                        applyPlayerDamage(a, b);
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.ENEMY_BULLET,
@@ -78,6 +87,7 @@ public class SurvivorPhysicsHandler
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.BOOMERANG,
@@ -87,10 +97,11 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                        applyPlayerDamage(a, b);
                     }
                 }
         );
+
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.BOOMERANG,
@@ -100,9 +111,18 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a, 2);
+                        applyPlayerDamage(a, b);
                     }
                 }
         );
+    }
+
+    private void applyPlayerDamage(Entity entity, Entity enemy)
+    {
+        Entity player = SurvivorGameWorld.getPlayer();
+
+        AttributeComponent attributeComponent = player.getComponent(AttributeComponent.class);
+
+        enemy.getComponent(HurtComponent.class).hurt(entity, attributeComponent.getAttributeValue(AttributeType.DAMAGE));
     }
 }

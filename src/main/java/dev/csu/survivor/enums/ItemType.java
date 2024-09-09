@@ -40,7 +40,7 @@ public enum ItemType
     POWER_CRYSTAL(
             () -> new AttributeItem(
                     AttributeType.DAMAGE,
-                    new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.PLAYER_INITIAL_DAMAGE)
+                    new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.POWER_CRYSTAL_VALUE)
             ),
             20
     ),
