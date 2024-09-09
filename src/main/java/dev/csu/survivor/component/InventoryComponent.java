@@ -21,19 +21,11 @@ public class InventoryComponent extends Component
 
     public void addItemToList(Entity entity, Item item) {
         itemList.add(item);
-        item.attributeChange(entity);
         item.onApply(entity);
-        updateEntityAttributes(entity);
     }
 
     public void removeItemFromList(Entity entity, Item item) {
         itemList.remove(item);
-        item.attributeChange(entity);
         item.onRemove(entity);
-        updateEntityAttributes(entity);
-    }
-
-    private void updateEntityAttributes(Entity entity) {
-        AttributeComponent attributeComponent = entity.getComponent(AttributeComponent.class);
     }
 }

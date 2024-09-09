@@ -10,13 +10,12 @@ import dev.csu.survivor.item.HealthCrystal;
 import dev.csu.survivor.item.Item;
 import dev.csu.survivor.util.StringUtil;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public enum ItemType
 {
-    HEALTH_CRYSTAL(() -> new HealthCrystal(UUID.randomUUID().toString() , Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
-    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(UUID.randomUUID().toString() ,Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
+    HEALTH_CRYSTAL(() -> new HealthCrystal(Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
+    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
     HEALING_MEDICINE(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
 
     /**

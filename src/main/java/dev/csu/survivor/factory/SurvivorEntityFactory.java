@@ -75,6 +75,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new AttackComponent())
                 .with(new HurtComponent())
                 .with(new EnemyComponent())
+                .with(new AttributeComponent())
                 .collidable()
                 .build();
     }

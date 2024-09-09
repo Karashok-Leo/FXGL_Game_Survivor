@@ -3,7 +3,9 @@ package dev.csu.survivor.component;
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
+import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EntityStates;
+import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 
 public class MotionComponent extends Component
@@ -37,6 +39,13 @@ public class MotionComponent extends Component
     public void onUpdate(double tpf)
     {
         if (state.isIn(EntityStates.DEATH)) return;
+
+        AttributeComponent attributeComponent = entity.getComponent(AttributeComponent.class);
+
+        if (entity.getType().equals(EntityType.PLAYER)) {
+            double updatedSpeed = (double) attributeComponent.calculateTotalAttribute(AttributeType.SPEED);
+            setSpeed(updatedSpeed);
+        }
 
         if (isUnmoving())
         {

@@ -1,64 +1,50 @@
 package dev.csu.survivor.component;
 
 import com.almasb.fxgl.entity.component.Component;
-import java.util.HashMap;
+import dev.csu.survivor.Constants;
+import dev.csu.survivor.enums.AttributeType;
+import dev.csu.survivor.world.attribute.AttributeInstance;
+import dev.csu.survivor.world.attribute.AttributeModifier;
+
+import java.util.EnumMap;
 import java.util.Map;
 
-public class AttributeComponent extends Component
-{
+public class AttributeComponent extends Component {
 
-    private double baseSpeedMultiplier = 1.0;
-    private int baseHealthAddition = 0;
+    private final Map<AttributeType, AttributeInstance> attributes = new EnumMap<>(AttributeType.class);
 
-    private final Map<String, Double> speedModifiers = new HashMap<>();
-    private final Map<String, Integer> healthModifiers = new HashMap<>();
-
-    public double getBaseSpeedMultiplier() {
-        return baseSpeedMultiplier;
+    public AttributeComponent() {
+        attributes.put(AttributeType.SPEED, new AttributeInstance(Constants.Common.PLAYER_SPEED, this::onAttributeUpdate));
+        attributes.put(AttributeType.HEALTH, new AttributeInstance(0, this::onAttributeUpdate));
     }
 
-    public void setBaseSpeedMultiplier(double baseSpeedMultiplier) {
-        this.baseSpeedMultiplier = baseSpeedMultiplier;
+    public AttributeInstance getAttributeInstance(AttributeType type) {
+        return attributes.get(type);
     }
 
-    public int getBaseHealthAddition() {
-        return baseHealthAddition;
-    }
-
-    public void setBaseHealthAddition(int baseHealthAddition) {
-        this.baseHealthAddition = baseHealthAddition;
-    }
-
-    public void addSpeedModifier(String itemId, double modifier) {
-        speedModifiers.put(itemId, modifier);
-    }
-
-    public void removeSpeedModifier(String itemId) {
-        speedModifiers.remove(itemId);
-    }
-
-    public double calculateTotalSpeedMultiplier() {
-        double totalMultiplier = baseSpeedMultiplier;
-        for (double modifier : speedModifiers.values()) {
-            totalMultiplier *= modifier;
+    public void addModifier(AttributeType type, String itemId, AttributeModifier modifier) {
+        AttributeInstance instance = attributes.get(type);
+        if (instance != null) {
+            instance.addModifier(itemId, modifier);
         }
-        return totalMultiplier;
     }
 
-    public void addHealthModifier(String itemId, int modifier) {
-        healthModifiers.put(itemId, modifier);
-    }
-
-    public void removeHealthModifier(String itemId) {
-        healthModifiers.remove(itemId);
-    }
-
-    public int calculateTotalHealthAddition() {
-        int totalHealth = baseHealthAddition;
-        for (int modifier : healthModifiers.values()) {
-            totalHealth += modifier;
+    public void removeModifier(AttributeType type, String itemId) {
+        AttributeInstance instance = attributes.get(type);
+        if (instance != null) {
+            instance.removeModifier(itemId);
         }
-        return totalHealth;
     }
 
+    public double calculateTotalAttribute(AttributeType type) {
+        AttributeInstance instance = attributes.get(type);
+        return instance != null ? instance.getTotalValue() : 0;
+    }
+
+    private void onAttributeUpdate(AttributeInstance instance) {
+    }
 }
+
+
+
+

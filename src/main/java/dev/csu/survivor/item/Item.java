@@ -19,14 +19,4 @@ public interface Item
     {
         return List.of();
     }
-
-    default void attributeChange(Entity entity) {
-        AttributeComponent attributeComponent = entity.getComponent(AttributeComponent.class);
-
-        if (attributeComponent != null) {
-            applyAttributeChange(attributeComponent);
-        }
-    }
-
-    default void applyAttributeChange(AttributeComponent attributeComponent) {}
 }
