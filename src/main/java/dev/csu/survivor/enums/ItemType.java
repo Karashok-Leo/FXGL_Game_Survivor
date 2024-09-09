@@ -4,19 +4,33 @@ import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.item.AccelerateCrystal;
-import dev.csu.survivor.item.HealingMedicine;
-import dev.csu.survivor.item.HealthCrystal;
-import dev.csu.survivor.item.Item;
+import dev.csu.survivor.item.*;
 import dev.csu.survivor.util.StringUtil;
+import dev.csu.survivor.world.attribute.AttributeModifier;
 
 import java.util.function.Supplier;
 
 public enum ItemType
 {
-    HEALTH_CRYSTAL(() -> new HealthCrystal(Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
-    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
-    HEALING_MEDICINE(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
+    HEALTH_CRYSTAL(
+            () -> new AttributeItem(
+                    AttributeType.MAX_HEALTH,
+                    new AttributeModifier("HealthCrystal", AttributeModifier.Operation.ADDITION, Constants.Common.HEALTH_CRYSTAL_VALUE)
+            ),
+            3
+    ),
+
+    ACCELERATE_FEATHER(
+            () -> new AttributeItem(
+                    AttributeType.SPEED,
+                    new AttributeModifier("AccelerateFeather", AttributeModifier.Operation.MULTIPLICATION, Constants.Common.ACCELERATE_CRYSTAL_DEGREE)
+            )
+    ),
+    HEALING_POTION(
+            () -> new AttributeItem(
+                    AttributeType.REGENERATION,
+                    new AttributeModifier("HealingPotion", AttributeModifier.Operation.ADDITION, Constants.Common.HEALING_MEDICINE_VALUE)
+            ));
 
     /**
      * The identifier of the item, default to be lowercase of the enum name.

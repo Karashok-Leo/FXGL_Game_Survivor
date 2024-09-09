@@ -1,7 +1,6 @@
 package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.KeepOnScreenComponent;
 import com.almasb.fxgl.dsl.components.OffscreenCleanComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
@@ -31,9 +30,10 @@ public class SurvivorEntityFactory implements EntityFactory
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.PLAYER_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(new MotionComponent(Constants.Common.PLAYER_SPEED))
+                .with(ComponentFactory.newPlayerAttributeComponent())
+                .with(new MotionComponent())
                 .with(ComponentFactory.newPlayerAnimationComponent())
-                .with(new HealthIntComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
+                .with(new HealthComponent(Constants.Common.PLAYER_INITIAL_MAX_HEALTH))
                 .with(new HurtComponent())
                 .with(new GoldComponent())
                 .with(new InventoryComponent())
@@ -68,9 +68,10 @@ public class SurvivorEntityFactory implements EntityFactory
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(ComponentFactory.newRandomMotionComponent(Constants.Common.ENEMY_MIN_SPEED, Constants.Common.ENEMY_MAX_SPEED))
+                .with(ComponentFactory.newEnemyAttributeComponent())
+                .with(new MotionComponent())
                 .with(ComponentFactory.newEnemyAnimationComponent())
-                .with(new HealthIntComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new AttackComponent())
                 .with(new HurtComponent())

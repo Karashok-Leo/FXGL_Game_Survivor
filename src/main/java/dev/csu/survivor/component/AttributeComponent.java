@@ -1,7 +1,6 @@
 package dev.csu.survivor.component;
 
 import com.almasb.fxgl.entity.component.Component;
-import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.world.attribute.AttributeInstance;
 import dev.csu.survivor.world.attribute.AttributeModifier;
@@ -9,39 +8,46 @@ import dev.csu.survivor.world.attribute.AttributeModifier;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class AttributeComponent extends Component {
-
+public class AttributeComponent extends Component
+{
     private final Map<AttributeType, AttributeInstance> attributes = new EnumMap<>(AttributeType.class);
 
-    public AttributeComponent() {
-        attributes.put(AttributeType.SPEED, new AttributeInstance(Constants.Common.PLAYER_SPEED, this::onAttributeUpdate));
-        attributes.put(AttributeType.HEALTH, new AttributeInstance(0, this::onAttributeUpdate));
+    public AttributeComponent(AttributeInstance... attributes)
+    {
+        for (AttributeInstance attribute : attributes)
+            putAttributeInstance(attribute);
     }
 
-    public AttributeInstance getAttributeInstance(AttributeType type) {
+    public AttributeInstance getAttributeInstance(AttributeType type)
+    {
         return attributes.get(type);
     }
 
-    public void addModifier(AttributeType type, String itemId, AttributeModifier modifier) {
-        AttributeInstance instance = attributes.get(type);
-        if (instance != null) {
-            instance.addModifier(itemId, modifier);
-        }
+    public void putAttributeInstance(AttributeInstance instance)
+    {
+        attributes.put(instance.getType(), instance);
     }
 
-    public void removeModifier(AttributeType type, String itemId) {
+    public void addModifier(AttributeType type, AttributeModifier modifier)
+    {
         AttributeInstance instance = attributes.get(type);
-        if (instance != null) {
-            instance.removeModifier(itemId);
-        }
+        if (instance != null) instance.addModifier(modifier);
     }
 
-    public double calculateTotalAttribute(AttributeType type) {
+    public void removeModifier(AttributeType type, String className)
+    {
+        AttributeInstance instance = attributes.get(type);
+        if (instance != null) instance.removeModifier(className);
+    }
+
+    public double getAttributeValue(AttributeType type)
+    {
         AttributeInstance instance = attributes.get(type);
         return instance != null ? instance.getTotalValue() : 0;
     }
 
-    private void onAttributeUpdate(AttributeInstance instance) {
+    private void onAttributeUpdate(AttributeInstance instance)
+    {
     }
 }
 

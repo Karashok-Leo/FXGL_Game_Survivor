@@ -1,8 +1,6 @@
 package dev.csu.survivor.component;
 
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
@@ -13,12 +11,15 @@ import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.ui.menu.GameOverMenu;
 
+/**
+ * Should be added after StateComponent and HealthComponent
+ */
 public class HurtComponent extends Component
 {
     protected final Timer timer;
     protected final LocalTimer hurtCooldown;
     protected StateComponent state;
-    protected HealthIntComponent health;
+    protected HealthComponent health;
 
     public HurtComponent()
     {
@@ -30,7 +31,7 @@ public class HurtComponent extends Component
     public void onAdded()
     {
         state = entity.getComponent(StateComponent.class);
-        health = entity.getComponent(HealthIntComponent.class);
+        health = entity.getComponent(HealthComponent.class);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class HurtComponent extends Component
     {
         // Add cooldown for hurt
         if (hurtCooldown.elapsed(Constants.Common.HURT_DURATION) &&
-                !health.isZero())
+            !health.isZero())
         {
             hurtCooldown.capture();
 
@@ -58,7 +59,8 @@ public class HurtComponent extends Component
                 {
                     if (entity.isType(EntityType.PLAYER))
                         FXGL.getSceneService().pushSubScene(new GameOverMenu());
-                    else {
+                    else
+                    {
                         FXGL.getGameWorld().spawn("gold", entity.getPosition());
                         entity.removeFromWorld();
                     }

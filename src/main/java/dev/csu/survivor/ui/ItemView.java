@@ -4,6 +4,7 @@ import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.item.Item;
+import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -46,7 +47,7 @@ public class ItemView extends BorderStackPane
         textFlow.setTextAlignment(TextAlignment.CENTER);
         textFlow.setPrefWidth(Constants.Client.SHOP_ENTRY_WIDTH);
 
-        List<Text> tooltip = this.item.getTooltip();
+        List<Text> tooltip = this.item.getTooltip(SurvivorGameWorld.getPlayer());
 
         box.getChildren().addAll(itemPane, textFlow);
         box.getChildren().addAll(tooltip);
