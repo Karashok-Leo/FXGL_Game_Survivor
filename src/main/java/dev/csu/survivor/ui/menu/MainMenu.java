@@ -1,30 +1,32 @@
 package dev.csu.survivor.ui.menu;
 
-import com.almasb.fxgl.app.scene.FXGLScene;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.scene.Scene;
+import dev.csu.survivor.ui.AchievementView;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.util.Objects;
-import dev.csu.survivor.ui.AchievementView;
+import java.util.Optional;
 
 public class MainMenu extends BaseMenu {
 
     private static Stage loginStage;
     private static final double BUTTON_WIDTH = 200;
     private static final double BUTTON_HEIGHT = 50;
-    private static final double MENU_POSITION_X =700;
+    private static final double MENU_POSITION_X = 700;
     private static final double MENU_POSITION_Y = 500;
     private final Button newGameButton;
     private final Button loginButton;
@@ -33,8 +35,6 @@ public class MainMenu extends BaseMenu {
     private final Button achievementButton;
     private final VBox box;
     private VBox optionsMenu;
-    private Scene achievementScene;
-    // 成就场景
     private Pane achievementPane;
 
     public MainMenu() {
@@ -63,20 +63,17 @@ public class MainMenu extends BaseMenu {
 
         // 创建选项按钮，点击后打开FXGL原生的选项菜单
         optionsButton = createButton("OPTIONS.png", "OPTIONS_p.png");
-        // 在MainMenu的构造函数中修改选项按钮的点击事件
         optionsButton.setOnAction(event -> {
             handleButtonClick(optionsButton, "OPTIONS_p.png", "OPTIONS.png", 500);
-            // 调用FXGL的选项菜单
             showOptionsMenu();
         });
 
         // 创建成就按钮，点击后显示成就视图
         achievementButton = createButton("ACHIEVEMENT.png", "ACHIEVEMENT_p.png");
         achievementButton.setOnAction(event -> {
-            handleButtonClick(optionsButton, "ACHIEVEMENT_p.png", "ACHIEVEMENT.png", 500);
+            handleButtonClick(achievementButton, "ACHIEVEMENT_p.png", "ACHIEVEMENT.png", 500);
             showAchievementView();
         });
-
 
         // 创建按钮布局
         box = new VBox(0, newGameButton, loginButton, optionsButton, achievementButton, exitButton);
@@ -101,7 +98,7 @@ public class MainMenu extends BaseMenu {
 
         // 监听用户登录事件
         FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> {
-             enableButtons(event.isClosed());
+            enableButtons(event.isClosed());
         });
     }
 
@@ -112,7 +109,7 @@ public class MainMenu extends BaseMenu {
 
     @Override
     protected void initMenuBox(MenuBox menuBox) {
-
+        // 这里可以初始化菜单框内容
     }
 
     // 创建按钮，设置默认和点击时的图片
@@ -131,8 +128,7 @@ public class MainMenu extends BaseMenu {
         return button;
     }
 
-    protected MenuBox createOptionsMenu()
-    {
+    protected MenuBox createOptionsMenu() {
         MenuButton itemGameplay = new MenuButton("menu.gameplay");
         itemGameplay.setMenuContent(this::createContentGameplay, true);
 
@@ -147,10 +143,8 @@ public class MainMenu extends BaseMenu {
 
         MenuButton itemRestore = new MenuButton("menu.restore");
         itemRestore.setOnAction(e ->
-                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes ->
-                {
-                    if (yes)
-                    {
+                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes -> {
+                    if (yes) {
                         switchMenuContentTo(EMPTY);
                         restoreDefaultSettings();
                     }
@@ -160,7 +154,7 @@ public class MainMenu extends BaseMenu {
         MenuButton itemBack = new MenuButton("menu.back");
         itemBack.setOnAction(e -> showMainMenu()); // 点击“Back”按钮时显示主菜单
 
-        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, itemRestore,itemBack);
+        return new MenuBox(itemGameplay, itemControls, itemVideo, itemAudio, itemRestore, itemBack);
     }
 
     // 处理按钮点击事件，显示点击后的图片并延时恢复默认图片
@@ -209,12 +203,12 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //关闭登录窗口
-    private void closeLoginWindow(){
+    // 关闭登录窗口
+    private void closeLoginWindow() {
         enableButtons(true);
     }
 
-    //展示选项页面
+    // 展示选项页面
     private void showOptionsMenu() {
         if (box != null) {
             box.setVisible(false); // 隐藏主菜单
@@ -232,9 +226,8 @@ public class MainMenu extends BaseMenu {
         }
     }
 
-    //展示主菜单
+    // 展示主菜单
     public void showMainMenu() {
-
         // 隐藏选项菜单
         if (optionsMenu != null) {
             optionsMenu.setVisible(false);
@@ -253,6 +246,19 @@ public class MainMenu extends BaseMenu {
 
     // 展示成就页面
     public void showAchievementView() {
+        if (!isUserLoggedIn()) {
+            // 用户未登录，弹出提示框
+            Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                    "Please log in to view achievements.",
+                    ButtonType.OK);
+            alert.setHeaderText(null);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                showMainMenu();
+            }
+            return;
+        }
+
         AchievementView achievementView = new AchievementView();
         achievementPane = achievementView.getContentRootPane();
 
@@ -267,6 +273,12 @@ public class MainMenu extends BaseMenu {
         getContentRoot().getChildren().add(achievementPane); // 将Pane添加到主菜单的内容中
     }
 
+    // 检查用户是否已登录
+    private boolean isUserLoggedIn() {
+        // 检查用户登录状态的逻辑
+        User currentUser = User.getInstance();
+        return currentUser != null && currentUser.isLoggedIn(); // 根据具体的User类实现进行判断
+    }
 
     // 启用或禁用所有按钮
     private void enableButtons(boolean enable) {
@@ -274,8 +286,10 @@ public class MainMenu extends BaseMenu {
         loginButton.setDisable(!enable);
         exitButton.setDisable(!enable);
         optionsButton.setDisable(!enable);
+        achievementButton.setDisable(!enable);
     }
 }
+
 
 
 
