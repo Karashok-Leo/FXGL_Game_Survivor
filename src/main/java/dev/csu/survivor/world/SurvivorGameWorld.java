@@ -36,6 +36,7 @@ public class SurvivorGameWorld
         {
             localTimer.capture();
             internalWorld.spawn("melee_enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+            internalWorld.spawn("ranged_enemy", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
         }
     }
 

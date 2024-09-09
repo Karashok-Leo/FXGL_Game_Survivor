@@ -1,6 +1,7 @@
 package dev.csu.survivor.component;
 
 import com.almasb.fxgl.entity.component.Component;
+import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.item.Item;
 
 import java.util.ArrayList;
@@ -8,27 +9,61 @@ import java.util.List;
 
 public class InventoryComponent extends Component
 {
-    private final List<Item> inventory;
-
-    public InventoryComponent()
+    public record ItemEntry(ItemType type, Item item)
     {
-        inventory = new ArrayList<>();
+        public ItemEntry(ItemType type)
+        {
+            this(type, type.createItem());
+        }
     }
 
-    public List<Item> getInventory()
+    private final List<ItemEntry> inventory;
+
+    public InventoryComponent(ItemEntry... entries)
+    {
+        inventory = new ArrayList<>(List.of(entries));
+    }
+
+    @Override
+    public void onAdded()
+    {
+        inventory.forEach(entry -> entry.item.onRemove(entity));
+    }
+
+    @Override
+    public void onRemoved()
+    {
+        inventory.forEach(entry -> entry.item.onRemove(entity));
+    }
+
+    public List<ItemEntry> getInventory()
     {
         return inventory;
     }
 
-    public void addItem(Item item)
+    /**
+     * Should be called after the component has been added to the entity.
+     */
+    public void addItem(ItemType type, Item item)
     {
-        inventory.add(item);
         item.onApply(entity);
+        inventory.add(new ItemEntry(type, item));
     }
 
-    public void removeItem(Item item)
+    public void addItem(ItemType type)
     {
-        inventory.remove(item);
-        item.onRemove(entity);
+        this.addItem(type, type.createItem());
+    }
+
+    public void removeItem(ItemType type)
+    {
+        inventory.stream()
+                .filter(entry -> entry.type == type)
+                .findFirst()
+                .ifPresent(entry ->
+                {
+                    entry.item.onRemove(entity);
+                    inventory.remove(entry);
+                });
     }
 }

@@ -3,10 +3,15 @@ package dev.csu.survivor.ui.menu;
 import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.ui.FXGLButton;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.component.GoldComponent;
 import dev.csu.survivor.component.InventoryComponent;
 import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.ui.BorderStackPane;
+import dev.csu.survivor.ui.GoldView;
+import dev.csu.survivor.ui.InventoryPane;
 import dev.csu.survivor.ui.ItemView;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
@@ -17,21 +22,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ShopMenu extends BaseMenu
 {
-    protected final FXGLDefaultMenu.MenuContent shopContent;
     protected final FXGLDefaultMenu.MenuContent inventoryContent;
+    protected final FXGLDefaultMenu.MenuContent shopContent;
 
     public ShopMenu()
     {
         super(MenuType.GAME_MENU);
-        this.shopContent = createShopContent();
         this.inventoryContent = createInventoryContent();
+        this.shopContent = createShopContent();
         this.switchMenuContentTo(this.shopContent);
     }
 
@@ -49,11 +56,11 @@ public class ShopMenu extends BaseMenu
         return bg;
     }
 
-    protected static List<ItemType> randomSelectItem(int n)
+    protected static List<ItemType> randomSelectItem()
     {
-        List<ItemType> items = Arrays.asList(ItemType.values());
+        List<ItemType> items = new ArrayList<>(List.of(ItemType.values()));
         Collections.shuffle(items);
-        return items.subList(0, n);
+        return items.subList(0, 3);
     }
 
     @Override
@@ -63,56 +70,117 @@ public class ShopMenu extends BaseMenu
         back.setOnAction(e -> FXGL.getSceneService().popSubScene());
 
         MenuButton inventory = new MenuButton("menu.inventory");
-        inventory.setMenuContent(() -> this.shopContent, true);
+        inventory.setMenuContent(() -> this.inventoryContent, true);
 
         MenuButton shop = new MenuButton("menu.shop");
-        shop.setMenuContent(() -> this.inventoryContent, true);
+        shop.setMenuContent(() -> this.shopContent, true);
 
         menuBox.add(back, inventory, shop);
     }
 
     protected FXGLDefaultMenu.MenuContent createShopContent()
     {
+        GoldView goldView = new GoldView();
+        goldView.getLabel().setTextFill(Color.WHITE);
+        goldView.setTranslateX(40);
+        goldView.setTranslateY(40);
+        this.addListener(goldView);
+
+        VBox vBox = new VBox(createShopEntries(), goldView);
+        vBox.setTranslateX(-600);
+        vBox.setTranslateY(-240);
+
+        return new FXGLDefaultMenu.MenuContent(vBox);
+    }
+
+    protected HBox createShopEntries()
+    {
         HBox hbox = new HBox();
         hbox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
 
-        for (ItemType itemType : randomSelectItem(3))
-        {
-            VBox subVBox = new VBox();
-            subVBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+        hbox.getChildren().addAll(
+                randomSelectItem()
+                        .stream()
+                        .map(this::createShopEntry)
+                        .toList()
+        );
 
-            ItemView itemView = new ItemView(itemType);
+        return hbox;
+    }
 
-            Button buttonBuy = FXGL.getUIFactoryService().newButton(FXGL.localizedStringProperty("menu.buy"));
-            buttonBuy.setAlignment(Pos.CENTER);
-            buttonBuy.setTextFill(Color.WHITE);
-            buttonBuy.setStyle("-fx-background-color: transparent");
+    protected VBox createShopEntry(ItemType itemType)
+    {
+        VBox itemBox = new VBox();
+        itemBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+        itemBox.getChildren().addAll(new ItemView(itemType), createButtonBuy(itemType, itemBox));
+        return itemBox;
+    }
 
-            buttonBuy.setOnAction(e ->
-            {
-                buttonBuy.setDisable(true);
-                InventoryComponent inv = SurvivorGameWorld.getPlayer().getComponent(InventoryComponent.class);
-                inv.addItem(itemType.createItem());
+    protected BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
+    {
+        Button button = new FXGLButton(text);
+        button.setFont(Font.font(Constants.Client.SHOP_ITEM_NAME_FONT));
+        button.setAlignment(Pos.CENTER);
+        button.setTextFill(Color.WHITE);
+        button.setStyle("-fx-background-color: transparent");
+        button.setOnAction(e -> handler.accept(button));
+        return new BorderStackPane(width, 40, button);
+    }
 
-                FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, subVBox);
-                ft.setToValue(0);
-                ft.setOnFinished(event -> subVBox.setVisible(false));
-                ft.play();
-            });
+    protected BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
+    {
+        return createBorderButton(
+                "%s (-%d Golds)".formatted(
+                        FXGL.localize("menu.buy"),
+                        itemType.price
+                ),
+                Constants.Client.SHOP_ENTRY_WIDTH,
+                button ->
+                {
+                    Entity player = SurvivorGameWorld.getPlayer();
+                    GoldComponent golds = player.getComponent(GoldComponent.class);
 
-            BorderStackPane paneBuy = new BorderStackPane(Constants.Client.SHOP_ENTRY_WIDTH, 40, buttonBuy);
+                    // Determine whether golds is enough
+                    if (golds.getValue() < itemType.price) return;
 
-            subVBox.getChildren().addAll(itemView, paneBuy);
+                    // Add the item to the inventory
+                    player.getComponent(InventoryComponent.class).addItem(itemType);
+                    // Decrease the golds
+                    golds.damage(itemType.price);
 
-            hbox.getChildren().add(subVBox);
-        }
-        hbox.setTranslateX(-480);
-        hbox.setTranslateY(-240);
-        return new FXGLDefaultMenu.MenuContent(hbox);
+                    FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, itemBox);
+                    ft.setToValue(0);
+                    ft.setOnFinished(event -> itemBox.setVisible(false));
+                    ft.play();
+
+                    button.setDisable(true);
+                }
+        );
     }
 
     protected FXGLDefaultMenu.MenuContent createInventoryContent()
     {
-        return EMPTY;
+        InventoryPane inventoryPane = new InventoryPane();
+
+        BorderStackPane previous = createBorderButton(
+                "Previous",
+                200,
+                button -> inventoryPane.prev()
+        );
+        BorderStackPane next = createBorderButton(
+                "Next",
+                200,
+                button -> inventoryPane.next()
+        );
+
+        HBox boxButton = new HBox(previous, next);
+        boxButton.setAlignment(Pos.CENTER);
+        boxButton.setSpacing(80);
+
+        VBox vBox = new VBox(inventoryPane, boxButton);
+        vBox.setTranslateX(-600);
+        vBox.setTranslateY(-240);
+
+        return new FXGLDefaultMenu.MenuContent(vBox);
     }
 }

@@ -28,12 +28,22 @@ public interface Constants
         double PLAYER_INITIAL_SPEED = 2;
         double PLAYER_INITIAL_DAMAGE = 2;
         double PLAYER_HIT_BOX_RADIUS = 7;
+        double PLAYER_BULLET_SPEED = 600;
 
         double ENEMY_INITIAL_MAX_HEALTH = 10;
         double ENEMY_INITIAL_MIN_SPEED = 0.6;
         double ENEMY_INITIAL_MAX_SPEED = 1.2;
         double ENEMY_INITIAL_DAMAGE = 2;
         double ENEMY_HIT_BOX_RADIUS = 11;
+
+        double RANGED_ENEMY_INITIAL_MAX_HEALTH = 10;
+        double RANGED_ENEMY_INITIAL_MIN_SPEED = 0.6;
+        double RANGED_ENEMY_INITIAL_MAX_SPEED = 1.2;
+        double RANGED_ENEMY_INITIAL_DAMAGE = 2;
+        double RANGED_ENEMY_HIT_BOX_RADIUS = 11;
+        double RANGED_ENEMY_ATTACK_RANGE = 300;
+        double ENEMY_BULLET_SPEED = 300;
+        double ENEMY_BULLET_ROTATE_SPEED = 1080;
 
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
         Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
@@ -80,6 +90,11 @@ public interface Constants
         int SHOP_ITEM_BORDER_SIZE = 160;
         int SHOP_ITEM_NAME_FONT = 20;
         int SHOP_ITEM_DESC_FONT = 14;
+
+        int INVENTORY_COLS = 4;
+        int INVENTORY_ROWS = 6;
+        int INVENTORY_BORDER_SIZE = 80;
+        double INVENTORY_ITEM_TEXTURE_SCALE = 3;
 
         Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);

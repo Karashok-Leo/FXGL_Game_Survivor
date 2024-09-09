@@ -4,7 +4,9 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.AnimationComponent;
 import dev.csu.survivor.component.AttributeComponent;
+import dev.csu.survivor.component.InventoryComponent;
 import dev.csu.survivor.enums.AttributeType;
+import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.world.attribute.AttributeInstance;
 
 public class ComponentFactory
@@ -42,5 +44,13 @@ public class ComponentFactory
                 new AttributeInstance(AttributeType.SPEED, FXGLMath.random(Constants.Common.ENEMY_INITIAL_MIN_SPEED, Constants.Common.ENEMY_INITIAL_MAX_SPEED)),
                 new AttributeInstance(AttributeType.DAMAGE, Constants.Common.ENEMY_INITIAL_DAMAGE)
         );
+    }
+
+    public static InventoryComponent newPlayerInventoryComponent()
+    {
+        InventoryComponent component = new InventoryComponent();
+        for (int i = 0; i < 25; i++)
+            component.getInventory().add(new InventoryComponent.ItemEntry(ItemType.HEALING_POTION));
+        return component;
     }
 }

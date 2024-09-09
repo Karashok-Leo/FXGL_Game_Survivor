@@ -15,8 +15,7 @@ public record ComponentItem(EntityType type) implements Item
     @Override
     public void onApply(Entity entity)
     {
-        Entity boomerang = FXGL.getGameWorld().spawn("boomerang");
-        boomerang.addComponent(new AutoRemoveComponent(Constants.Common.REMOVE_DURATION));
+        FXGL.getGameWorld().spawn("boomerang");
     }
 
     @Override
