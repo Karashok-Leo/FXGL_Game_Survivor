@@ -92,7 +92,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new MotionComponent())
                 .with(ComponentFactory.newRangedEnemyAnimationComponent())
                 .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
-                .with(new HealthBarViewComponent(-16,-32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH,Constants.Client.ENEMY_HEALTH_BAR_HEIGHT,Color.RED))
+                .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new HurtComponent())
                 .with(new RangedAttackComponent(Duration.seconds(1.0)))
                 .with(new RangedEnemyComponent())
@@ -147,18 +147,5 @@ public class SurvivorEntityFactory implements EntityFactory
         BoundingBoxComponent bbox = bullet.getBoundingBoxComponent();
         bullet.setPosition(position.subtract(bbox.getWidth() / 2, bbox.getHeight() / 2));
         return bullet;
-    }
-
-    @Spawns("boomerang")
-    public Entity newBoomerang(SpawnData data)
-    {
-        return FXGL.entityBuilder()
-                .type(EntityType.BOOMERANG)
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.BOOMERANG_HIT_BOX_RADIUS)))
-                .at(data.getX(), data.getY())
-                .view("item/boomerang_attack.png")
-                .with(new BoomerangComponent())
-                .collidable()
-                .build();
     }
 }

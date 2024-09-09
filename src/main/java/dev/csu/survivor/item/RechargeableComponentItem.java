@@ -1,21 +1,30 @@
 package dev.csu.survivor.item;
 
-import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
 import com.almasb.fxgl.entity.Entity;
-import dev.csu.survivor.Constants;
-import dev.csu.survivor.enums.EntityType;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public record ComponentItem(EntityType type) implements Item
+public record RechargeableComponentItem<C extends RechargeableIntComponent>(
+        Class<C> clazz,
+        Supplier<C> componentFactory,
+        String descHead
+) implements IRechargeableComponentItem<C>
 {
     @Override
-    public void onApply(Entity entity)
+    public C getComponent()
     {
-        FXGL.getGameWorld().spawn("boomerang");
+        return componentFactory.get();
+    }
+
+    @Override
+    public Class<C> getComponentClass()
+    {
+        return clazz;
     }
 
     @Override
@@ -23,7 +32,7 @@ public record ComponentItem(EntityType type) implements Item
     {
         List<Text> tooltip = new ArrayList<>();
 
-        Text componentName  = new Text("Boomerang:");
+        Text componentName = new Text(descHead + ":");
         componentName.setFill(Color.WHITE);
         Text modifierText = new Text("    + 1");
         modifierText.setFill(Color.WHITE);

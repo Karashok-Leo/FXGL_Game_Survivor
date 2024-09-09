@@ -95,7 +95,7 @@ public interface Constants
         int INVENTORY_COLS = 5;
         int INVENTORY_ROWS = 5;
         int INVENTORY_BORDER_SIZE = 80;
-        double INVENTORY_ITEM_TEXTURE_SCALE = 3;
+        double INVENTORY_ITEM_TEXTURE_SCALE = 2.4;
 
         Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);

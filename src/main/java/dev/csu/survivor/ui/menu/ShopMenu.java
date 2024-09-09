@@ -40,12 +40,19 @@ public class ShopMenu extends BaseMenu
         this.inventoryContent = createInventoryContent();
         this.shopContent = createShopContent();
         this.switchMenuContentTo(this.shopContent);
+
+        GoldView goldView = new GoldView();
+        goldView.getLabel().setTextFill(Color.WHITE);
+        goldView.setTranslateX(40);
+        goldView.setTranslateY(90);
+        this.addListener(goldView);
+        this.getContentRoot().getChildren().add(goldView);
     }
 
     @Override
     protected String getTitle()
     {
-        return "Shop";
+        return "Shop & Inventory";
     }
 
     @Override
@@ -80,17 +87,11 @@ public class ShopMenu extends BaseMenu
 
     protected FXGLDefaultMenu.MenuContent createShopContent()
     {
-        GoldView goldView = new GoldView();
-        goldView.getLabel().setTextFill(Color.WHITE);
-        goldView.setTranslateX(40);
-        goldView.setTranslateY(40);
-        this.addListener(goldView);
+        HBox shopEntries = createShopEntries();
+        shopEntries.setTranslateX(-600);
+        shopEntries.setTranslateY(-240);
 
-        VBox vBox = new VBox(createShopEntries(), goldView);
-        vBox.setTranslateX(-600);
-        vBox.setTranslateY(-240);
-
-        return new FXGLDefaultMenu.MenuContent(vBox);
+        return new FXGLDefaultMenu.MenuContent(shopEntries);
     }
 
     protected HBox createShopEntries()

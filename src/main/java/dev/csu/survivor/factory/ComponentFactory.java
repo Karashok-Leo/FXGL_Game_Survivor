@@ -66,6 +66,7 @@ public class ComponentFactory
     public static InventoryComponent newPlayerInventoryComponent()
     {
         InventoryComponent component = new InventoryComponent();
+        component.getInventory().add(new InventoryComponent.ItemEntry(ItemType.BOOMERANG_ATTACK));
         for (int i = 0; i < 25; i++)
             component.getInventory().add(new InventoryComponent.ItemEntry(ItemType.HEALING_POTION));
         return component;
