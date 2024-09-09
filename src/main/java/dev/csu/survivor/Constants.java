@@ -73,6 +73,7 @@ public interface Constants
         double SHOP_ITEM_TEXTURE_SCALE = 3.6;
         int SHOP_ITEM_BORDER_SIZE = 160;
 
+        Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);
     }
 

@@ -1,10 +1,9 @@
 package dev.csu.survivor.component;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
 import dev.csu.survivor.enums.EntityStates;
-import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
 
 public class EnemyComponent extends Component
@@ -30,9 +29,8 @@ public class EnemyComponent extends Component
             state.changeState(EntityStates.RUN);
         if (state.isIn(EntityStates.RUN, EntityStates.HURT))
         {
-            Point2D target = FXGL.getGameWorld()
-                    .getEntitiesByType(EntityType.PLAYER)
-                    .getFirst()
+            Point2D target = SurvivorGameWorld
+                    .getPlayer()
                     .getPosition();
             Point2D subtract = target.subtract(entity.getPosition());
             motion.addVelocity(subtract.getX(), subtract.getY());

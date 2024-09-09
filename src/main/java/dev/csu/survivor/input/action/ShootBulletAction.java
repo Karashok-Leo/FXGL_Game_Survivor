@@ -5,7 +5,7 @@ import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
 
 public class ShootBulletAction extends UserAction
@@ -20,9 +20,8 @@ public class ShootBulletAction extends UserAction
     {
         GameWorld world = FXGL.getGameWorld();
         Input input = FXGL.getInput();
-        Point2D center = world
-                .getEntitiesByType(EntityType.PLAYER)
-                .getFirst()
+        Point2D center = SurvivorGameWorld
+                .getPlayer()
                 .getCenter();
         SpawnData data = new SpawnData();
         data.put("position", center);

@@ -16,8 +16,8 @@ import java.util.function.Supplier;
 public enum ItemType
 {
     HEALTH_CRYSTAL(() -> new HealthCrystal(UUID.randomUUID().toString() , Constants.Common.HEALTH_CRYSTAL_VALUE), 3),
-    ACCELERATE_CRYSTAL(() -> new AccelerateCrystal(UUID.randomUUID().toString() ,Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
-    HEALING_MEDICINE(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
+    ACCELERATE_FEATHER(() -> new AccelerateCrystal(UUID.randomUUID().toString() ,Constants.Common.ACCELERATE_CRYSTAL_DEGREE)),
+    HEALING_POTION(() -> new HealingMedicine(Constants.Common.HEALING_MEDICINE_VALUE));
 
     /**
      * The identifier of the item, default to be lowercase of the enum name.
@@ -34,7 +34,7 @@ public enum ItemType
     /**
      * Used to create a new item every time the shop refreshes
      */
-    public final ItemFactory itemFactory;
+    private final ItemFactory itemFactory;
 
     /**
      * The higher the rarity, the less likely it is to be sold in the shop

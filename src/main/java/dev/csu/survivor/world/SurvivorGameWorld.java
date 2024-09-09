@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.time.LocalTimer;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.enums.EntityType;
 
 public class SurvivorGameWorld
 {
@@ -36,13 +37,9 @@ public class SurvivorGameWorld
         }
     }
 
-    public GameWorld getInternalWorld()
+    public static Entity getPlayer()
     {
-        return internalWorld;
-    }
-
-    public Entity getPlayer()
-    {
-        return player;
+        return FXGL.getGameWorld()
+                .getSingleton(EntityType.PLAYER);
     }
 }

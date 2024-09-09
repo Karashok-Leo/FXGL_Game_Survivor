@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.GameWorld;
 
 import dev.csu.survivor.factory.MenuFactory;
 import dev.csu.survivor.factory.SurvivorEntityFactory;
+import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.network.NetworkController;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
 import dev.csu.survivor.ui.SurvivorGameHud;
@@ -48,7 +49,7 @@ public class SurvivorGameApp extends GameApplication
     @Override
     protected void initInput()
     {
-//        new SurvivorGameInput().init(FXGL.getInput());
+        new SurvivorGameInput().init(FXGL.getInput());
     }
 
     @Override

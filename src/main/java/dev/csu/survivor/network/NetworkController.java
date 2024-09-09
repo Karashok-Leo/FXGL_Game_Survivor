@@ -46,6 +46,8 @@ public class NetworkController
         }), Duration.seconds(0));
     }
 
+
+
     public void onUpdate(double tpf)
     {
         if (isServer && server != null)
@@ -63,7 +65,7 @@ public class NetworkController
         }
     }
 
-    private void connectClient()
+    public void connectClient()
     {
         FXGL.getDialogService().showInputBox("Enter Server IP Address to connect as client", answer -> {
             try {
