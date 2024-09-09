@@ -81,6 +81,28 @@ public class SurvivorEntityFactory implements EntityFactory
                 .build();
     }
 
+    @Spawns("ranged_enemy")
+    public Entity newRangedEnemy(SpawnData data)
+    {
+        return FXGL.entityBuilder()
+                .type(EntityType.RANGED_ENEMY)
+                .at(data.getX(), data.getY())
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.RANGED_ENEMY_HIT_BOX_RADIUS)))
+                .with(new StateComponent(EntityStates.IDLE))
+                .with(ComponentFactory.newEnemyAttributeComponent())
+                .with(new MotionComponent())
+                .with(ComponentFactory.newEnemyAnimationComponent())
+                .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthBarViewComponent(-16,-32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH,Constants.Client.ENEMY_HEALTH_BAR_HEIGHT,Color.RED))
+                .with(new AttackComponent())
+                .with(new HurtComponent())
+                .with(new EnemyComponent())
+                .with(new AttributeComponent())
+                .collidable()
+                .build();
+
+    }
+
     @Spawns("gold")
     public Entity newGold(SpawnData data)
     {

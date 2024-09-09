@@ -4,6 +4,7 @@ public enum EntityType
 {
     PLAYER,
     ENEMY,
+    RANGED_ENEMY,
     BULLET,
     GOLD,
 }

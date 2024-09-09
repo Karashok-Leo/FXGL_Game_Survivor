@@ -35,6 +35,13 @@ public interface Constants
         double ENEMY_INITIAL_DAMAGE = 2;
         double ENEMY_HIT_BOX_RADIUS = 11;
 
+        double RANGED_ENEMY_INITIAL_MAX_HEALTH = 10;
+        double RANGED_ENEMY_INITIAL_MIN_SPEED = 0.6;
+        double RANGED_ENEMY_INITIAL_MAX_SPEED = 1.2;
+        double RANGED_ENEMY_INITIAL_DAMAGE = 2;
+        double RANGED_ENEMY_HIT_BOX_RADIUS = 11;
+        double RANGED_ENEMY_ATTACK_RANGE = 100;
+
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
         Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
         Duration ENEMY_IDLE_DURATION = Duration.seconds(0.4);
