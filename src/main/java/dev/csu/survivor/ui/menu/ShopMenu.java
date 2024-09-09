@@ -178,6 +178,7 @@ public class ShopMenu extends BaseMenu
         boxButton.setSpacing(80);
 
         VBox vBox = new VBox(inventoryPane, boxButton);
+        vBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
         vBox.setTranslateX(-600);
         vBox.setTranslateY(-240);
 

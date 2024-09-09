@@ -12,8 +12,16 @@ import java.util.List;
 
 public class BoomerangComponent extends Component
 {
+    protected List<Entity> boomerangEntities;
+
     public BoomerangComponent()
     {
+    }
+
+    @Override
+    public void onAdded()
+    {
+        super.onAdded();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class InventoryPane extends GridPane
 
     protected BorderStackPane createInventoryEntry(InventoryComponent.ItemEntry itemEntry)
     {
-        Texture texture = itemEntry.type().getTexture();
+        Texture texture = itemEntry.type().getTexture().copy();
         texture.setScaleX(Constants.Client.INVENTORY_ITEM_TEXTURE_SCALE);
         texture.setScaleY(Constants.Client.INVENTORY_ITEM_TEXTURE_SCALE);
         return new BorderStackPane(Constants.Client.INVENTORY_BORDER_SIZE, Constants.Client.INVENTORY_BORDER_SIZE, texture);
@@ -64,8 +64,8 @@ public class InventoryPane extends GridPane
         for (int i = 0; i < ITEMS_PER_PAGE; i++)
         {
             int index = startIndex + i;
-            int column = (i % ITEMS_PER_PAGE) % Constants.Client.INVENTORY_COLS;
-            int row = (i % ITEMS_PER_PAGE) / Constants.Client.INVENTORY_ROWS;
+            int column = i % Constants.Client.INVENTORY_COLS;
+            int row = i / Constants.Client.INVENTORY_COLS;
             this.add(index < size ? itemPanes.get(index) : createEmptyEntry(), column, row);
         }
     }

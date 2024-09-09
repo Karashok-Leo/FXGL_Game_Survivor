@@ -66,12 +66,12 @@ public class SurvivorEntityFactory implements EntityFactory
         return FXGL.entityBuilder()
                 .type(EntityType.MELEE_ENEMY)
                 .at(data.getX(), data.getY())
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.MELEE_ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(ComponentFactory.newEnemyAttributeComponent())
+                .with(ComponentFactory.newMeleeEnemyAttributeComponent())
                 .with(new MotionComponent())
-                .with(ComponentFactory.newEnemyAnimationComponent())
-                .with(new HealthComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
+                .with(ComponentFactory.newMeleeEnemyAnimationComponent())
+                .with(new HealthComponent(Constants.Common.MELEE_ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new MeleeAttackComponent())
                 .with(new HurtComponent())
@@ -88,9 +88,9 @@ public class SurvivorEntityFactory implements EntityFactory
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.RANGED_ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(ComponentFactory.newEnemyAttributeComponent())
+                .with(ComponentFactory.newRangedEnemyAttributeComponent())
                 .with(new MotionComponent())
-                .with(ComponentFactory.newEnemyAnimationComponent())
+                .with(ComponentFactory.newRangedEnemyAnimationComponent())
                 .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16,-32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH,Constants.Client.ENEMY_HEALTH_BAR_HEIGHT,Color.RED))
                 .with(new HurtComponent())
@@ -135,11 +135,11 @@ public class SurvivorEntityFactory implements EntityFactory
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
-        double rotationSpeed = Constants.Common.ENEMY_BULLET_ROTATE_SPEED;
+        double rotationSpeed = Constants.Common.RANGED_ENEMY_BULLET_ROTATE_SPEED;
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.ENEMY_BULLET)
                 .viewWithBBox(new Rectangle(80, 30, Color.BLUE))
-                .with(new ProjectileComponent(target.subtract(position), Constants.Common.ENEMY_BULLET_SPEED))
+                .with(new ProjectileComponent(target.subtract(position), Constants.Common.RANGED_ENEMY_BULLET_SPEED))
                 .with(new RotateComponent(rotationSpeed))
                 .with(new OffscreenCleanComponent())
                 .collidable()

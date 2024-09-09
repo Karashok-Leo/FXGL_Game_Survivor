@@ -27,7 +27,7 @@ public class InventoryComponent extends Component
     @Override
     public void onAdded()
     {
-        inventory.forEach(entry -> entry.item.onRemove(entity));
+        inventory.forEach(entry -> entry.item.onApply(entity));
     }
 
     @Override

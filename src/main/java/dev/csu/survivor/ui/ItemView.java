@@ -46,7 +46,7 @@ public class ItemView extends BorderStackPane
 
     protected BorderStackPane createItemPane()
     {
-        Texture texture = itemType.getTexture();
+        Texture texture = itemType.getTexture().copy();
         texture.setScaleX(Constants.Client.SHOP_ITEM_TEXTURE_SCALE);
         texture.setScaleY(Constants.Client.SHOP_ITEM_TEXTURE_SCALE);
         return new BorderStackPane(Constants.Client.SHOP_ITEM_BORDER_SIZE, Constants.Client.SHOP_ITEM_BORDER_SIZE, texture);
