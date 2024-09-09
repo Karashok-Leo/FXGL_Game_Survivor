@@ -37,6 +37,13 @@ public enum ItemType
             ),
             20
     ),
+    POWER_CRYSTAL(
+            () -> new AttributeItem(
+                    AttributeType.DAMAGE,
+                    new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.PLAYER_INITIAL_DAMAGE)
+            ),
+            20
+    ),
     BOOMERANG_ATTACK(
             () -> new ComponentItem(
                     EntityType.BOOMERANG
