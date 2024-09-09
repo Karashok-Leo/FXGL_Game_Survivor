@@ -62,6 +62,7 @@ public interface Constants
         double HEALTH_CRYSTAL_VALUE = 5;
         double HEALING_POTION_VALUE = 0.2;
         double ACCELERATE_FEATHER_DEGREE = 1.2;
+        double POWER_CRYSTAL_VALUE = 1;
 
         int RANDOM_FEATURE_COUNTS = 96;
         int RANDOM_BUSH_COUNTS = 32;

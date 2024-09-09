@@ -38,6 +38,13 @@ public enum ItemType
             ),
             20
     ),
+    POWER_CRYSTAL(
+            () -> new AttributeItem(
+                    AttributeType.DAMAGE,
+                    new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.POWER_CRYSTAL_VALUE)
+            ),
+            20
+    ),
     BOOMERANG_ATTACK(
             () -> new RechargeableComponentItem<>(
                     BoomerangComponent.class,
