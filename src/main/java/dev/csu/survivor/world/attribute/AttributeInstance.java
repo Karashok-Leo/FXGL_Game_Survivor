@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class AttributeInstance
@@ -15,10 +16,10 @@ public class AttributeInstance
     private final SimpleDoubleProperty baseValue;
 
     /**
-     * K: className
+     * K: UUID
      * V: AttributeModifier
      */
-    private final Map<String, AttributeModifier> modifiers = new HashMap<>();
+    private final Map<UUID, AttributeModifier> idToModifier = new HashMap<>();
 
     private boolean dirty = true;
 
@@ -77,19 +78,29 @@ public class AttributeInstance
 
     public void addModifier(AttributeModifier modifier)
     {
-        modifiers.put(modifier.className(), modifier);
+        idToModifier.put(modifier.uuid(), modifier);
         markDirty();
         calculateTotalValue();
     }
 
     public void removeModifier(AttributeModifier modifier)
     {
-        this.removeModifier(modifier.className());
+        this.removeModifier(modifier.uuid());
     }
 
-    public void removeModifier(String className)
+    public void removeModifier(UUID uuid)
     {
-        modifiers.remove(className);
+        idToModifier.remove(uuid);
+        markDirty();
+        calculateTotalValue();
+    }
+
+    public void removeModifierByClass(String className)
+    {
+        idToModifier.values()
+                .stream()
+                .filter(modifier -> modifier.className().equals(className))
+                .forEach(modifier -> this.idToModifier.remove(modifier.uuid()));
         markDirty();
         calculateTotalValue();
     }
@@ -108,7 +119,7 @@ public class AttributeInstance
     {
         double totalValue = getBaseValue();
 
-        for (AttributeModifier modifier : modifiers.values())
+        for (AttributeModifier modifier : idToModifier.values())
         {
             if (modifier.operation() == AttributeModifier.Operation.ADDITION)
             {

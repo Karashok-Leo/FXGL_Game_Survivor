@@ -45,7 +45,7 @@ public interface Constants
         Duration DEATH_DELAY = Duration.seconds(1.5);
 
         double GOLD_HIT_BOX_RADIUS = 12;
-        int INITIAL_GOLDS = 10;
+        int INITIAL_GOLDS = 20;
         int MAX_GOLDS = 999;
 
         double HEALTH_CRYSTAL_VALUE = 5;
