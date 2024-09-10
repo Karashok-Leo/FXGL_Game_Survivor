@@ -54,7 +54,7 @@ public class SurvivorGameWorld
             }
         }
 
-        if (waveTimer.elapsed(Duration.minutes(2)))
+        if (waveTimer.elapsed(Duration.seconds(2)))
         {
             wave.set(wave.get() + 1);
             waveTimer.capture();

@@ -14,9 +14,9 @@ public class HealthComponent extends RechargeableDoubleComponent
     protected final LocalTimer regenTimer;
     protected AttributeComponent attribute;
 
-    public HealthComponent(double maxValue)
+    public HealthComponent()
     {
-        super(maxValue, maxValue);
+        super(0, 0);
         this.regenTimer = FXGL.newLocalTimer();
     }
 
@@ -25,7 +25,6 @@ public class HealthComponent extends RechargeableDoubleComponent
     {
         this.regenTimer.capture();
         this.attribute = this.entity.getComponent(AttributeComponent.class);
-        this.maxValueProperty().bind(attribute.getAttributeInstance(AttributeType.MAX_HEALTH).valueProperty());
 
         // If max health increase, then set current health to max health
         this.maxValueProperty().addListener((observableValue, oldValue, newValue) ->
@@ -33,12 +32,14 @@ public class HealthComponent extends RechargeableDoubleComponent
             if (newValue.doubleValue() > oldValue.doubleValue())
                 this.restoreFully();
         });
+        
+        this.maxValueProperty().bind(attribute.getAttributeInstance(AttributeType.MAX_HEALTH).valueProperty());
     }
 
     @Override
     public void onUpdate(double tpf)
     {
-        if(this.isZero()) return;
+        if (this.isZero()) return;
         double regen = attribute.getAttributeValue(AttributeType.REGENERATION);
         if (regenTimer.elapsed(Duration.seconds(1 / regen)))
         {
