@@ -1,10 +1,15 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.FXGLScene;
+import com.almasb.fxgl.dsl.FXGL;
+import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,6 +22,8 @@ import java.sql.*;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.sun.javafx.event.EventUtil.fireEvent;
 
 public class AchievementView extends FXGLScene {
 
@@ -34,6 +41,23 @@ public class AchievementView extends FXGLScene {
         gridPane.setVgap(20);
         gridPane.setLayoutX(-225);
         gridPane.setLayoutY(-250);
+
+        //返回按钮
+        Button backButton = new Button();
+        backButton.setOnAction(event -> {
+            System.out.println("Back button clicked");
+            FXGL.getEventBus().fireEvent(new BackEvent());
+        });
+        ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/achievements/BACK.png"))));
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(50);
+        backButton.setGraphic(imageView);
+        backButton.setPrefSize(200, 50);
+        backButton.setPadding(javafx.geometry.Insets.EMPTY);
+        backButton.setStyle("-fx-background-color: transparent;");
+        backButton.setBorder(null);
+        backButton.setLayoutX(-600);
+        backButton.setLayoutY(-420);
 
         User user = User.getInstance();
 
@@ -91,10 +115,14 @@ public class AchievementView extends FXGLScene {
         }
 
         contentRoot.getChildren().add(gridPane); // 将GridPane添加到容器中
+        contentRoot.getChildren().add(backButton);
 
         // 设置背景透明
         contentRoot.setStyle("-fx-background-color: transparent;");
+
+        contentRoot.getStyleClass().add("achievement-view");
     }
+
 
     /**
      * 获取成就视图的内容容器
@@ -132,6 +160,13 @@ public class AchievementView extends FXGLScene {
         }
 
         return box;
+    }
+    public static class BackEvent extends Event {
+
+        public static final EventType<BackEvent> USER_BACK = new EventType<>(Event.ANY, "USER_BACK");
+        public BackEvent() {
+            super(USER_BACK);
+        }
     }
 }
 

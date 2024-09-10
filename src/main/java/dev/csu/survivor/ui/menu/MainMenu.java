@@ -2,22 +2,27 @@ package dev.csu.survivor.ui.menu;
 
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.input.UserAction;
 import dev.csu.survivor.ui.AchievementView;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -98,8 +103,18 @@ public class MainMenu extends BaseMenu {
 
         // 监听用户登录事件
         FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> {
+            System.out.println("85252 ");
             enableButtons(event.isClosed());
         });
+
+        //监听返回事件
+        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK,event -> {
+            System.out.println("jianting ");
+           showMainMenu();
+        });
+
+        // 注册按键事件
+        FXGL.getInput().addAction(new BackAction("GoTo"),KeyCode.K);
     }
 
     @Override
@@ -287,6 +302,17 @@ public class MainMenu extends BaseMenu {
         exitButton.setDisable(!enable);
         optionsButton.setDisable(!enable);
         achievementButton.setDisable(!enable);
+    }
+
+    public class BackAction extends UserAction {
+
+        public BackAction(String name) {
+            super(name);
+        }
+
+        public void onAction() {
+            showMainMenu();
+        }
     }
 }
 
