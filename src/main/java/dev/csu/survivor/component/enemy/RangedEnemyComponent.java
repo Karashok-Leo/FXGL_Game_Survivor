@@ -1,8 +1,10 @@
 package dev.csu.survivor.component.enemy;
 
 import com.almasb.fxgl.core.math.Vec2;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
+import com.almasb.fxgl.time.TimerAction;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.AnimationComponent;
 import dev.csu.survivor.component.base.MotionComponent;
@@ -15,6 +17,7 @@ public class RangedEnemyComponent extends Component
     protected StateComponent state;
     protected MotionComponent motion;
     protected RangedAttackComponent rangedAttack;
+    private TimerAction attackCooldown;
 
     public RangedEnemyComponent()
     {
@@ -45,12 +48,17 @@ public class RangedEnemyComponent extends Component
             {
                 Point2D subtract = target.subtract(entity.getPosition());
                 motion.addVelocity(subtract.getX(), subtract.getY());
-            } else
+            }
+            else
             {
-                rangedAttack.attack(SurvivorGameWorld.getPlayer());
+                if (attackCooldown == null || attackCooldown.isExpired()) {
+                    rangedAttack.attack(SurvivorGameWorld.getPlayer());
 
-                Vec2 direction = new Vec2(target.subtract(entity.getPosition()));
-                entity.getComponent(AnimationComponent.class).updateDirection(direction);
+                    Vec2 direction = new Vec2(target.subtract(entity.getPosition()));
+                    entity.getComponent(AnimationComponent.class).updateDirection(direction);
+
+                    attackCooldown = FXGL.getGameTimer().runOnceAfter(() -> {}, Constants.Common.RANGED_ENEMY_ATTACK_COOLDOWN);
+                }
             }
         }
 

@@ -50,6 +50,7 @@ public interface Constants
         Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
         Duration ENEMY_IDLE_DURATION = Duration.seconds(0.4);
         Duration ATTACK_DURATION = Duration.seconds(0.8);
+        Duration RANGED_ENEMY_ATTACK_COOLDOWN = Duration.seconds(0.8);
         Duration HURT_DELAY = Duration.seconds(0.2);
         Duration HURT_DURATION = Duration.seconds(0.3);
         Duration DEATH_DURATION = Duration.seconds(1.0);
