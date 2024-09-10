@@ -32,7 +32,7 @@ public class HealthComponent extends RechargeableDoubleComponent
             if (newValue.doubleValue() > oldValue.doubleValue())
                 this.restoreFully();
         });
-        
+
         this.maxValueProperty().bind(attribute.getAttributeInstance(AttributeType.MAX_HEALTH).valueProperty());
     }
 
