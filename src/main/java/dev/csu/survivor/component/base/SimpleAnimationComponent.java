@@ -1,24 +1,24 @@
-package dev.csu.survivor.component.misc;
+package dev.csu.survivor.component.base;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.BoundingBoxComponent;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
-import javafx.util.Duration;
 
-public class GoldAnimationComponent extends Component
+/**
+ * Should be added after BoundingBoxComponent
+ */
+public class SimpleAnimationComponent extends Component
 {
-    public static final AnimationChannel CHANNEL = new AnimationChannel(
-            FXGL.image("coin.png"), 9, 20, 20,
-            Duration.seconds(2), 0, 7
-    );
+    protected final AnimationChannel channel;
+    protected final AnimatedTexture texture;
 
-    protected final AnimatedTexture texture = new AnimatedTexture(CHANNEL);
-
-    public GoldAnimationComponent()
+    public SimpleAnimationComponent(AnimationChannel channel)
     {
+        this.channel = channel;
+        this.texture = new AnimatedTexture(channel);
     }
+
 
     @Override
     public void onAdded()
@@ -26,8 +26,8 @@ public class GoldAnimationComponent extends Component
         this.entity.getViewComponent().addChild(texture);
 
         BoundingBoxComponent bbox = this.entity.getBoundingBoxComponent();
-        this.texture.setTranslateX((bbox.getWidth() - CHANNEL.getFrameWidth(0)) / 2.0);
-        this.texture.setTranslateY((bbox.getHeight() - CHANNEL.getFrameHeight(0)) / 2.0);
+        this.texture.setTranslateX((bbox.getWidth() - channel.getFrameWidth(0)) / 2.0);
+        this.texture.setTranslateY((bbox.getHeight() - channel.getFrameHeight(0)) / 2.0);
 
         // Bind zIndex to yPos
         this.entity.getViewComponent().zIndexProperty().bind(entity.yProperty());

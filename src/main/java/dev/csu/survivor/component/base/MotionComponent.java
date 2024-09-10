@@ -50,7 +50,7 @@ public class MotionComponent extends Component
         }
 
         if (!state.isIn(EntityStates.IDLE))
-            entity.getComponent(AnimationComponent.class)
+            entity.getComponent(MultiAnimationComponent.class)
                     .updateDirection(velocity);
 
         // Move

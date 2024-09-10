@@ -9,6 +9,7 @@ import com.almasb.fxgl.input.UserAction;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
 
+@Deprecated
 public class ShootBulletAction extends UserAction
 {
     public ShootBulletAction()

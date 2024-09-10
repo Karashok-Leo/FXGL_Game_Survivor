@@ -20,6 +20,7 @@ public class RangedAttackComponent extends AttackComponent
             SpawnData data = new SpawnData();
             data.put("position", entity.getCenter());
             data.put("target", new Point2D(target.getX(), target.getY()));
+            data.put("owner", entity);
 
             world.spawn("enemy_bullet", data);
         }

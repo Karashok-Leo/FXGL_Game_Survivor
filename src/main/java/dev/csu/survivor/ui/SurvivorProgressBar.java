@@ -1,9 +1,11 @@
 package dev.csu.survivor.ui;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.logging.Logger;
 import com.almasb.fxgl.ui.Position;
 import com.almasb.fxgl.ui.ProgressBar;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.util.StyleUtil;
 import javafx.animation.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -107,14 +109,10 @@ public class SurvivorProgressBar extends Parent
                 Text text = new Text((diff > 0 ? "+" : "") + diff);
                 text.setTranslateX(newWidth + (diff > 0 ? 5 : 25));
                 text.setTranslateY(height.get());
-                text.setFill(traceFillProvider.get(diff > 0));
-                text.setFont(Font.font(18 + height.get() / 5));
 
-                text.setStroke(traceFillProvider.get(diff > 0));
-                text.setStrokeWidth(2);
-                DropShadow shadow = new DropShadow(10, Color.BLACK);
-                shadow.setInput(new Glow(0.3));
-                text.setEffect(shadow);
+                double size = 18 + height.get() / 5;
+                Paint paint = traceFillProvider.get(diff > 0);
+                StyleUtil.setTextStyle(text, size, paint);
 
                 barGroup.getChildren().add(text);
 

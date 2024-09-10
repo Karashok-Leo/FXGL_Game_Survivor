@@ -9,6 +9,7 @@ import dev.csu.survivor.component.base.OwnableComponent;
 import dev.csu.survivor.component.enemy.MeleeAttackComponent;
 import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.enums.AttributeType;
+import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityType;
 
 public class SurvivorPhysicsHandler
@@ -20,27 +21,13 @@ public class SurvivorPhysicsHandler
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
                         EntityType.PLAYER,
-                        EntityType.MELEE_ENEMY
+                        EnemyType.MELEE_ENEMY
                 )
                 {
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
                         b.getComponent(MeleeAttackComponent.class).attack(a);
-                    }
-                }
-        );
-
-        physicsWorld.addCollisionHandler(
-                new CollisionHandler(
-                        EntityType.BULLET,
-                        EntityType.MELEE_ENEMY
-                )
-                {
-                    @Override
-                    protected void onCollision(Entity a, Entity b)
-                    {
-                        applyOwnerDamage(a, b);
                     }
                 }
         );
@@ -59,19 +46,35 @@ public class SurvivorPhysicsHandler
                 }
         );
 
-        physicsWorld.addCollisionHandler(
-                new CollisionHandler(
-                        EntityType.BULLET,
-                        EntityType.RANGED_ENEMY
-                )
-                {
-                    @Override
-                    protected void onCollision(Entity a, Entity b)
+        for (EnemyType enemyType : EnemyType.values())
+        {
+            physicsWorld.addCollisionHandler(
+                    new CollisionHandler(
+                            EntityType.PLAYER_BULLET,
+                            enemyType
+                    )
                     {
-                        applyOwnerDamage(a, b);
+                        @Override
+                        protected void onCollision(Entity bullet, Entity enemy)
+                        {
+                            applyOwnerDamage(bullet, enemy);
+                        }
                     }
-                }
-        );
+            );
+            physicsWorld.addCollisionHandler(
+                    new CollisionHandler(
+                            EntityType.BOOMERANG,
+                            enemyType
+                    )
+                    {
+                        @Override
+                        protected void onCollision(Entity boomerang, Entity enemy)
+                        {
+                            applyOwnerDamage(boomerang, enemy);
+                        }
+                    }
+            );
+        }
 
         physicsWorld.addCollisionHandler(
                 new CollisionHandler(
@@ -80,37 +83,9 @@ public class SurvivorPhysicsHandler
                 )
                 {
                     @Override
-                    protected void onCollision(Entity a, Entity b)
+                    protected void onCollision(Entity bullet, Entity player)
                     {
-                        b.getComponent(HurtComponent.class).hurt(a, 2);
-                    }
-                }
-        );
-
-        physicsWorld.addCollisionHandler(
-                new CollisionHandler(
-                        EntityType.BOOMERANG,
-                        EntityType.MELEE_ENEMY
-                )
-                {
-                    @Override
-                    protected void onCollision(Entity boomerang, Entity enemy)
-                    {
-                        applyOwnerDamage(boomerang, enemy);
-                    }
-                }
-        );
-
-        physicsWorld.addCollisionHandler(
-                new CollisionHandler(
-                        EntityType.BOOMERANG,
-                        EntityType.RANGED_ENEMY
-                )
-                {
-                    @Override
-                    protected void onCollision(Entity boomerang, Entity enemy)
-                    {
-                        applyOwnerDamage(boomerang, enemy);
+                        applyOwnerDamage(bullet, player);
                     }
                 }
         );

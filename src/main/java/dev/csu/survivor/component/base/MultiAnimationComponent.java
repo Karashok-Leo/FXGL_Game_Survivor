@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Should be added after StateComponent
+ * Should be added after StateComponent and BoundingBoxComponent
  */
-public class AnimationComponent extends Component
+public class MultiAnimationComponent extends Component
 {
     protected final AnimationMap animationMap;
     protected AnimatedTexture texture;
@@ -34,7 +34,7 @@ public class AnimationComponent extends Component
     protected SimpleObjectProperty<Direction> directionProperty;
     protected SimpleObjectProperty<AnimationChannel> channelProperty;
 
-    public AnimationComponent(AnimationMap animationMap)
+    public MultiAnimationComponent(AnimationMap animationMap)
     {
         this.animationMap = animationMap;
     }

@@ -8,6 +8,7 @@ import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.HealthComponent;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
@@ -69,13 +70,7 @@ public class SurvivorGameHud
         healthBar.setMinValue(0);
 
         Label label = healthBar.getLabel();
-        label.setFont(Font.font(Constants.Client.HUD_FONT));
-        label.setStyle("""
-                -fx-background-color: rgba(255, 255, 255, 0.4);
-                -fx-background-radius: 10;
-                -fx-border-radius: 10;
-                -fx-padding: 2, 6;
-                """);
+        StyleUtil.setLabelStyle(label, Color.rgb(64, 238, 67));
 
         return healthBar;
     }
@@ -83,7 +78,6 @@ public class SurvivorGameHud
     private GoldView createGoldView()
     {
         GoldView goldView = new GoldView();
-        goldView.addLabelBackground();
         goldView.setTranslateX(14);
         return goldView;
     }
@@ -101,14 +95,7 @@ public class SurvivorGameHud
         Text text = new Text("+1");
         text.setTranslateX(x);
         text.setTranslateY(y);
-        text.setFill(Color.WHITE);
-        text.setFont(Font.font(24));
-
-        text.setStroke(Color.GOLD);
-        text.setStrokeWidth(2);
-        DropShadow shadow = new DropShadow(10, Color.BLACK);
-        shadow.setInput(new Glow(0.3));
-        text.setEffect(shadow);
+        StyleUtil.setTextStyle(text, Color.GOLD);
 
         gameScene.addChild(text);
 
