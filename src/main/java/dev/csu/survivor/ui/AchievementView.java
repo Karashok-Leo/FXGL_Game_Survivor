@@ -1,15 +1,12 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.FXGLScene;
-import com.almasb.fxgl.dsl.FXGL;
-import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,7 +20,6 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.sun.javafx.event.EventUtil.fireEvent;
 
 public class AchievementView extends FXGLScene {
 
@@ -128,13 +124,15 @@ public class AchievementView extends FXGLScene {
 
             // 成就名称
             Label nameLabel = new Label(name);
-            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"); // 设置文字颜色为白色
 
             // 成就描述
             Label descriptionLabel = new Label(description);
+            descriptionLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
 
             // 达成时间
             Label timeLabel = new Label("Unlock Time: " + unlockTime);
+            timeLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
 
             box.getChildren().addAll(imageView, nameLabel, descriptionLabel, timeLabel);
         } catch (NullPointerException e) {
@@ -143,6 +141,8 @@ public class AchievementView extends FXGLScene {
 
         return box;
     }
+
+    //返回事件
     public static class BackEvent extends Event {
 
         public static final EventType<BackEvent> USER_BACK = new EventType<>(Event.ANY, "USER_BACK");

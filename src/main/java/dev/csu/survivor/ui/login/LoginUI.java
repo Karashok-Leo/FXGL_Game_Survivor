@@ -82,19 +82,23 @@ public class LoginUI extends Application {
 
     // 处理注册逻辑
     private void handleSignIn() {
-        String username = tfUser.getText();
-        String password = tfPassword.getText();
+        try {
+            String username = tfUser.getText();
+            String password = tfPassword.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showErrorDialog("Incomplete information.");
-            return;
-        }
+            if (username.isEmpty() || password.isEmpty()) {
+                showErrorDialog("Incomplete information.");
+                return;
+            }
 
-        if (userManager.userExist(username)) {
-            showErrorDialog("User already exists.");
-        } else {
-            userManager.registerUser(username, password);
-            showSuccessDialog();
+            if (userManager.userExist(username)) {
+                showErrorDialog("User already exists.");
+            } else {
+                userManager.registerUser(username, password);
+                showSuccessDialog();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
