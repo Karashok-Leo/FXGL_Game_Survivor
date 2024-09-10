@@ -18,6 +18,11 @@ public class SurvivorGameApp extends GameApplication
 {
     private SurvivorGameWorld world;
 
+    public SurvivorGameWorld getWorld()
+    {
+        return world;
+    }
+
     public static void main(String[] args)
     {
         launch(args);
