@@ -54,12 +54,13 @@ public class RangedEnemyComponent extends Component
                 if (attackCooldown == null || attackCooldown.isExpired()) {
                     rangedAttack.attack(SurvivorGameWorld.getPlayer());
 
-                    Vec2 direction = new Vec2(target.subtract(entity.getPosition()));
-                    entity.getComponent(MultiAnimationComponent.class).updateDirection(direction);
-
                     attackCooldown = FXGL.getGameTimer().runOnceAfter(() -> {}, Constants.Common.RANGED_ENEMY_ATTACK_COOLDOWN);
                 }
             }
+
+            // Update direction
+            Vec2 direction = new Vec2(target.subtract(entity.getPosition()));
+            entity.getComponent(MultiAnimationComponent.class).updateDirection(direction);
         }
 
         if (state.isIn(EntityStates.ATTACK) && distance > Constants.Common.RANGED_ENEMY_ATTACK_RANGE)

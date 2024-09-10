@@ -85,7 +85,7 @@ public interface Constants
         int SHOP_ENTRY_WIDTH = 200;
         int SHOP_ENTRY_HEIGHT = 480;
         int SHOP_ENTRY_PADDING = 20;
-        int SHOP_ENTRY_OUTER_SPACING = 20;
+        int SHOP_ENTRY_OUTER_SPACING = 0;
         int SHOP_ENTRY_INNER_SPACING = 30;
         double SHOP_ITEM_TEXTURE_SCALE = 3.6;
         int SHOP_ITEM_BORDER_SIZE = 160;
@@ -95,7 +95,8 @@ public interface Constants
         int INVENTORY_COLS = 5;
         int INVENTORY_ROWS = 5;
         int INVENTORY_BORDER_SIZE = 80;
-        double INVENTORY_ITEM_TEXTURE_SCALE = 1.6;
+        int INVENTORY_ENTRY_SPACING = 20;
+        double INVENTORY_ITEM_TEXTURE_SCALE = 1.8;
 
         Duration SHOP_ENTRY_FADE_DURATION = Duration.seconds(0.5);
         Duration TEXT_FADE_DURATION = Duration.seconds(1.0);

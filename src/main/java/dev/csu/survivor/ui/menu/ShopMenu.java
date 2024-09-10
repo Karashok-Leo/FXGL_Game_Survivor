@@ -19,37 +19,38 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class ShopMenu extends BaseMenu
 {
-    protected final InventoryPane inventoryPane;
     protected final HBox shopEntries;
-    protected final FXGLDefaultMenu.MenuContent inventoryContent;
+    protected final InventoryPane inventoryPane;
     protected final FXGLDefaultMenu.MenuContent shopContent;
+    protected final FXGLDefaultMenu.MenuContent inventoryContent;
 
     public ShopMenu()
     {
         super(MenuType.GAME_MENU);
 
         this.shopEntries = createShopEntries();
-        shopEntries.setTranslateX(-640);
-        shopEntries.setTranslateY(-240);
+        shopEntries.setTranslateX(-776);
+        shopEntries.setTranslateY(-200);
 
         this.inventoryPane = new InventoryPane();
-        inventoryPane.setTranslateX(-570);
-        inventoryPane.setTranslateY(-240);
+        inventoryPane.setTranslateX(-544);
+        inventoryPane.setTranslateY(-200);
 
-        this.inventoryContent = new FXGLDefaultMenu.MenuContent(this.inventoryPane);
         this.shopContent = new FXGLDefaultMenu.MenuContent(this.shopEntries);
+        this.inventoryContent = new FXGLDefaultMenu.MenuContent(this.inventoryPane);
 
+        this.refreshShopEntries();
         this.switchMenuContentTo(this.shopContent);
 
         GoldView goldView = new GoldView();
@@ -58,6 +59,12 @@ public class ShopMenu extends BaseMenu
         goldView.setTranslateY(90);
         this.addListener(goldView);
         this.getContentRoot().getChildren().add(goldView);
+
+        getInput().addEventHandler(KeyEvent.ANY, event ->
+        {
+            if (event.getCode() == FXGL.getSettings().getMenuKey())
+                fireResume();
+        });
     }
 
     @Override
@@ -77,39 +84,32 @@ public class ShopMenu extends BaseMenu
     @Override
     protected void initMenuBox(MenuBox menuBox)
     {
-        MenuButton back = new MenuButton("menu.back");
-        back.setOnAction(e -> FXGL.getSceneService().popSubScene());
+        MenuButton shop = new MenuButton("menu.shop");
+        shop.setMenuContent(() -> this.shopContent, true);
 
         MenuButton inventory = new MenuButton("menu.inventory");
         inventory.setMenuContent(() -> this.inventoryContent, true);
 
-        MenuButton shop = new MenuButton("menu.shop");
-        shop.setMenuContent(() -> this.shopContent, true);
+        MenuButton itemResume = new MenuButton("menu.resume");
+        itemResume.setOnAction(e -> fireResume());
 
-        menuBox.add(back, inventory, shop);
+        menuBox.add(shop, inventory, itemResume);
     }
 
-    protected HBox createShopContent()
+    public void refreshShopEntries()
     {
-        HBox shopEntries = createShopEntries();
-        shopEntries.setTranslateX(-600);
-        shopEntries.setTranslateY(-240);
-        return shopEntries;
-    }
-
-    protected HBox createShopEntries()
-    {
-        HBox hbox = new HBox();
-        hbox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
-
-        hbox.getChildren().addAll(
+        this.shopEntries.getChildren().clear();
+        this.shopEntries.getChildren().addAll(
                 MathUtil.weightedRandomSet(4, List.of(ItemType.values()), type -> type.weight)
                         .stream()
                         .map(this::createShopEntry)
                         .toList()
         );
+    }
 
-        return hbox;
+    protected HBox createShopEntries()
+    {
+        return new HBox();
     }
 
     protected VBox createShopEntry(ItemType itemType)
@@ -123,7 +123,7 @@ public class ShopMenu extends BaseMenu
     public static BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
     {
         Button button = new FXGLButton(text);
-        button.setFont(Font.font(Constants.Client.SHOP_ITEM_NAME_FONT));
+        button.setFont(FXGL.getUIFactoryService().newFont(Constants.Client.SHOP_ITEM_NAME_FONT));
         button.setAlignment(Pos.CENTER);
         button.setTextFill(Color.WHITE);
         button.setStyle("-fx-background-color: transparent");
@@ -134,7 +134,7 @@ public class ShopMenu extends BaseMenu
     public BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
     {
         return createBorderButton(
-                "%s (-%d Golds)".formatted(
+                "%s (-%d G)".formatted(
                         FXGL.localize("menu.buy"),
                         itemType.price
                 ),
@@ -167,7 +167,7 @@ public class ShopMenu extends BaseMenu
     public static BorderStackPane createButtonSell(ItemType itemType, VBox itemBox, InventoryPane inventoryPaneToUpdate)
     {
         return createBorderButton(
-                "%s (+%d Golds)".formatted(
+                "%s (+%d G)".formatted(
                         FXGL.localize("menu.sell"),
                         itemType.price
                 ),
@@ -192,5 +192,12 @@ public class ShopMenu extends BaseMenu
                     inventoryPaneToUpdate.updatePage();
                 }
         );
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        switchMenuTo(menu);
+        switchMenuContentTo(this.shopContent);
     }
 }

@@ -1,5 +1,6 @@
 package dev.csu.survivor.ui;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.ItemType;
@@ -9,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
@@ -56,7 +56,7 @@ public class ItemView extends BorderStackPane
     {
         Text text = new Text(itemType.getName());
         text.setFill(Color.WHITE);
-        text.setFont(Font.font(Constants.Client.SHOP_ITEM_NAME_FONT));
+        text.setFont(FXGL.getUIFactoryService().newFont(Constants.Client.SHOP_ITEM_NAME_FONT));
         TextFlow itemName = new TextFlow(text);
         itemName.setTextAlignment(TextAlignment.CENTER);
         itemName.setPrefWidth(Constants.Client.SHOP_ENTRY_WIDTH);
@@ -68,7 +68,7 @@ public class ItemView extends BorderStackPane
         List<Text> desc = this.item.getDescription(SurvivorGameWorld.getPlayer());
         desc.forEach(text1 ->
         {
-            text1.setFont(Font.font(Constants.Client.SHOP_ITEM_DESC_FONT));
+            text1.setFont(FXGL.getUIFactoryService().newFont(Constants.Client.SHOP_ITEM_DESC_FONT));
         });
 
         VBox box = new VBox();
