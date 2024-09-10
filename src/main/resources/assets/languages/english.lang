@@ -16,7 +16,7 @@ attribute.max_health = Max Health
 attribute.speed = Speed
 attribute.damage = Attack Damage
 attribute.armor = Armor
-attribute.regeneration = Health Regeneration
+attribute.regeneration = Health Regen
 
 #
 # FXGL - JavaFX Game Library. The MIT License (MIT).
