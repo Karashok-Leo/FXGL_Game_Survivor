@@ -2,8 +2,8 @@ package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.core.math.FXGLMath;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.base.AnimationComponent;
 import dev.csu.survivor.component.base.AttributeComponent;
+import dev.csu.survivor.component.base.MultiAnimationComponent;
 import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.ItemType;
@@ -14,25 +14,25 @@ public class ComponentFactory
     /**
      * @return a new AnimationComponent for the animations of player
      */
-    public static AnimationComponent newPlayerAnimationComponent()
+    public static MultiAnimationComponent newPlayerAnimationComponent()
     {
-        return new AnimationComponent(Constants.AnimationMaps.PLAYER_ANIMATION_MAP);
+        return new MultiAnimationComponent(Constants.AnimationMaps.PLAYER_ANIMATION_MAP);
     }
 
     /**
      * @return a new AnimationComponent for the animations of melee enemy
      */
-    public static AnimationComponent newMeleeEnemyAnimationComponent()
+    public static MultiAnimationComponent newMeleeEnemyAnimationComponent()
     {
-        return new AnimationComponent(Constants.AnimationMaps.MELEE_ENEMY_ANIMATION_MAP);
+        return new MultiAnimationComponent(Constants.AnimationMaps.MELEE_ENEMY_ANIMATION_MAP);
     }
 
     /**
      * @return a new AnimationComponent for the animations of ranged enemy
      */
-    public static AnimationComponent newRangedEnemyAnimationComponent()
+    public static MultiAnimationComponent newRangedEnemyAnimationComponent()
     {
-        return new AnimationComponent(Constants.AnimationMaps.RANGED_ENEMY_ANIMATION_MAP);
+        return new MultiAnimationComponent(Constants.AnimationMaps.RANGED_ENEMY_ANIMATION_MAP);
     }
 
     public static AttributeComponent newPlayerAttributeComponent()
@@ -45,21 +45,24 @@ public class ComponentFactory
         );
     }
 
-    public static AttributeComponent newMeleeEnemyAttributeComponent()
+    public static AttributeComponent newEnemyAttributeComponent(int wave)
     {
         return new AttributeComponent(
-                new AttributeInstance(AttributeType.MAX_HEALTH, Constants.Common.MELEE_ENEMY_INITIAL_MAX_HEALTH),
-                new AttributeInstance(AttributeType.SPEED, FXGLMath.random(Constants.Common.MELEE_ENEMY_INITIAL_MIN_SPEED, Constants.Common.MELEE_ENEMY_INITIAL_MAX_SPEED)),
-                new AttributeInstance(AttributeType.DAMAGE, Constants.Common.MELEE_ENEMY_INITIAL_DAMAGE)
-        );
-    }
-
-    public static AttributeComponent newRangedEnemyAttributeComponent()
-    {
-        return new AttributeComponent(
-                new AttributeInstance(AttributeType.MAX_HEALTH, Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH),
-                new AttributeInstance(AttributeType.SPEED, FXGLMath.random(Constants.Common.RANGED_ENEMY_INITIAL_MIN_SPEED, Constants.Common.RANGED_ENEMY_INITIAL_MAX_SPEED)),
-                new AttributeInstance(AttributeType.DAMAGE, Constants.Common.RANGED_ENEMY_INITIAL_DAMAGE)
+                new AttributeInstance(
+                        AttributeType.MAX_HEALTH,
+                        Constants.Common.ENEMY_INITIAL_MAX_HEALTH + wave
+                ),
+                new AttributeInstance(
+                        AttributeType.SPEED,
+                        FXGLMath.random(
+                                Constants.Common.ENEMY_INITIAL_MIN_SPEED + wave * 0.1,
+                                Constants.Common.ENEMY_INITIAL_MAX_SPEED + wave * 0.1
+                        )
+                ),
+                new AttributeInstance(
+                        AttributeType.DAMAGE,
+                        Constants.Common.ENEMY_INITIAL_DAMAGE + wave
+                )
         );
     }
 

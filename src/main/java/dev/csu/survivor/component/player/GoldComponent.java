@@ -4,7 +4,6 @@ import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.misc.GoldAnimationComponent;
 import dev.csu.survivor.ui.SurvivorGameHud;
 
 public class GoldComponent extends RechargeableIntComponent
@@ -18,7 +17,7 @@ public class GoldComponent extends RechargeableIntComponent
     {
         gold.removeFromWorld();
 
-        AnimatedTexture texture = new AnimatedTexture(GoldAnimationComponent.CHANNEL);
+        AnimatedTexture texture = new AnimatedTexture(Constants.AnimationMaps.COIN);
         texture.setX(gold.getX());
         texture.setY(gold.getY());
         texture.setScaleX(2);

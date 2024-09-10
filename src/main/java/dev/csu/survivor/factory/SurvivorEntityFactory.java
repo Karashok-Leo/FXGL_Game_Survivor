@@ -13,16 +13,16 @@ import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.base.HealthComponent;
-import dev.csu.survivor.component.base.HurtComponent;
-import dev.csu.survivor.component.base.MotionComponent;
-import dev.csu.survivor.component.base.OwnableComponent;
+import dev.csu.survivor.component.base.*;
 import dev.csu.survivor.component.enemy.MeleeAttackComponent;
 import dev.csu.survivor.component.enemy.MeleeEnemyComponent;
 import dev.csu.survivor.component.enemy.RangedAttackComponent;
 import dev.csu.survivor.component.enemy.RangedEnemyComponent;
-import dev.csu.survivor.component.misc.*;
+import dev.csu.survivor.component.misc.HealthBarViewComponent;
+import dev.csu.survivor.component.misc.RandomBushComponent;
+import dev.csu.survivor.component.misc.RandomLandComponent;
 import dev.csu.survivor.component.player.GoldComponent;
+import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
@@ -71,15 +71,16 @@ public class SurvivorEntityFactory implements EntityFactory
     @Spawns("melee_enemy")
     public Entity newMeleeEnemy(SpawnData data)
     {
+        int wave = data.get("wave");
         return FXGL.entityBuilder()
-                .type(EntityType.MELEE_ENEMY)
+                .type(EnemyType.MELEE_ENEMY)
                 .at(data.getX(), data.getY())
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.MELEE_ENEMY_HIT_BOX_RADIUS)))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(ComponentFactory.newMeleeEnemyAttributeComponent())
+                .with(ComponentFactory.newEnemyAttributeComponent(wave))
                 .with(new MotionComponent())
                 .with(ComponentFactory.newMeleeEnemyAnimationComponent())
-                .with(new HealthComponent(Constants.Common.MELEE_ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new MeleeAttackComponent())
                 .with(new HurtComponent())
@@ -91,15 +92,16 @@ public class SurvivorEntityFactory implements EntityFactory
     @Spawns("ranged_enemy")
     public Entity newRangedEnemy(SpawnData data)
     {
+        int wave = data.get("wave");
         return FXGL.entityBuilder()
-                .type(EntityType.RANGED_ENEMY)
+                .type(EnemyType.RANGED_ENEMY)
                 .at(data.getX(), data.getY())
-                .bbox(new HitBox(BoundingShape.circle(Constants.Common.RANGED_ENEMY_HIT_BOX_RADIUS)))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.ENEMY_HIT_BOX_RADIUS)))
                 .with(new StateComponent(EntityStates.IDLE))
-                .with(ComponentFactory.newRangedEnemyAttributeComponent())
+                .with(ComponentFactory.newEnemyAttributeComponent(wave))
                 .with(new MotionComponent())
                 .with(ComponentFactory.newRangedEnemyAnimationComponent())
-                .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
+                .with(new HealthComponent(Constants.Common.ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new HurtComponent())
                 .with(new RangedAttackComponent())
@@ -116,23 +118,24 @@ public class SurvivorEntityFactory implements EntityFactory
                 .type(EntityType.GOLD)
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(BoundingShape.circle(Constants.Common.GOLD_HIT_BOX_RADIUS)))
-                .with(new GoldAnimationComponent())
+                .with(new SimpleAnimationComponent(Constants.AnimationMaps.COIN))
                 .collidable()
                 .build();
     }
 
+    @Deprecated
     @Spawns("test_bullet")
     public Entity newTestBullet(SpawnData data)
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
-        Entity owner=data.get("owner");
+        Entity owner = data.get("owner");
         Entity bullet = FXGL.entityBuilder()
-                .type(EntityType.BULLET)
+                .type(EntityType.PLAYER_BULLET)
                 .viewWithBBox(new Rectangle(80, 30, Color.RED))
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.PLAYER_BULLET_SPEED))
                 .with(new OffscreenCleanComponent())
-                .with(new OwnableComponent(()->owner))
+                .with(new OwnableComponent(() -> owner))
                 .collidable()
                 .build();
         BoundingBoxComponent bbox = bullet.getBoundingBoxComponent();
@@ -145,10 +148,12 @@ public class SurvivorEntityFactory implements EntityFactory
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
+        Entity owner = data.get("owner");
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.ENEMY_BULLET)
                 .bbox(BoundingShape.box(20, 40))
-                .with(new EnemyBulletAnimationComponent())
+                .with(new SimpleAnimationComponent(Constants.AnimationMaps.ENEMY_BULLET))
+                .with(new OwnableComponent(() -> owner))
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.RANGED_ENEMY_BULLET_SPEED))
                 .with(new OffscreenCleanComponent())
                 .collidable()
