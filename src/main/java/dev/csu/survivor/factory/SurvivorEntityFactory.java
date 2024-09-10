@@ -21,10 +21,7 @@ import dev.csu.survivor.component.enemy.MeleeAttackComponent;
 import dev.csu.survivor.component.enemy.MeleeEnemyComponent;
 import dev.csu.survivor.component.enemy.RangedAttackComponent;
 import dev.csu.survivor.component.enemy.RangedEnemyComponent;
-import dev.csu.survivor.component.misc.GoldAnimationComponent;
-import dev.csu.survivor.component.misc.HealthBarViewComponent;
-import dev.csu.survivor.component.misc.RandomBushComponent;
-import dev.csu.survivor.component.misc.RandomLandComponent;
+import dev.csu.survivor.component.misc.*;
 import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
@@ -150,7 +147,8 @@ public class SurvivorEntityFactory implements EntityFactory
         Point2D target = data.get("target");
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.ENEMY_BULLET)
-                .viewWithBBox(new Rectangle(80, 30, Color.BLUE))
+                .bbox(BoundingShape.box(20, 40))
+                .with(new EnemyBulletAnimationComponent())
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.RANGED_ENEMY_BULLET_SPEED))
                 .with(new OffscreenCleanComponent())
                 .collidable()

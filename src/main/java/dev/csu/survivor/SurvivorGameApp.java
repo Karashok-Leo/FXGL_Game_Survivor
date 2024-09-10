@@ -34,6 +34,10 @@ public class SurvivorGameApp extends GameApplication
         gameSettings.setDeveloperMenuEnabled(Constants.DEVELOPER_MENU_ENABLED);
         gameSettings.setApplicationMode(Constants.APP_MODE);
         gameSettings.setSceneFactory(new MenuFactory());
+        gameSettings.setFontGame("mojangles.ttf");
+        gameSettings.setFontMono("mojangles.ttf");
+        gameSettings.setFontText("mojangles.ttf");
+        gameSettings.setFontUI("mojangles.ttf");
     }
 
     @Override
