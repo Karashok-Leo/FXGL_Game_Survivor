@@ -8,7 +8,6 @@ import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,17 +15,18 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.Objects;
 import java.util.Optional;
 
-public class MainMenu extends BaseMenu {
+@Deprecated
+public class MainMenu extends BaseMenu
+{
 
     private static Stage loginStage;
     private static final double BUTTON_WIDTH = 200;
@@ -42,40 +42,46 @@ public class MainMenu extends BaseMenu {
     private VBox optionsMenu;
     private Pane achievementPane;
 
-    public MainMenu() {
+    public MainMenu()
+    {
         super(MenuType.MAIN_MENU);
 
         // 创建新游戏按钮，设置点击后的事件
         newGameButton = createButton("NEWGAME.png", "NEWGAME_p.png");
-        newGameButton.setOnAction(event -> {
+        newGameButton.setOnAction(event ->
+        {
             handleButtonClick(newGameButton, "NEWGAME_p.png", "NEWGAME.png", 500);
             FXGL.getGameController().startNewGame();
         });
 
         // 创建登录按钮，点击后打开登录窗口
         loginButton = createButton("LOGIN.png", "LOGIN_p.png");
-        loginButton.setOnAction(event -> {
+        loginButton.setOnAction(event ->
+        {
             handleButtonClick(loginButton, "LOGIN_p.png", "LOGIN.png", 500);
             openLoginWindow();
         });
 
         // 创建退出按钮，点击后退出游戏
         exitButton = createButton("EXIT.png", "EXIT_p.png");
-        exitButton.setOnAction(event -> {
+        exitButton.setOnAction(event ->
+        {
             handleButtonClick(exitButton, "EXIT_p.png", "EXIT.png", 500);
             FXGL.getGameController().exit();
         });
 
         // 创建选项按钮，点击后打开FXGL原生的选项菜单
         optionsButton = createButton("OPTIONS.png", "OPTIONS_p.png");
-        optionsButton.setOnAction(event -> {
+        optionsButton.setOnAction(event ->
+        {
             handleButtonClick(optionsButton, "OPTIONS_p.png", "OPTIONS.png", 500);
             showOptionsMenu();
         });
 
         // 创建成就按钮，点击后显示成就视图
         achievementButton = createButton("ACHIEVEMENT.png", "ACHIEVEMENT_p.png");
-        achievementButton.setOnAction(event -> {
+        achievementButton.setOnAction(event ->
+        {
             handleButtonClick(achievementButton, "ACHIEVEMENT_p.png", "ACHIEVEMENT.png", 500);
             showAchievementView();
         });
@@ -102,33 +108,38 @@ public class MainMenu extends BaseMenu {
         setBackgroundImage("BG.png");
 
         // 监听用户登录事件
-        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> {
+        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event ->
+        {
             System.out.println("85252 ");
             enableButtons(event.isClosed());
         });
 
         //监听返回事件
-        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK,event -> {
+        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
+        {
             System.out.println("jianting ");
-           showMainMenu();
+            showMainMenu();
         });
 
         // 注册按键事件
-        FXGL.getInput().addAction(new BackAction("GoTo"),KeyCode.K);
+        FXGL.getInput().addAction(new BackAction("GoTo"), KeyCode.K);
     }
 
     @Override
-    protected String getTitle() {
+    protected String getTitle()
+    {
         return "Survivor";
     }
 
     @Override
-    protected void initMenuBox(MenuBox menuBox) {
+    protected void initMenuBox(MenuBox menuBox)
+    {
         // 这里可以初始化菜单框内容
     }
 
     // 创建按钮，设置默认和点击时的图片
-    private Button createButton(String defaultImagePath, String clickedImagePath) {
+    private Button createButton(String defaultImagePath, String clickedImagePath)
+    {
         Button button = new Button();
         ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/menu/" + defaultImagePath))));
         imageView.setFitWidth(BUTTON_WIDTH);
@@ -143,7 +154,8 @@ public class MainMenu extends BaseMenu {
         return button;
     }
 
-    protected MenuBox createOptionsMenu() {
+    protected MenuBox createOptionsMenu()
+    {
         MenuButton itemGameplay = new MenuButton("menu.gameplay");
         itemGameplay.setMenuContent(this::createContentGameplay, true);
 
@@ -158,8 +170,10 @@ public class MainMenu extends BaseMenu {
 
         MenuButton itemRestore = new MenuButton("menu.restore");
         itemRestore.setOnAction(e ->
-                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes -> {
-                    if (yes) {
+                FXGL.getDialogService().showConfirmationBox(FXGL.localize("menu.settingsRestore"), yes ->
+                {
+                    if (yes)
+                    {
                         switchMenuContentTo(EMPTY);
                         restoreDefaultSettings();
                     }
@@ -173,13 +187,15 @@ public class MainMenu extends BaseMenu {
     }
 
     // 处理按钮点击事件，显示点击后的图片并延时恢复默认图片
-    private void handleButtonClick(Button button, String clickedImagePath, String defaultImagePath, int delay) {
+    private void handleButtonClick(Button button, String clickedImagePath, String defaultImagePath, int delay)
+    {
         ImageView clickedImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/menu/" + clickedImagePath))));
         clickedImageView.setFitWidth(BUTTON_WIDTH);
         clickedImageView.setFitHeight(BUTTON_HEIGHT);
         button.setGraphic(clickedImageView);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(delay), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(delay), event ->
+        {
             ImageView defaultImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/menu/" + defaultImagePath))));
             defaultImageView.setFitWidth(BUTTON_WIDTH);
             defaultImageView.setFitHeight(BUTTON_HEIGHT);
@@ -190,7 +206,8 @@ public class MainMenu extends BaseMenu {
     }
 
     // 设置背景图片
-    private void setBackgroundImage(String imagePath) {
+    private void setBackgroundImage(String imagePath)
+    {
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/menu/" + imagePath)));
         ImageView backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(getContentRoot().getWidth());
@@ -199,33 +216,41 @@ public class MainMenu extends BaseMenu {
     }
 
     // 打开登录窗口
-    private void openLoginWindow() {
-        if (loginStage == null || !loginStage.isShowing()) {
+    private void openLoginWindow()
+    {
+        if (loginStage == null || !loginStage.isShowing())
+        {
             loginStage = new Stage();
             loginStage.initModality(Modality.APPLICATION_MODAL); // 先设置模态性
 
             LoginUI loginUI = new LoginUI();
-            try {
+            try
+            {
                 loginUI.start(loginStage); // 然后启动 loginStage
-                loginStage.setOnCloseRequest(event -> {
+                loginStage.setOnCloseRequest(event ->
+                {
                     loginStage = null;
                     enableButtons(true);
                 });
                 enableButtons(false);
-            } catch (Exception ex) {
+            } catch (Exception ex)
+            {
                 ex.printStackTrace();
             }
         }
     }
 
     // 关闭登录窗口
-    private void closeLoginWindow() {
+    private void closeLoginWindow()
+    {
         enableButtons(true);
     }
 
     // 展示选项页面
-    private void showOptionsMenu() {
-        if (box != null) {
+    private void showOptionsMenu()
+    {
+        if (box != null)
+        {
             box.setVisible(false); // 隐藏主菜单
         }
 
@@ -236,39 +261,47 @@ public class MainMenu extends BaseMenu {
         optionsMenu.setLayoutY(MENU_POSITION_Y);
 
         optionsMenu.setVisible(true); // 显示选项菜单
-        if (!getContentRoot().getChildren().contains(optionsMenu)) {
+        if (!getContentRoot().getChildren().contains(optionsMenu))
+        {
             getContentRoot().getChildren().add(optionsMenu);
         }
     }
 
     // 展示主菜单
-    public void showMainMenu() {
+    public void showMainMenu()
+    {
         // 隐藏选项菜单
-        if (optionsMenu != null) {
+        if (optionsMenu != null)
+        {
             optionsMenu.setVisible(false);
         }
 
         // 隐藏成就页面
-        if (achievementPane != null) {
+        if (achievementPane != null)
+        {
             achievementPane.setVisible(false);
         }
 
         // 显示主菜单
-        if (box != null) {
+        if (box != null)
+        {
             box.setVisible(true);
         }
     }
 
     // 展示成就页面
-    public void showAchievementView() {
-        if (!isUserLoggedIn()) {
+    public void showAchievementView()
+    {
+        if (!isUserLoggedIn())
+        {
             // 用户未登录，弹出提示框
             Alert alert = new Alert(Alert.AlertType.INFORMATION,
                     "Please log in to view achievements.",
                     ButtonType.OK);
             alert.setHeaderText(null);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (result.isPresent() && result.get() == ButtonType.OK)
+            {
                 showMainMenu();
             }
             return;
@@ -278,7 +311,8 @@ public class MainMenu extends BaseMenu {
         achievementPane = achievementView.getContentRootPane();
 
         // 隐藏主菜单
-        if (box != null) {
+        if (box != null)
+        {
             box.setVisible(false);
         }
 
@@ -289,14 +323,16 @@ public class MainMenu extends BaseMenu {
     }
 
     // 检查用户是否已登录
-    private boolean isUserLoggedIn() {
+    private boolean isUserLoggedIn()
+    {
         // 检查用户登录状态的逻辑
         User currentUser = User.getInstance();
         return currentUser != null && currentUser.isLoggedIn(); // 根据具体的User类实现进行判断
     }
 
     // 启用或禁用所有按钮
-    private void enableButtons(boolean enable) {
+    private void enableButtons(boolean enable)
+    {
         newGameButton.setDisable(!enable);
         loginButton.setDisable(!enable);
         exitButton.setDisable(!enable);
@@ -304,13 +340,16 @@ public class MainMenu extends BaseMenu {
         achievementButton.setDisable(!enable);
     }
 
-    public class BackAction extends UserAction {
+    public class BackAction extends UserAction
+    {
 
-        public BackAction(String name) {
+        public BackAction(String name)
+        {
             super(name);
         }
 
-        public void onAction() {
+        public void onAction()
+        {
             showMainMenu();
         }
     }

@@ -1,4 +1,6 @@
 menu.restart = RESTART
+menu.login = LOGIN
+menu.achievement = ACHIEVEMENT
 menu.buy = Buy
 menu.sell = Sell
 menu.shop = SHOP

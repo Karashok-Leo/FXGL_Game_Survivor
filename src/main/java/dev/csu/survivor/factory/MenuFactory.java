@@ -2,7 +2,6 @@ package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.app.scene.*;
 import dev.csu.survivor.ui.menu.GameMenu;
-import dev.csu.survivor.ui.menu.MainMenu;
 import dev.csu.survivor.ui.menu.VanillaMainMenu;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +32,7 @@ public class MenuFactory extends SceneFactory
     @Override
     public FXGLMenu newMainMenu()
     {
-        return new MainMenu();
+        return new VanillaMainMenu();
     }
 
     @NotNull
