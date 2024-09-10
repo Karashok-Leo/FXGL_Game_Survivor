@@ -1,13 +1,9 @@
 package dev.csu.survivor.physics;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
-import dev.csu.survivor.component.MeleeAttackComponent;
-import dev.csu.survivor.component.GoldComponent;
-import dev.csu.survivor.component.HurtComponent;
-import dev.csu.survivor.component.AttributeComponent;
+import dev.csu.survivor.component.*;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.world.SurvivorGameWorld;
@@ -41,7 +37,7 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        applyPlayerDamage(a, b);
+                        applyOwnerDamage(a, b);
                     }
                 }
         );
@@ -69,7 +65,7 @@ public class SurvivorPhysicsHandler
                     @Override
                     protected void onCollision(Entity a, Entity b)
                     {
-                        applyPlayerDamage(a, b);
+                        applyOwnerDamage(a, b);
                     }
                 }
         );
@@ -95,9 +91,9 @@ public class SurvivorPhysicsHandler
                 )
                 {
                     @Override
-                    protected void onCollision(Entity a, Entity b)
+                    protected void onCollision(Entity boomerang, Entity enemy)
                     {
-                        applyPlayerDamage(a, b);
+                        applyOwnerDamage(boomerang, enemy);
                     }
                 }
         );
@@ -109,20 +105,22 @@ public class SurvivorPhysicsHandler
                 )
                 {
                     @Override
-                    protected void onCollision(Entity a, Entity b)
+                    protected void onCollision(Entity boomerang, Entity enemy)
                     {
-                        applyPlayerDamage(a, b);
+                        applyOwnerDamage(boomerang, enemy);
                     }
                 }
         );
     }
 
-    private void applyPlayerDamage(Entity entity, Entity enemy)
+    private void applyOwnerDamage(Entity ownable, Entity hurt)
     {
-        Entity player = SurvivorGameWorld.getPlayer();
+        Entity owner = ownable.getComponent(OwnableComponent.class).getOwner();
 
-        AttributeComponent attributeComponent = player.getComponent(AttributeComponent.class);
+        AttributeComponent attributeComponent = owner.getComponent(AttributeComponent.class);
 
-        enemy.getComponent(HurtComponent.class).hurt(entity, attributeComponent.getAttributeValue(AttributeType.DAMAGE));
+        double damage = attributeComponent.getAttributeValue(AttributeType.DAMAGE);
+
+        hurt.getComponent(HurtComponent.class).hurt(ownable, damage);
     }
 }

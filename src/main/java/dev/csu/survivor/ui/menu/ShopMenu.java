@@ -31,14 +31,26 @@ import java.util.function.Consumer;
 
 public class ShopMenu extends BaseMenu
 {
+    protected final InventoryPane inventoryPane;
+    protected final HBox shopEntries;
     protected final FXGLDefaultMenu.MenuContent inventoryContent;
     protected final FXGLDefaultMenu.MenuContent shopContent;
 
     public ShopMenu()
     {
         super(MenuType.GAME_MENU);
-        this.inventoryContent = createInventoryContent();
-        this.shopContent = createShopContent();
+
+        this.shopEntries = createShopEntries();
+        shopEntries.setTranslateX(-640);
+        shopEntries.setTranslateY(-240);
+
+        this.inventoryPane = new InventoryPane();
+        inventoryPane.setTranslateX(-570);
+        inventoryPane.setTranslateY(-240);
+
+        this.inventoryContent = new FXGLDefaultMenu.MenuContent(this.inventoryPane);
+        this.shopContent = new FXGLDefaultMenu.MenuContent(this.shopEntries);
+
         this.switchMenuContentTo(this.shopContent);
 
         GoldView goldView = new GoldView();
@@ -85,13 +97,12 @@ public class ShopMenu extends BaseMenu
         menuBox.add(back, inventory, shop);
     }
 
-    protected FXGLDefaultMenu.MenuContent createShopContent()
+    protected HBox createShopContent()
     {
         HBox shopEntries = createShopEntries();
         shopEntries.setTranslateX(-600);
         shopEntries.setTranslateY(-240);
-
-        return new FXGLDefaultMenu.MenuContent(shopEntries);
+        return shopEntries;
     }
 
     protected HBox createShopEntries()
@@ -117,7 +128,7 @@ public class ShopMenu extends BaseMenu
         return itemBox;
     }
 
-    protected BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
+    public static BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
     {
         Button button = new FXGLButton(text);
         button.setFont(Font.font(Constants.Client.SHOP_ITEM_NAME_FONT));
@@ -128,7 +139,7 @@ public class ShopMenu extends BaseMenu
         return new BorderStackPane(width, 40, button);
     }
 
-    protected BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
+    public BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
     {
         return createBorderButton(
                 "%s (-%d Golds)".formatted(
@@ -151,38 +162,43 @@ public class ShopMenu extends BaseMenu
 
                     FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, itemBox);
                     ft.setToValue(0);
-                    ft.setOnFinished(event -> itemBox.setVisible(false));
                     ft.play();
 
                     button.setDisable(true);
+
+                    this.inventoryPane.updateInventory();
+                    this.inventoryPane.updatePage();
                 }
         );
     }
 
-    protected FXGLDefaultMenu.MenuContent createInventoryContent()
+    public static BorderStackPane createButtonSell(ItemType itemType, VBox itemBox, InventoryPane inventoryPaneToUpdate)
     {
-        InventoryPane inventoryPane = new InventoryPane();
+        return createBorderButton(
+                "%s (+%d Golds)".formatted(
+                        FXGL.localize("menu.sell"),
+                        itemType.price
+                ),
+                Constants.Client.SHOP_ENTRY_WIDTH,
+                button ->
+                {
+                    Entity player = SurvivorGameWorld.getPlayer();
+                    GoldComponent golds = player.getComponent(GoldComponent.class);
 
-        BorderStackPane previous = createBorderButton(
-                "Previous",
-                200,
-                button -> inventoryPane.prev()
+                    // Remove the item from the inventory
+                    player.getComponent(InventoryComponent.class).removeItem(itemType);
+                    // Increase the golds
+                    golds.restore(itemType.price);
+
+                    FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, itemBox);
+                    ft.setToValue(0);
+                    ft.play();
+
+                    button.setDisable(true);
+
+                    inventoryPaneToUpdate.updateInventory();
+                    inventoryPaneToUpdate.updatePage();
+                }
         );
-        BorderStackPane next = createBorderButton(
-                "Next",
-                200,
-                button -> inventoryPane.next()
-        );
-
-        HBox boxButton = new HBox(previous, next);
-        boxButton.setAlignment(Pos.CENTER);
-        boxButton.setSpacing(80);
-
-        VBox vBox = new VBox(inventoryPane, boxButton);
-        vBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
-        vBox.setTranslateX(-600);
-        vBox.setTranslateY(-240);
-
-        return new FXGLDefaultMenu.MenuContent(vBox);
     }
 }
