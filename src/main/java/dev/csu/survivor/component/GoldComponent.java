@@ -24,7 +24,7 @@ public class GoldComponent extends RechargeableIntComponent
         texture.setScaleY(2);
         SurvivorGameHud.INSTANCE.createGoldCollectingAnimation(texture, gold.getX(), gold.getY());
 
-        setValue(getValue() + 1);
+        restore(1);
     }
 }
 

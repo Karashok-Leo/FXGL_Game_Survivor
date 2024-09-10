@@ -7,6 +7,7 @@ import dev.csu.survivor.world.attribute.AttributeModifier;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AttributeComponent extends Component
 {
@@ -34,10 +35,16 @@ public class AttributeComponent extends Component
         if (instance != null) instance.addModifier(modifier);
     }
 
-    public void removeModifier(AttributeType type, String className)
+    public void removeModifier(AttributeType type, UUID uuid)
     {
         AttributeInstance instance = attributes.get(type);
-        if (instance != null) instance.removeModifier(className);
+        if (instance != null) instance.removeModifier(uuid);
+    }
+
+    public void removeModifierByClass(AttributeType type, String className)
+    {
+        AttributeInstance instance = attributes.get(type);
+        if (instance != null) instance.removeModifierByClass(className);
     }
 
     public double getAttributeValue(AttributeType type)
