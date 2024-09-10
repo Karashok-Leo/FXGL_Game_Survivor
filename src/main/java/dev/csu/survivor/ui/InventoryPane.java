@@ -31,23 +31,19 @@ public class InventoryPane extends HBox
 
         this.grid = new GridPane();
         this.grid.setAlignment(Pos.CENTER);
-        this.grid.setHgap(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
-        this.grid.setVgap(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+        this.grid.setHgap(Constants.Client.INVENTORY_ENTRY_SPACING);
+        this.grid.setVgap(Constants.Client.INVENTORY_ENTRY_SPACING);
         this.updateInventory();
         this.setPage(0);
         HBox buttonBox = this.createButtonBox();
 
         VBox inventoryBox = new VBox(grid, buttonBox);
-        inventoryBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+        inventoryBox.setSpacing(Constants.Client.INVENTORY_ENTRY_SPACING);
 
         this.selectItemBox = new VBox();
-        selectItemBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
+        this.selectItemBox.setTranslateX(100);
 
-        HBox wholeBox = new HBox(inventoryBox, selectItemBox);
-        wholeBox.setAlignment(Pos.CENTER);
-        wholeBox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
-
-        this.getChildren().addAll(wholeBox);
+        this.getChildren().addAll(inventoryBox, selectItemBox);
     }
 
     public void updateInventory()
@@ -108,12 +104,12 @@ public class InventoryPane extends HBox
         rect.setArcHeight(25.0);
         rect.setMouseTransparent(true);
         LinearGradient gradient = new LinearGradient(0.0, 1.0, 1.0, 0.2, true, CycleMethod.NO_CYCLE,
-                new Stop(0.6, Color.color(1.0, 0.8, 0.0, 0.34)),
-                new Stop(0.85, Color.color(1.0, 0.8, 0.0, 0.74)),
+                new Stop(0.6, Color.color(0.6, 0.96, 1.0, 0.1)),
+                new Stop(0.85, Color.color(0.6, 0.96, 1.0, 0.3)),
                 new Stop(1.0, Color.WHITE));
         rect.fillProperty().bind(
                 Bindings.when(btn.pressedProperty())
-                        .then(((Paint) Color.color(1.0, 0.8, 0.0, 0.75)))
+                        .then(((Paint) Color.color(0.6, 0.96, 1.0, 0.3)))
                         .otherwise(gradient)
         );
         rect.setStroke(Color.color(0.1, 0.1, 0.1, 0.15));

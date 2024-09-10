@@ -279,9 +279,6 @@ public abstract class BaseMenu extends FXGLMenu
         BorderStackPane titleRoot = new BorderStackPane(titleWidth, titleHeight, titleBox);
         titleRoot.setAlignment(Pos.CENTER);
 
-        System.out.println(titleWidth);
-        System.out.println(titleHeight);
-
         titleRoot.setTranslateX((getAppWidth() - titleWidth) / 2);
         titleRoot.setTranslateY(50.0);
 

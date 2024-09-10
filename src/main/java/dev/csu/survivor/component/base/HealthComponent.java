@@ -38,6 +38,7 @@ public class HealthComponent extends RechargeableDoubleComponent
     @Override
     public void onUpdate(double tpf)
     {
+        if(this.isZero()) return;
         double regen = attribute.getAttributeValue(AttributeType.REGENERATION);
         if (regenTimer.elapsed(Duration.seconds(1 / regen)))
         {

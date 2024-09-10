@@ -11,12 +11,14 @@ import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.util.MathUtil;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.util.Duration;
 
 import java.util.List;
 
 public class SurvivorGameWorld
 {
     private final LocalTimer localTimer;
+    private final LocalTimer waveTimer;
     private final GameWorld internalWorld;
     private final SimpleIntegerProperty wave;
     private final Entity player;
@@ -26,6 +28,8 @@ public class SurvivorGameWorld
     {
         this.localTimer = FXGL.newLocalTimer();
         this.localTimer.capture();
+        this.waveTimer = FXGL.newLocalTimer();
+        this.waveTimer.capture();
         this.internalWorld = internalWorld;
         this.wave = new SimpleIntegerProperty(1);
         this.player = this.internalWorld.spawn("player", Constants.Common.PLAYER_SPAWN_POINT);
@@ -35,6 +39,7 @@ public class SurvivorGameWorld
         for (int i = 0; i < Constants.Common.RANDOM_BUSH_COUNTS; i++)
             this.internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
 
+        this.internalWorld.getEntitiesByType(EnemyType.values()).size();
     }
 
     public void tick()
@@ -47,6 +52,12 @@ public class SurvivorGameWorld
                 EnemyType enemyType = MathUtil.weightedRandom(List.of(EnemyType.values()), type -> type.weight);
                 spawn(enemyType.spawnName);
             }
+        }
+
+        if (waveTimer.elapsed(Duration.minutes(2)))
+        {
+            wave.set(wave.get() + 1);
+            waveTimer.capture();
         }
     }
 
