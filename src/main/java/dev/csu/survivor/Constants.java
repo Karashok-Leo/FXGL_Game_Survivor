@@ -32,6 +32,7 @@ public interface Constants
         double PLAYER_INITIAL_DAMAGE = 2;
         double PLAYER_HIT_BOX_RADIUS = 7;
         double PLAYER_BULLET_SPEED = 600;
+        Duration PLAYER_SHOOT_COOLDOWN = Duration.seconds(0.4);
 
         double ENEMY_INITIAL_MAX_HEALTH = 5;
         double ENEMY_INITIAL_MIN_SPEED = 0.4;
@@ -71,6 +72,8 @@ public interface Constants
         double BOOMERANG_REVOLUTION_SPEED = 4;
         double BOOMERANG_REVOLUTION_RADIUS = 100;
         double BOOMERANG_HIT_BOX_RADIUS = 10;
+
+        Duration WAVE_CIRCLE = Duration.minutes(2);
     }
 
     interface Client

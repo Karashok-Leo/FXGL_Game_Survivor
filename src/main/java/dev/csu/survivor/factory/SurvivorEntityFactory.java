@@ -27,7 +27,6 @@ import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class SurvivorEntityFactory implements EntityFactory
 {
@@ -123,21 +122,23 @@ public class SurvivorEntityFactory implements EntityFactory
                 .build();
     }
 
-    @Deprecated
-    @Spawns("test_bullet")
-    public Entity newTestBullet(SpawnData data)
+    @Spawns("player_bullet")
+    public Entity newPlayerBullet(SpawnData data)
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
         Entity owner = data.get("owner");
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.PLAYER_BULLET)
-                .viewWithBBox(new Rectangle(80, 30, Color.RED))
+                .bbox(new HitBox(BoundingShape.circle(Constants.Common.PLAYER_HIT_BOX_RADIUS)))
+                .view("bullet.png")
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.PLAYER_BULLET_SPEED))
                 .with(new OffscreenCleanComponent())
                 .with(new OwnableComponent(() -> owner))
                 .collidable()
                 .build();
+        bullet.setScaleX(1.5);
+        bullet.setScaleY(1.5);
         BoundingBoxComponent bbox = bullet.getBoundingBoxComponent();
         bullet.setPosition(position.subtract(bbox.getWidth() / 2, bbox.getHeight() / 2));
         return bullet;
