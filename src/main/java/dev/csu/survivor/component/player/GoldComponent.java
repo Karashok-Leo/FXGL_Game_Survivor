@@ -1,9 +1,10 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.player;
 
 import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.component.misc.GoldAnimationComponent;
 import dev.csu.survivor.ui.SurvivorGameHud;
 
 public class GoldComponent extends RechargeableIntComponent

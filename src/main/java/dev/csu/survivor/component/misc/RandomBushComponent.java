@@ -1,4 +1,4 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.misc;
 
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;

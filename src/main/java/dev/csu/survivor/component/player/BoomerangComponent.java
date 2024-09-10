@@ -1,4 +1,4 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.player;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.RechargeableIntComponent;
@@ -6,6 +6,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.component.base.OwnableComponent;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 
@@ -32,11 +33,13 @@ public class BoomerangComponent extends RechargeableIntComponent
                 Entity boomerang = FXGL.entityBuilder()
                         .type(EntityType.BOOMERANG)
                         .at(entity.getCenter())
-                        .bbox(new HitBox(BoundingShape.circle(Constants.Common.BOOMERANG_HIT_BOX_RADIUS)))
                         .view("item/boomerang_attack.png")
+                        .bbox(new HitBox(BoundingShape.circle(Constants.Common.BOOMERANG_HIT_BOX_RADIUS)))
                         .with(new OwnableComponent(() -> entity))
                         .collidable()
                         .build();
+                boomerang.setScaleX(2);
+                boomerang.setScaleY(2);
                 this.boomerangs.add(boomerang);
             }
         } else

@@ -4,7 +4,7 @@ import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.BoomerangComponent;
+import dev.csu.survivor.component.player.BoomerangComponent;
 import dev.csu.survivor.item.AttributeItem;
 import dev.csu.survivor.item.Item;
 import dev.csu.survivor.item.RechargeableComponentItem;

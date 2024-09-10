@@ -1,7 +1,7 @@
 package dev.csu.survivor.item;
 
 import com.almasb.fxgl.entity.Entity;
-import dev.csu.survivor.component.AttributeComponent;
+import dev.csu.survivor.component.base.AttributeComponent;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.world.attribute.AttributeInstance;
 import dev.csu.survivor.world.attribute.AttributeModifier;

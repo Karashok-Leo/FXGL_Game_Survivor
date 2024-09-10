@@ -3,10 +3,13 @@ package dev.csu.survivor.physics;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
-import dev.csu.survivor.component.*;
+import dev.csu.survivor.component.base.AttributeComponent;
+import dev.csu.survivor.component.base.HurtComponent;
+import dev.csu.survivor.component.base.OwnableComponent;
+import dev.csu.survivor.component.enemy.MeleeAttackComponent;
+import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EntityType;
-import dev.csu.survivor.world.SurvivorGameWorld;
 
 public class SurvivorPhysicsHandler
 {

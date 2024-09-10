@@ -1,7 +1,8 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.enemy;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
+import dev.csu.survivor.component.base.MotionComponent;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;

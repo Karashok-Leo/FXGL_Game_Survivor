@@ -1,9 +1,11 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.enemy;
 
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.state.StateComponent;
 import dev.csu.survivor.Constants;
+import dev.csu.survivor.component.base.AnimationComponent;
+import dev.csu.survivor.component.base.MotionComponent;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
@@ -29,28 +31,20 @@ public class RangedEnemyComponent extends Component
     @Override
     public void onUpdate(double tpf)
     {
-
-        if (state.isIn(EntityStates.DEATH))
-        {
-            return;
-        }
+        if (state.isIn(EntityStates.DEATH)) return;
 
         Point2D target = SurvivorGameWorld.getPlayer().getPosition();
         double distance = entity.distance(SurvivorGameWorld.getPlayer());
 
         if (state.isIn(EntityStates.IDLE))
-        {
             state.changeState(EntityStates.RUN);
-        }
 
         if (state.isIn(EntityStates.RUN, EntityStates.HURT))
         {
             if (distance > Constants.Common.RANGED_ENEMY_ATTACK_RANGE)
             {
-                Vec2 direction = new Vec2(target.subtract(entity.getPosition())).normalize();
-
-                motion.addVelocity(direction);
-
+                Point2D subtract = target.subtract(entity.getPosition());
+                motion.addVelocity(subtract.getX(), subtract.getY());
             } else
             {
                 rangedAttack.attack(SurvivorGameWorld.getPlayer());

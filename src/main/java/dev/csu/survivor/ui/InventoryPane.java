@@ -2,7 +2,7 @@ package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.texture.Texture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.InventoryComponent;
+import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.ui.menu.ShopMenu;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.beans.binding.Bindings;

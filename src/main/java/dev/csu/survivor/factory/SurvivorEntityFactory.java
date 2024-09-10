@@ -13,13 +13,24 @@ import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.*;
+import dev.csu.survivor.component.base.HealthComponent;
+import dev.csu.survivor.component.base.HurtComponent;
+import dev.csu.survivor.component.base.MotionComponent;
+import dev.csu.survivor.component.base.OwnableComponent;
+import dev.csu.survivor.component.enemy.MeleeAttackComponent;
+import dev.csu.survivor.component.enemy.MeleeEnemyComponent;
+import dev.csu.survivor.component.enemy.RangedAttackComponent;
+import dev.csu.survivor.component.enemy.RangedEnemyComponent;
+import dev.csu.survivor.component.misc.GoldAnimationComponent;
+import dev.csu.survivor.component.misc.HealthBarViewComponent;
+import dev.csu.survivor.component.misc.RandomBushComponent;
+import dev.csu.survivor.component.misc.RandomLandComponent;
+import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 public class SurvivorEntityFactory implements EntityFactory
 {
@@ -94,7 +105,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new HealthComponent(Constants.Common.RANGED_ENEMY_INITIAL_MAX_HEALTH))
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new HurtComponent())
-                .with(new RangedAttackComponent(Duration.seconds(1.0)))
+                .with(new RangedAttackComponent())
                 .with(new RangedEnemyComponent())
                 .collidable()
                 .build();
@@ -118,11 +129,13 @@ public class SurvivorEntityFactory implements EntityFactory
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
+        Entity owner=data.get("owner");
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.BULLET)
                 .viewWithBBox(new Rectangle(80, 30, Color.RED))
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.PLAYER_BULLET_SPEED))
                 .with(new OffscreenCleanComponent())
+                .with(new OwnableComponent(()->owner))
                 .collidable()
                 .build();
         BoundingBoxComponent bbox = bullet.getBoundingBoxComponent();
@@ -135,12 +148,10 @@ public class SurvivorEntityFactory implements EntityFactory
     {
         Point2D position = data.get("position");
         Point2D target = data.get("target");
-        double rotationSpeed = Constants.Common.RANGED_ENEMY_BULLET_ROTATE_SPEED;
         Entity bullet = FXGL.entityBuilder()
                 .type(EntityType.ENEMY_BULLET)
                 .viewWithBBox(new Rectangle(80, 30, Color.BLUE))
                 .with(new ProjectileComponent(target.subtract(position), Constants.Common.RANGED_ENEMY_BULLET_SPEED))
-                .with(new RotateComponent(rotationSpeed))
                 .with(new OffscreenCleanComponent())
                 .collidable()
                 .build();

@@ -1,8 +1,8 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.misc;
 
-import com.almasb.fxgl.dsl.components.HealthDoubleComponent;
 import com.almasb.fxgl.dsl.components.view.ChildViewComponent;
 import com.almasb.fxgl.ui.Position;
+import dev.csu.survivor.component.base.HealthComponent;
 import dev.csu.survivor.ui.SurvivorProgressBar;
 import javafx.beans.property.DoubleProperty;
 import javafx.scene.paint.Color;

@@ -1,5 +1,6 @@
 menu.restart = RESTART
 menu.buy = Buy
+menu.sell = Sell
 menu.shop = SHOP
 menu.inventory = INVENTORY
 

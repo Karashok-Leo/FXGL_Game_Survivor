@@ -1,4 +1,4 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.player;
 
 import com.almasb.fxgl.entity.component.Component;
 import dev.csu.survivor.enums.ItemType;

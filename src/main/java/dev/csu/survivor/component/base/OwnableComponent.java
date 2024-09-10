@@ -1,4 +1,4 @@
-package dev.csu.survivor.component;
+package dev.csu.survivor.component.base;
 
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.entity.Entity;

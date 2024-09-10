@@ -2,9 +2,9 @@ package dev.csu.survivor.factory;
 
 import com.almasb.fxgl.core.math.FXGLMath;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.AnimationComponent;
-import dev.csu.survivor.component.AttributeComponent;
-import dev.csu.survivor.component.InventoryComponent;
+import dev.csu.survivor.component.base.AnimationComponent;
+import dev.csu.survivor.component.base.AttributeComponent;
+import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.world.attribute.AttributeInstance;

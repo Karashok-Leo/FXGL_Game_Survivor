@@ -6,7 +6,7 @@ import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.HealthComponent;
+import dev.csu.survivor.component.base.HealthComponent;
 import dev.csu.survivor.ui.menu.GameOverMenu;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;

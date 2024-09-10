@@ -1,7 +1,7 @@
 package dev.csu.survivor;
 
 import com.almasb.fxgl.app.ApplicationMode;
-import dev.csu.survivor.component.AnimationComponent;
+import dev.csu.survivor.component.base.AnimationComponent;
 import dev.csu.survivor.enums.EntityStates;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
