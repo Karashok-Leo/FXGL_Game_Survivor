@@ -1,6 +1,7 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.GameScene;
+import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -8,6 +9,7 @@ import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.HealthComponent;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import dev.csu.survivor.ui.menu.ShopMenu;
 import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
@@ -26,6 +28,8 @@ import javafx.util.Duration;
 public class SurvivorGameHud
 {
     public static SurvivorGameHud INSTANCE;
+
+    private final LazyValue<ShopMenu> shopMenu = new LazyValue<>(ShopMenu::new);
 
     private GameScene gameScene;
     private SubScene gameOver;
@@ -46,6 +50,11 @@ public class SurvivorGameHud
         // Add goldView as update listener to the scene
         scene.addListener(goldView);
         scene.addUINode(box);
+    }
+
+    public ShopMenu getShopMenu()
+    {
+        return shopMenu.get();
     }
 
     private SurvivorProgressBar createHealthBar()

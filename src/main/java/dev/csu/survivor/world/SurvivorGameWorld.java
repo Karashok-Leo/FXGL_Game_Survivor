@@ -9,6 +9,8 @@ import com.almasb.fxgl.time.LocalTimer;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.input.SurvivorGameInput;
+import dev.csu.survivor.ui.SurvivorGameHud;
 import dev.csu.survivor.util.MathUtil;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.util.Duration;
@@ -54,10 +56,11 @@ public class SurvivorGameWorld
             }
         }
 
-        if (waveTimer.elapsed(Duration.seconds(2)))
+        if (waveTimer.elapsed(Constants.Common.WAVE_CIRCLE))
         {
             wave.set(wave.get() + 1);
             waveTimer.capture();
+            SurvivorGameHud.INSTANCE.getShopMenu().refreshShopEntries();
         }
     }
 
