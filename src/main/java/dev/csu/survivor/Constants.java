@@ -44,7 +44,6 @@ public interface Constants
 
         double RANGED_ENEMY_ATTACK_RANGE = 300;
         double RANGED_ENEMY_BULLET_SPEED = 300;
-        double RANGED_ENEMY_BULLET_ROTATE_SPEED = 1080;
 
         Point2D PLAYER_SPAWN_POINT = new Point2D(GAME_SCENE_WIDTH / 2.0, GAME_SCENE_HEIGHT / 2.0);
         Duration ENEMY_SPAWN_DURATION = Duration.seconds(4.0);
@@ -68,7 +67,7 @@ public interface Constants
         int RANDOM_BUSH_COUNTS = 32;
 
         double BOOMERANG_ROTATION_SPEED = 600;
-        double BOOMERANG_REVOLUTION_SPEED = 7;
+        double BOOMERANG_REVOLUTION_SPEED = 4;
         double BOOMERANG_REVOLUTION_RADIUS = 100;
         double BOOMERANG_HIT_BOX_RADIUS = 10;
     }

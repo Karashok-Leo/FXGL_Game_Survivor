@@ -7,6 +7,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.OwnableComponent;
+import dev.csu.survivor.component.misc.BoomerangSelfComponent;
 import dev.csu.survivor.enums.EntityType;
 import javafx.geometry.Point2D;
 
@@ -33,13 +34,11 @@ public class BoomerangComponent extends RechargeableIntComponent
                 Entity boomerang = FXGL.entityBuilder()
                         .type(EntityType.BOOMERANG)
                         .at(entity.getCenter())
-                        .view("item/boomerang_attack.png")
                         .bbox(new HitBox(BoundingShape.circle(Constants.Common.BOOMERANG_HIT_BOX_RADIUS)))
                         .with(new OwnableComponent(() -> entity))
+                        .with(new BoomerangSelfComponent())
                         .collidable()
                         .build();
-                boomerang.setScaleX(2);
-                boomerang.setScaleY(2);
                 this.boomerangs.add(boomerang);
             }
         } else
@@ -71,25 +70,20 @@ public class BoomerangComponent extends RechargeableIntComponent
             boomerang.removeFromWorld();
         this.boomerangsToRemove.clear();
 
-        Point2D center = this.entity.getCenter();
-        double deviationX = -15;
-        double deviationY = -15;
+        Point2D center = this.entity.getPosition();
         double radius = Constants.Common.BOOMERANG_REVOLUTION_RADIUS;
         double angle = FXGL.getGameTimer().getNow() * Constants.Common.BOOMERANG_REVOLUTION_SPEED;
 
-        double angleIncrement = 2 * Math.PI / boomerangs.size();
+        double angleStep = 2 * Math.PI / boomerangs.size();
         double currentAngle = angle;
 
         for (Entity boomerang : boomerangs)
         {
-            boomerang.rotateBy(tpf * Constants.Common.BOOMERANG_ROTATION_SPEED);
+            double x = center.getX() + radius * Math.cos(currentAngle);
+            double y = center.getY() + radius * Math.sin(currentAngle);
+            boomerang.setPosition(x, y);
 
-            double x = deviationX + center.getX() + radius * Math.cos(currentAngle);
-            double y = deviationY + center.getY() + radius * Math.sin(currentAngle);
-            Point2D boomerangPosition = new Point2D(x, y);
-            boomerang.setPosition(boomerangPosition);
-
-            currentAngle += angleIncrement;
+            currentAngle += angleStep;
         }
     }
 }
