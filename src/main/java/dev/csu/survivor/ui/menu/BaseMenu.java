@@ -19,6 +19,7 @@ import com.almasb.fxgl.particle.ParticleSystem;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FXGLScrollPane;
+import dev.csu.survivor.ui.BorderStackPane;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
@@ -255,14 +256,6 @@ public abstract class BaseMenu extends FXGLMenu
         text2.setStroke(titleColor.get());
         text2.setStrokeWidth(1.5);
 
-        double textWidth = text.getLayoutBounds().getWidth() + text2.getLayoutBounds().getWidth();
-
-        Rectangle border = new Rectangle(textWidth + 30, 65.0, null);
-        border.setStroke(Color.WHITE);
-        border.setStrokeWidth(4.0);
-        border.setArcWidth(25.0);
-        border.setArcHeight(25.0);
-
         ParticleEmitter emitter = ParticleEmitters.newExplosionEmitter(50);
         emitter.setBlendMode(BlendMode.ADD);
         emitter.setSourceImage(FXGL.image("particles/trace_horizontal.png", 64.0, 64.0));
@@ -276,15 +269,24 @@ public abstract class BaseMenu extends FXGLMenu
         emitter.setSpawnPointFunction(i -> Point2D.ZERO);
         emitter.setAccelerationFunction(() -> new Point2D(FXGL.random(-1.0, 1.0), FXGL.random(0.0, 0.0)));
 
-        HBox box = new HBox(text, text2);
-        box.setAlignment(Pos.CENTER);
+        HBox titleBox = new HBox(text, text2);
+        titleBox.setTranslateX(5);
+        titleBox.setAlignment(Pos.CENTER);
 
-        StackPane titleRoot = new StackPane(border, box);
-        titleRoot.setTranslateX(getAppWidth() / 2.0 - (textWidth + 30) / 2);
+        double titleWidth = text.getLayoutBounds().getWidth() + text2.getLayoutBounds().getWidth() + 128;
+        double titleHeight = text.getLayoutBounds().getHeight() + 32;
+
+        BorderStackPane titleRoot = new BorderStackPane(titleWidth, titleHeight, titleBox);
+        titleRoot.setAlignment(Pos.CENTER);
+
+        System.out.println(titleWidth);
+        System.out.println(titleHeight);
+
+        titleRoot.setTranslateX((getAppWidth() - titleWidth) / 2);
         titleRoot.setTranslateY(50.0);
 
         if (!FXGL.getSettings().isNative())
-            particleSystem.addParticleEmitter(emitter, getAppWidth() / 2.0 - 30, titleRoot.getTranslateY() + border.getHeight() - 16);
+            particleSystem.addParticleEmitter(emitter, getAppWidth() / 2.0 - 30, titleRoot.getTranslateY() + titleHeight - 16);
 
         return titleRoot;
     }
@@ -458,7 +460,6 @@ public abstract class BaseMenu extends FXGLMenu
     {
         private MenuBox parent = null;
         private FXGLDefaultMenu.MenuContent cachedContent = EMPTY;
-        private final Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
         private final Button btn;
         private boolean isAnimating = false;
 
@@ -469,6 +470,7 @@ public abstract class BaseMenu extends FXGLMenu
             btn.setAlignment(Pos.CENTER_LEFT);
             btn.setStyle("-fx-background-color: transparent");
 
+            Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
             p.setMouseTransparent(true);
 
             LinearGradient g = new LinearGradient(0.0, 1.0, 1.0, 0.2, true, CycleMethod.NO_CYCLE,

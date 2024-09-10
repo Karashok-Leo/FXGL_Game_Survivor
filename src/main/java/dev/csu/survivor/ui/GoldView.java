@@ -3,7 +3,6 @@ package dev.csu.survivor.ui;
 import com.almasb.fxgl.core.Updatable;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.misc.GoldAnimationComponent;
 import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.beans.binding.Bindings;
@@ -14,7 +13,7 @@ import javafx.scene.text.Font;
 
 public class GoldView extends Parent implements Updatable
 {
-    protected final AnimatedTexture texture = new AnimatedTexture(GoldAnimationComponent.CHANNEL);
+    protected final AnimatedTexture texture = new AnimatedTexture(Constants.AnimationMaps.COIN);
     protected final Label label;
 
     public GoldView()
