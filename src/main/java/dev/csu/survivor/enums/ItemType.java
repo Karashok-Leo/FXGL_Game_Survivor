@@ -20,7 +20,7 @@ public enum ItemType
                     AttributeType.MAX_HEALTH,
                     new AttributeModifier("HealthCrystal", AttributeModifier.Operation.ADDITION, Constants.Common.HEALTH_CRYSTAL_VALUE)
             ),
-            3,
+            5,
             10
     ),
 
@@ -29,6 +29,7 @@ public enum ItemType
                     AttributeType.SPEED,
                     new AttributeModifier("AccelerateFeather", AttributeModifier.Operation.MULTIPLICATION, Constants.Common.ACCELERATE_FEATHER_DEGREE)
             ),
+            2,
             15
     ),
     HEALING_POTION(
@@ -36,6 +37,7 @@ public enum ItemType
                     AttributeType.REGENERATION,
                     new AttributeModifier("HealingPotion", AttributeModifier.Operation.ADDITION, Constants.Common.HEALING_POTION_VALUE)
             ),
+            5,
             20
     ),
     POWER_CRYSTAL(
@@ -43,6 +45,7 @@ public enum ItemType
                     AttributeType.DAMAGE,
                     new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.POWER_CRYSTAL_VALUE)
             ),
+            5,
             20
     ),
     BOOMERANG_ATTACK(
@@ -51,6 +54,7 @@ public enum ItemType
                     BoomerangComponent::new,
                     "Boomerang"
             ),
+            5,
             10
     );
 
@@ -72,9 +76,9 @@ public enum ItemType
     private final ItemFactory itemFactory;
 
     /**
-     * The higher the rarity, the less likely it is to be sold in the shop
+     * The higher the weight, the more likely it is to be sold in the shop
      */
-    public final int rarity;
+    public final int weight;
 
     /**
      * The price of the item
@@ -95,27 +99,27 @@ public enum ItemType
         this(itemFactory, 0, price);
     }
 
-    ItemType(ItemFactory itemFactory, int rarity, int price)
+    ItemType(ItemFactory itemFactory, int weight, int price)
     {
-        this(itemFactory, rarity, price, true);
+        this(itemFactory, weight, price, true);
     }
 
-    ItemType(ItemFactory itemFactory, int rarity, int price, boolean stackable)
+    ItemType(ItemFactory itemFactory, int weight, int price, boolean stackable)
     {
         this.price = price;
         this.id = StringUtil.lowercase(this.name());
         this.itemFactory = itemFactory;
-        this.rarity = rarity;
+        this.weight = weight;
         this.stackable = stackable;
 
         initLazyValues();
     }
 
-    ItemType(String id, ItemFactory itemFactory, int rarity, int price, boolean stackable)
+    ItemType(String id, ItemFactory itemFactory, int weight, int price, boolean stackable)
     {
         this.id = id;
         this.itemFactory = itemFactory;
-        this.rarity = rarity;
+        this.weight = weight;
         this.price = price;
         this.stackable = stackable;
 

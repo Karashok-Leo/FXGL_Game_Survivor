@@ -2,6 +2,7 @@ package dev.csu.survivor.ui.menu;
 
 import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
+import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.ui.FXGLButton;
@@ -24,9 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ShopMenu extends BaseMenu
@@ -75,11 +74,41 @@ public class ShopMenu extends BaseMenu
         return bg;
     }
 
-    protected static List<ItemType> randomSelectItem()
+    /**
+     * @param n Should be greater than the length of the values in ItemType
+     * @return A set containing n random item types, according to the weights of types
+     */
+    @SuppressWarnings("SameParameterValue")
+    protected static Set<ItemType> randomSelectItem(int n)
     {
-        List<ItemType> items = new ArrayList<>(List.of(ItemType.values()));
-        Collections.shuffle(items);
-        return items.subList(0, 3);
+        Random random = FXGLMath.getRandom();
+
+        List<ItemType> pool = new ArrayList<>(List.of(ItemType.values()));
+
+        int totalWeight = 0;
+        for (ItemType itemType : pool)
+            totalWeight += itemType.weight;
+
+        int size = pool.size();
+
+        if (totalWeight <= 0 || size <= n) throw new AssertionError();
+
+        Set<ItemType> result = new HashSet<>();
+        while (result.size() < n)
+        {
+            int randomInt = random.nextInt(totalWeight);
+            for (ItemType itemType : pool)
+            {
+                randomInt -= itemType.weight;
+                if (randomInt < 0)
+                {
+                    result.add(itemType);
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -111,7 +140,7 @@ public class ShopMenu extends BaseMenu
         hbox.setSpacing(Constants.Client.SHOP_ENTRY_OUTER_SPACING);
 
         hbox.getChildren().addAll(
-                randomSelectItem()
+                randomSelectItem(4)
                         .stream()
                         .map(this::createShopEntry)
                         .toList()
