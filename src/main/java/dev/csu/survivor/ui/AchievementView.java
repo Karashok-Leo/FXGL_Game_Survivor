@@ -3,6 +3,7 @@ package dev.csu.survivor.ui;
 import com.almasb.fxgl.app.scene.FXGLScene;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
+import dev.csu.survivor.util.StyleUtil;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
@@ -75,7 +76,9 @@ public class AchievementView extends FXGLScene {
                     // 创建成就的显示组件
                     VBox achievementBox = createAchievementBox(name, description, imagePath, unlockTime);
 
-                    gridPane.add(achievementBox, column, row);
+                    BorderStackPane borderStackPane = new BorderStackPane(300, 400, achievementBox);
+
+                    gridPane.add(borderStackPane, column, row);
 
                     // 控制成就展示为每行3个
                     column++;
@@ -124,17 +127,25 @@ public class AchievementView extends FXGLScene {
 
             // 成就名称
             Label nameLabel = new Label(name);
-            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"); // 设置文字颜色为白色
+            StyleUtil.setLabelStyle(nameLabel, 24);
 
             // 成就描述
             Label descriptionLabel = new Label(description);
-            descriptionLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
+            StyleUtil.setLabelStyle(descriptionLabel, 18);
+            descriptionLabel.setMaxWidth(270);
+            descriptionLabel.setWrapText(true);
 
             // 达成时间
-            Label timeLabel = new Label("Unlock Time: " + unlockTime);
-            timeLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
+            Label timeLabel = new Label("Unlock Time: \n" + unlockTime);
+            StyleUtil.setLabelStyle(timeLabel , 16);
 
-            box.getChildren().addAll(imageView, nameLabel, descriptionLabel, timeLabel);
+            // 空白标签用于分隔上下内容
+            Label spacer1 = new Label();
+            Label spacer2 = new Label();
+            spacer1.setMinHeight(50);
+            spacer2.setMinHeight(30);
+
+            box.getChildren().addAll(imageView, nameLabel, spacer1, descriptionLabel, spacer2, timeLabel);
         } catch (NullPointerException e) {
             logger.log(Level.WARNING, "Null pointer exception while loading image, image path: {0}", imagePath);
         }
