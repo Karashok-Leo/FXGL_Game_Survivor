@@ -21,6 +21,8 @@ public class VanillaMainMenu extends BaseMenu
 {
     private static Stage loginStage;
     private Pane achievementPane;
+    private  MenuButton itemLogout;
+    private  MenuButton itemLogin;
 
     public VanillaMainMenu()
     {
@@ -30,6 +32,8 @@ public class VanillaMainMenu extends BaseMenu
         FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event ->
         {
             System.out.println("85252 ");
+            itemLogout.setVisible(true);
+            itemLogin.setVisible(false);
         });
 
         //监听返回事件
@@ -50,8 +54,17 @@ public class VanillaMainMenu extends BaseMenu
         itemOptions.setMenuContent(() -> EMPTY, false);
         itemOptions.setChild(createOptionsMenu());
 
-        MenuButton itemLogin = new MenuButton("menu.login");
+        itemLogin = new MenuButton("menu.login");
         itemLogin.setOnAction(e -> openLoginWindow());
+
+        itemLogout = new MenuButton("menu.logout");
+        itemLogout.setOnAction(e->{
+            Logout();
+            itemLogin.setVisible(true);
+            itemLogout.setVisible(false);
+        });
+        itemLogout.setVisible(false);
+
 
         MenuButton itemAchievement = new MenuButton("menu.achievement");
         itemAchievement.setMenuContent(this::createAchievementContent, false);
@@ -59,13 +72,23 @@ public class VanillaMainMenu extends BaseMenu
         MenuButton itemExit = new MenuButton("menu.exit");
         itemExit.setOnAction(e -> fireExit());
 
+        User user = User.getInstance();
+        if (user.isLoggedIn()){
+
+        }
         menuBox.add(
                 itemNewGame,
                 itemOptions,
                 itemLogin,
+                itemLogout,
                 itemAchievement,
                 itemExit
         );
+    }
+
+    private void Logout() {
+        User user = User.getInstance();
+        user.logout();
     }
 
     @Override
@@ -105,7 +128,7 @@ public class VanillaMainMenu extends BaseMenu
                 loginStage.setOnCloseRequest(event ->
                 {
                     loginStage = null;
-//                    enableButtons(true);
+//                  enableButtons(true);
                 });
 //                enableButtons(false);
             } catch (Exception ex)
