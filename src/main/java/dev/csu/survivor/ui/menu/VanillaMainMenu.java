@@ -1,25 +1,24 @@
 package dev.csu.survivor.ui.menu;
 
+import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.ui.AchievementView;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.Optional;
-
 public class VanillaMainMenu extends BaseMenu
 {
-    private static final double MENU_POSITION_X = 700;
-    private static final double MENU_POSITION_Y = 500;
     private static Stage loginStage;
     private Pane achievementPane;
 
@@ -48,13 +47,14 @@ public class VanillaMainMenu extends BaseMenu
         itemNewGame.setOnAction(e -> fireNewGame());
 
         MenuButton itemOptions = new MenuButton("menu.options");
+        itemOptions.setMenuContent(() -> EMPTY, false);
         itemOptions.setChild(createOptionsMenu());
 
         MenuButton itemLogin = new MenuButton("menu.login");
         itemLogin.setOnAction(e -> openLoginWindow());
 
         MenuButton itemAchievement = new MenuButton("menu.achievement");
-        itemAchievement.setOnAction(e -> showAchievementView());
+        itemAchievement.setMenuContent(this::createAchievementContent, false);
 
         MenuButton itemExit = new MenuButton("menu.exit");
         itemExit.setOnAction(e -> fireExit());
@@ -71,9 +71,23 @@ public class VanillaMainMenu extends BaseMenu
     @Override
     protected Node createBackground(double width, double height)
     {
-        Rectangle bg = new Rectangle(width, height);
-        bg.setFill(Color.rgb(10, 1, 1, 1.0));
-        return bg;
+        Image image = FXGL.image("menu/BG.png");
+        ImageView bg = new ImageView(image);
+        bg.setFitWidth(width);
+        bg.setFitHeight(height);
+        bg.setPreserveRatio(true);
+
+        // 创建GaussianBlur效果
+        GaussianBlur gaussianBlur = new GaussianBlur();
+        gaussianBlur.setRadius(10); // 设置模糊半径
+
+        // 将模糊效果应用到ImageView
+        bg.setEffect(gaussianBlur);
+
+        Rectangle cover = new Rectangle(width, height);
+        cover.setFill(Color.rgb(10, 1, 1, 0.7));
+
+        return new StackPane(bg, cover);
     }
 
     // 打开登录窗口
@@ -112,30 +126,23 @@ public class VanillaMainMenu extends BaseMenu
     }
 
     // 展示成就页面
-    public void showAchievementView()
+    protected FXGLDefaultMenu.MenuContent createAchievementContent()
     {
         if (!isUserLoggedIn())
         {
             // 用户未登录，弹出提示框
-            Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                    "Please log in to view achievements.",
-                    ButtonType.OK);
-            alert.setHeaderText(null);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK)
-            {
-                showMainMenu();
-            }
-            return;
+            FXGL.getDialogService()
+                    .showMessageBox("Please log in to view achievements.");
+            return EMPTY;
         }
 
         AchievementView achievementView = new AchievementView();
         achievementPane = achievementView.getContentRootPane();
 
-        achievementPane.setLayoutX(MENU_POSITION_X);
-        achievementPane.setLayoutY(MENU_POSITION_Y);
+        achievementPane.setTranslateX(-400);
+        achievementPane.setTranslateY(130);
 
-        getContentRoot().getChildren().add(achievementPane); // 将Pane添加到主菜单的内容中
+        return new FXGLDefaultMenu.MenuContent(achievementPane);
     }
 
     // 检查用户是否已登录

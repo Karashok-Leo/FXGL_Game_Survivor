@@ -42,23 +42,6 @@ public class AchievementView extends FXGLScene {
         gridPane.setLayoutX(-225);
         gridPane.setLayoutY(-250);
 
-        //返回按钮
-        Button backButton = new Button();
-        backButton.setOnAction(event -> {
-            System.out.println("Back button clicked");
-            FXGL.getEventBus().fireEvent(new BackEvent());
-        });
-        ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/achievements/BACK.png"))));
-        imageView.setFitWidth(200);
-        imageView.setFitHeight(50);
-        backButton.setGraphic(imageView);
-        backButton.setPrefSize(200, 50);
-        backButton.setPadding(javafx.geometry.Insets.EMPTY);
-        backButton.setStyle("-fx-background-color: transparent;");
-        backButton.setBorder(null);
-        backButton.setLayoutX(-600);
-        backButton.setLayoutY(-420);
-
         User user = User.getInstance();
 
         try {
@@ -115,7 +98,6 @@ public class AchievementView extends FXGLScene {
         }
 
         contentRoot.getChildren().add(gridPane); // 将GridPane添加到容器中
-        contentRoot.getChildren().add(backButton);
 
         // 设置背景透明
         contentRoot.setStyle("-fx-background-color: transparent;");
