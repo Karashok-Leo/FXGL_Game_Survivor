@@ -140,12 +140,4 @@ public class VanillaMainMenu extends BaseMenu
 
         return new FXGLDefaultMenu.MenuContent(achievementPane);
     }
-
-    // 检查用户是否已登录
-    private boolean isUserLoggedIn()
-    {
-        // 检查用户登录状态的逻辑
-        User currentUser = User.getInstance();
-        return currentUser != null && currentUser.isLoggedIn(); // 根据具体的User类实现进行判断
-    }
 }
