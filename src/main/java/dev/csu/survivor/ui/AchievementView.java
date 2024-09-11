@@ -1,6 +1,7 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.FXGLScene;
+import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
 import dev.csu.survivor.util.StyleUtil;
@@ -50,7 +51,7 @@ public class AchievementView extends FXGLScene {
         gridPane.setLayoutY(-100);
 
         ProgressBar progressBar = new ProgressBar(0);
-        progressBar.setPrefWidth(1000);
+        progressBar.setPrefWidth(925);
 
         VBox progressContainer = new VBox(10);
         progressContainer.setAlignment(Pos.CENTER);
@@ -80,8 +81,8 @@ public class AchievementView extends FXGLScene {
             // 检查查询结果是否为空
             if (!rs.isBeforeFirst()) {
                 logger.log(Level.INFO, "No achievements found for user {0}", user.getUsername());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "No achievements found for user " + user.getUsername(), ButtonType.OK);
-                alert.showAndWait();
+                FXGL.getDialogService()
+                        .showMessageBox("No achievements found for user!" + user.getUsername());
             } else {
                 // 设定位置
                 int column = 0;

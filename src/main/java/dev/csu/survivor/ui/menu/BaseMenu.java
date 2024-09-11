@@ -465,6 +465,7 @@ public abstract class BaseMenu extends FXGLMenu
             this.btn = FXGL.getUIFactoryService().newButton(FXGL.localizedStringProperty(stringKey));
             btn.setAlignment(Pos.CENTER_LEFT);
             btn.setStyle("-fx-background-color: transparent");
+            btn.setMinWidth(250);
 
             Polygon p = new Polygon(0.0, 0.0, 220.0, 0.0, 250.0, 35.0, 0.0, 35.0);
             p.setMouseTransparent(true);
