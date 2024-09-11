@@ -7,6 +7,9 @@ menu.sell = Sell
 menu.shop = SHOP
 menu.inventory = INVENTORY
 
+dialog.login = LOGIN
+dialog.register = REGISTER
+
 item.accelerate_feather = Accelerate Feather
 item.healing_potion = Healing Potion
 item.health_crystal = Health Crystal

@@ -4,6 +4,7 @@ import com.almasb.fxgl.app.scene.FXGLDefaultMenu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.ui.AchievementView;
+import dev.csu.survivor.ui.login.LoginService;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
 import javafx.beans.binding.Bindings;
@@ -57,7 +58,7 @@ public class VanillaMainMenu extends BaseMenu
         itemLogin.getBtn().onActionProperty().bind(
                 Bindings.when(isLoggedIn)
                         .then((EventHandler<ActionEvent>) e -> User.getInstance().logout())
-                        .otherwise(e -> openLoginWindow())
+                        .otherwise(e ->new LoginService().showLoginBox())
         );
         itemLogin.getBtn().textProperty().bind(
                 Bindings.when(isLoggedIn)
@@ -103,6 +104,7 @@ public class VanillaMainMenu extends BaseMenu
     }
 
     // 打开登录窗口
+    @Deprecated
     private void openLoginWindow()
     {
         if (loginStage == null || !loginStage.isShowing())
