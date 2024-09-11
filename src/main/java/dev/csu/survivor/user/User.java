@@ -5,12 +5,13 @@ import javafx.event.Event;
 import javafx.event.EventType;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class User {
     private int userId;
     private String username;
-    private Date registerDate;
-    private Date lastLoginDate;
+    private Timestamp registerDate;
+    private Timestamp lastLoginDate;
     private boolean isLoggedIn;
 
     // 私有构造方法，防止外部实例化
@@ -18,19 +19,19 @@ public class User {
         this.isLoggedIn = false;
     }
 
-    public Date getLastLoginDate() {
+    public Timestamp getLastLoginDate() {
         return lastLoginDate;
     }
 
-    public void setLastLoginDate(Date lastLoginDate) {
+    public void setLastLoginDate(Timestamp lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public Date getRegisterDate() {
+    public Timestamp getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(Timestamp registerDate) {
         this.registerDate = registerDate;
     }
 

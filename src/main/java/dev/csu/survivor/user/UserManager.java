@@ -1,12 +1,12 @@
 package dev.csu.survivor.user;
 
+import dev.csu.survivor.achievements.AchievementChecker;
+import dev.csu.survivor.achievements.AchievementManager;
 import dev.csu.survivor.util.JDBCUtil;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +17,7 @@ public class UserManager {
 
     // 登录方法
     public boolean login(String username, String password) {
-        String query = "SELECT user_id, password_hash FROM users WHERE username = ?";
+        String query = "SELECT user_id, password_hash, register_date, last_login FROM users WHERE username = ?";
         try (Connection conn = JDBCUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
@@ -34,6 +34,21 @@ public class UserManager {
                         user.setUserId(rs.getInt("user_id"));
                         user.setUsername(username);
                         user.setLoggedIn(true);
+                        user.setRegisterDate(rs.getTimestamp("register_date"));
+                        user.setLastLoginDate(rs.getTimestamp("last_login"));
+
+                        // 判断是否获得初次登录成就
+                        new AchievementChecker(new AchievementManager()).checkForAchievement(1, "first_login");
+
+                        user.setLastLoginDate(Timestamp.valueOf(LocalDateTime.now()));
+
+                        // 更新数据库中的最后登录日期
+                        String updateQuery = "UPDATE users SET last_login = ? WHERE user_id = ?";
+                        try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
+                            updateStmt.setTimestamp(1, user.getLastLoginDate());
+                            updateStmt.setInt(2, user.getUserId());
+                            updateStmt.executeUpdate();
+                        }
 
                         logger.log(Level.INFO, "User {0} logged in successfully", username);
                         return true;

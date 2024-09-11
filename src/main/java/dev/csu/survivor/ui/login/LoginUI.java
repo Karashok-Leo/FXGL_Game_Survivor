@@ -67,15 +67,7 @@ public class LoginUI extends Application
     {
         if (userManager.login(username, password))
         {
-            // 更新全局用户状态
-            User user = User.getInstance();
-            user.setUsername(username);
-            user.setLoggedIn(true);
-            user.setLastLoginDate(new Date(System.currentTimeMillis()));
-
             FXGL.getEventBus().fireEvent(new CloseLoginWindowEvent(true));
-
-            new AchievementChecker(new AchievementManager()).checkForAchievement(1, "first_login");
 
             System.out.println("Login successful");
             return true;
