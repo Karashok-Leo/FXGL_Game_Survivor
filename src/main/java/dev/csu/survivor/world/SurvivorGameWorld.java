@@ -15,6 +15,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.List;
 
+/**
+ * 包装后的游戏世界类
+ */
 public class SurvivorGameWorld
 {
     private final LocalTimer spawnTimer;
@@ -42,16 +45,29 @@ public class SurvivorGameWorld
             this.internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
     }
 
+    /**
+     * 获取游戏世界对象
+     *
+     * @return 游戏世界对象
+     */
     public static SurvivorGameWorld getInstance()
     {
         return ((SurvivorGameApp) FXGL.getApp()).getWorld();
     }
 
+    /**
+     * 获取游戏世界中唯一的玩家
+     *
+     * @return 游戏世界中唯一的玩家实体
+     */
     public static Entity getPlayer()
     {
         return getInstance().player;
     }
 
+    /**
+     * 游戏帧方法
+     */
     public void tick()
     {
         this.enemies.set(
@@ -78,6 +94,12 @@ public class SurvivorGameWorld
         }
     }
 
+    /**
+     * 生成指定实体，并在 SpawnData 中传入当前波次
+     *
+     * @param entityName 实体 Spawner 名称
+     * @see dev.csu.survivor.factory.SurvivorEntityFactory
+     */
     public void spawn(String entityName)
     {
         SpawnData data = new SpawnData(FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
@@ -85,11 +107,17 @@ public class SurvivorGameWorld
         internalWorld.spawn(entityName, data);
     }
 
+    /**
+     * 当前波次
+     */
     public SimpleIntegerProperty waveProperty()
     {
         return wave;
     }
 
+    /**
+     * 当前剩余敌人
+     */
     public SimpleIntegerProperty enemiesProperty()
     {
         return enemies;

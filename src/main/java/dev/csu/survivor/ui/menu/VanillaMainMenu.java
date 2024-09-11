@@ -21,6 +21,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * 主菜单界面
+ */
 public class VanillaMainMenu extends BaseMenu
 {
     private static Stage loginStage;

@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 /**
- * Copy from FXGLDefaultMenu
+ * 拷贝自 {@link FXGLDefaultMenu}
  */
 public abstract class BaseMenu extends FXGLMenu
 {
@@ -92,6 +92,9 @@ public abstract class BaseMenu extends FXGLMenu
         );
     }
 
+    /**
+     * 该菜单显示的标题
+     */
     protected String getTitle()
     {
         return FXGL.getSettings().getTitle();
@@ -152,6 +155,9 @@ public abstract class BaseMenu extends FXGLMenu
         switchMenuContentTo(EMPTY);
     }
 
+    /**
+     * 跳转菜单至指定节点
+     */
     protected void switchMenuTo(Node menu)
     {
         Node oldMenu = menuRoot.getChildren().getFirst();
@@ -172,6 +178,11 @@ public abstract class BaseMenu extends FXGLMenu
         ft.play();
     }
 
+    /**
+     * 跳转菜单内容至指定 MenuContent
+     *
+     * @see com.almasb.fxgl.app.scene.FXGLDefaultMenu.MenuContent
+     */
     protected void switchMenuContentTo(Node content)
     {
         menuContentRoot.getChildren().set(0, content);
@@ -198,15 +209,25 @@ public abstract class BaseMenu extends FXGLMenu
     }
 
     /**
-     * Core method
+     * 初始化菜单按钮集
+     *
+     * @see MenuBox
      */
     protected abstract void initMenuBox(MenuBox menuBox);
 
+    /**
+     * 创建初始菜单内容
+     *
+     * @see com.almasb.fxgl.app.scene.FXGLDefaultMenu.MenuContent
+     */
     protected FXGLDefaultMenu.MenuContent createMenuContent()
     {
         return EMPTY;
     }
 
+    /**
+     * 创建菜单按钮集
+     */
     protected MenuBox createMenuBodyGameMenu()
     {
         MenuBox box = new MenuBox();
@@ -214,6 +235,9 @@ public abstract class BaseMenu extends FXGLMenu
         return box;
     }
 
+    /**
+     * 创建继续游戏按钮
+     */
     protected MenuButton createResumeButton()
     {
         MenuButton itemResume = new MenuButton("menu.resume");
@@ -221,6 +245,9 @@ public abstract class BaseMenu extends FXGLMenu
         return itemResume;
     }
 
+    /**
+     * 创建退出按钮
+     */
     protected MenuButton createExitButton()
     {
         if (FXGL.getSettings().isMainMenuEnabled())
@@ -236,6 +263,13 @@ public abstract class BaseMenu extends FXGLMenu
         }
     }
 
+    /**
+     * 创建背景
+     *
+     * @param width  窗口宽度
+     * @param height 窗口高度
+     * @return 背景节点
+     */
     protected Node createBackground(double width, double height)
     {
         Rectangle bg = new Rectangle(width, height);
@@ -243,6 +277,12 @@ public abstract class BaseMenu extends FXGLMenu
         return bg;
     }
 
+    /**
+     * 创建菜单标题
+     *
+     * @param title 标题文本
+     * @return 菜单标题节点
+     */
     protected Node createTitleView(String title)
     {
         Text text = FXGL.getUIFactoryService().newText(title.substring(0, 1), 50.0);
@@ -287,6 +327,11 @@ public abstract class BaseMenu extends FXGLMenu
         return titleRoot;
     }
 
+    /**
+     * 创建选项菜单按钮集
+     *
+     * @return 选项菜单按钮集
+     */
     protected MenuBox createOptionsMenu()
     {
         MenuButton itemGameplay = new MenuButton("menu.gameplay");
@@ -352,7 +397,9 @@ public abstract class BaseMenu extends FXGLMenu
         return new FXGLDefaultMenu.MenuContent(hbox);
     }
 
-
+    /**
+     * 创建修改按键设置的 TriggerView
+     */
     protected void addNewInputBinding(UserAction action, Trigger trigger, GridPane grid)
     {
         Text actionName = FXGL.getUIFactoryService().newText(action.getName(), Color.WHITE, 18.0);
@@ -452,6 +499,12 @@ public abstract class BaseMenu extends FXGLMenu
         return new FXGLDefaultMenu.MenuContent(gridPane);
     }
 
+    /**
+     * 菜单按钮
+     * <p>
+     * 自带 Hover、Focus 时效果
+     * </p>
+     */
     protected class MenuButton extends Pane
     {
         private final Button btn;
@@ -508,21 +561,38 @@ public abstract class BaseMenu extends FXGLMenu
             });
         }
 
+        /**
+         * 获取该菜单按钮内置的按钮对象
+         *
+         * @return 该菜单按钮内置的按钮对象
+         */
         public Button getBtn()
         {
             return btn;
         }
 
+        /**
+         * 设置该菜单按钮的行为
+         */
         public void setOnAction(EventHandler<ActionEvent> handler)
         {
             btn.setOnAction(handler);
         }
 
+        /**
+         * 设置该菜单按钮的父级按钮集
+         */
         public void setParent(MenuBox menu)
         {
             parent = menu;
         }
 
+        /**
+         * 设置该菜单按钮点击后显示的菜单内容
+         *
+         * @param contentSupplier 菜单内容
+         * @param isCached        是否缓存菜单内容
+         */
         public void setMenuContent(Supplier<FXGLDefaultMenu.MenuContent> contentSupplier, boolean isCached)
         {
             btn.addEventHandler(ActionEvent.ACTION, actionEvent ->
@@ -534,6 +604,9 @@ public abstract class BaseMenu extends FXGLMenu
             });
         }
 
+        /**
+         * 设置该菜单按钮的子按钮集
+         */
         public void setChild(MenuBox menu)
         {
             MenuButton back = new MenuButton("menu.back");
@@ -549,6 +622,9 @@ public abstract class BaseMenu extends FXGLMenu
         }
     }
 
+    /**
+     * 菜单按钮集
+     */
     protected class MenuBox extends VBox
     {
         public MenuBox(MenuButton... items)
@@ -562,6 +638,11 @@ public abstract class BaseMenu extends FXGLMenu
             return 10 * this.getChildren().size();
         }
 
+        /**
+         * 向该菜单按钮集中添加菜单按钮
+         *
+         * @param items 要添加的菜单按钮
+         */
         public void add(MenuButton... items)
         {
             for (MenuButton item : items)

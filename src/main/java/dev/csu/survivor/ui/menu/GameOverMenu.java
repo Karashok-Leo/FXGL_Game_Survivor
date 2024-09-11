@@ -6,6 +6,9 @@ import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.scene.control.Label;
 
+/**
+ * 游戏结束界面
+ */
 public class GameOverMenu extends BaseMenu
 {
     protected FXGLDefaultMenu.MenuContent waveContent;
@@ -44,6 +47,10 @@ public class GameOverMenu extends BaseMenu
         menuBox.add(createExitButton());
     }
 
+    /**
+     * 创建重新游玩按钮
+     * @return 重新游玩按钮
+     */
     protected MenuButton createRestartButton()
     {
         MenuButton itemRestart = new MenuButton("menu.restart");

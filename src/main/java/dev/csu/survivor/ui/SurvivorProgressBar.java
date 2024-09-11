@@ -23,7 +23,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- * Copy from ProgressBar.java
+ * 拷贝自 {@link ProgressBar}
+ * <p>修改了 label 与跳字 text 的样式，并对外提供获取内部组件的方法</p>
  */
 public class SurvivorProgressBar extends Parent
 {

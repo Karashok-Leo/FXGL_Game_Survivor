@@ -16,6 +16,13 @@ import javafx.scene.text.TextFlow;
 
 import java.util.List;
 
+/**
+ * 物品视图
+ * <p>显示以下内容：</p>
+ * <p>物品纹理</p>
+ * <p>物品名称</p>
+ * <p>物品描述</p>
+ */
 public class ItemView extends BorderStackPane
 {
     protected final ItemType itemType;
@@ -44,6 +51,10 @@ public class ItemView extends BorderStackPane
         return box;
     }
 
+    /**
+     * 创建物品纹理显示的 BorderStackPane 对象
+     * @return 物品纹理显示的 BorderStackPane 对象
+     */
     protected BorderStackPane createItemPane()
     {
         Texture texture = itemType.getTexture().copy();
@@ -52,6 +63,10 @@ public class ItemView extends BorderStackPane
         return new BorderStackPane(Constants.Client.SHOP_ITEM_BORDER_SIZE, Constants.Client.SHOP_ITEM_BORDER_SIZE, texture);
     }
 
+    /**
+     * 创建物品名称的 TextFlow 对象
+     * @return 物品名称的 TextFlow 对象
+     */
     protected TextFlow createItemName()
     {
         Text text = new Text(itemType.getName());
@@ -63,6 +78,10 @@ public class ItemView extends BorderStackPane
         return itemName;
     }
 
+    /**
+     * 创建物品描述信息的 BorderStackPane 对象
+     * @return 物品描述信息的 BorderStackPane 对象
+     */
     protected BorderStackPane createDescPane()
     {
         List<Text> desc = this.item.getDescription(SurvivorGameWorld.getPlayer());
@@ -77,10 +96,6 @@ public class ItemView extends BorderStackPane
         box.setAlignment(Pos.TOP_LEFT);
         box.getChildren().addAll(desc);
 
-//        TextFlow itemDesc = new TextFlow();
-//        itemDesc.getChildren().addAll(desc);
-//        itemDesc.setTextAlignment(TextAlignment.LEFT);
-//        itemDesc.setPrefWidth(Constants.Client.SHOP_ITEM_BORDER_SIZE - 2 * Constants.Client.SHOP_ENTRY_PADDING);
         return new BorderStackPane(Constants.Client.SHOP_ITEM_BORDER_SIZE, Constants.Client.SHOP_ITEM_BORDER_SIZE, box);
     }
 }

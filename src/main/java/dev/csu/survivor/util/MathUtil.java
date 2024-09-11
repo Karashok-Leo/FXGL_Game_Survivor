@@ -10,6 +10,13 @@ import java.util.function.Function;
 
 public class MathUtil
 {
+    /**
+     * 加权随机选择
+     *
+     * @param pool         选择的池
+     * @param weightGetter 权重获取方法
+     * @return 随机选择到的对象
+     */
     public static <T> T weightedRandom(Collection<T> pool, Function<T, Integer> weightGetter)
     {
         Random random = FXGLMath.getRandom();
@@ -35,8 +42,12 @@ public class MathUtil
     }
 
     /**
-     * @param n Should be greater than the size of pool
-     * @return A set containing n random items, according to the weights of them
+     * 加权随机选择
+     *
+     * @param n            随机选择的目标数量
+     * @param pool         选择的池
+     * @param weightGetter 权重获取方法
+     * @return 随机选择到的对象集（不含相同对象）
      */
     public static <T> Set<T> weightedRandomSet(int n, Collection<T> pool, Function<T, Integer> weightGetter)
     {

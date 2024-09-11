@@ -11,8 +11,9 @@ import dev.csu.survivor.physics.SurvivorPhysicsHandler;
 import dev.csu.survivor.ui.SurvivorGameHud;
 import dev.csu.survivor.world.SurvivorGameWorld;
 
-import java.util.Map;
-
+/**
+ * 游戏入口类
+ */
 public class SurvivorGameApp extends GameApplication
 {
     private SurvivorGameWorld world;
@@ -27,6 +28,11 @@ public class SurvivorGameApp extends GameApplication
         return world;
     }
 
+    /**
+     * 初始化游戏设置
+     *
+     * @param gameSettings 游戏设置
+     */
     @Override
     protected void initSettings(GameSettings gameSettings)
     {
@@ -44,18 +50,18 @@ public class SurvivorGameApp extends GameApplication
         gameSettings.setFontUI("mojangles.ttf");
     }
 
-    @Override
-    protected void initGameVars(Map<String, Object> vars)
-    {
-//        vars.put("death", 0);
-    }
-
+    /**
+     * 初始化控制交互行为
+     */
     @Override
     protected void initInput()
     {
         new SurvivorGameInput().init(FXGL.getInput());
     }
 
+    /**
+     * 初始化游戏
+     */
     @Override
     protected void initGame()
     {
@@ -64,18 +70,29 @@ public class SurvivorGameApp extends GameApplication
         world = new SurvivorGameWorld(gameWorld);
     }
 
+    /**
+     * 游戏帧方法
+     *
+     * @param tpf time per frame
+     */
     @Override
     protected void onUpdate(double tpf)
     {
         world.tick();
     }
 
+    /**
+     * 初始化游戏物理设计
+     */
     @Override
     protected void initPhysics()
     {
         new SurvivorPhysicsHandler().init(FXGL.getPhysicsWorld());
     }
 
+    /**
+     * 初始化游戏 UI
+     */
     @Override
     protected void initUI()
     {

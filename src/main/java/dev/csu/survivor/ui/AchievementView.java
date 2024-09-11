@@ -7,21 +7,12 @@ import dev.csu.survivor.util.JDBCUtil;
 import dev.csu.survivor.util.StyleUtil;
 import javafx.event.Event;
 import javafx.event.EventType;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.Border;
+import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -32,14 +23,17 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-public class AchievementView extends FXGLScene {
-
+/**
+ * 成就展示界面
+ */
+public class AchievementView extends FXGLScene
+{
     private static final int ACHIEVEMENTS_PER_ROW = 3; // 每行显示三个成就
     private static final Logger logger = Logger.getLogger(AchievementView.class.getName()); // 定义日志记录器
     private final Pane contentRoot; // 用于返回给主菜单的容器
 
-    public AchievementView() {
+    public AchievementView()
+    {
         super(1600, 900);
 
         contentRoot = new Pane();
@@ -59,7 +53,8 @@ public class AchievementView extends FXGLScene {
 
         User user = User.getInstance();
 
-        try {
+        try
+        {
             // 连接数据库查询数据
             String query = "SELECT name, description, image_path, earned_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
             Connection conn = JDBCUtil.getConnection();
@@ -79,17 +74,20 @@ public class AchievementView extends FXGLScene {
             int achievedCount = 0;
 
             // 检查查询结果是否为空
-            if (!rs.isBeforeFirst()) {
+            if (!rs.isBeforeFirst())
+            {
                 logger.log(Level.INFO, "No achievements found for user {0}", user.getUsername());
                 FXGL.getDialogService()
                         .showMessageBox("No achievements found for user!" + user.getUsername());
-            } else {
+            } else
+            {
                 // 设定位置
                 int column = 0;
                 int row = 0;
 
                 // 遍历查询结果，创建成就显示
-                while (rs.next()) {
+                while (rs.next())
+                {
                     String name = rs.getString("name");
                     String description = rs.getString("description");
                     String imagePath = rs.getString("image_path");
@@ -107,7 +105,8 @@ public class AchievementView extends FXGLScene {
 
                     // 控制成就展示为每行3个
                     column++;
-                    if (column >= ACHIEVEMENTS_PER_ROW) {
+                    if (column >= ACHIEVEMENTS_PER_ROW)
+                    {
                         column = 0;
                         row++;
                     }
@@ -131,9 +130,11 @@ public class AchievementView extends FXGLScene {
 
             contentRoot.getChildren().addAll(progressPane);  // 添加包裹的进度条
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             logger.log(Level.SEVERE, "Database query exception", e);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             logger.log(Level.SEVERE, "Other exception", e);
         }
 
@@ -145,16 +146,17 @@ public class AchievementView extends FXGLScene {
         contentRoot.getStyleClass().add("achievement-view");
     }
 
-    private static @NotNull BorderPane getBorderPane(VBox progressContainer) {
+    private static @NotNull BorderPane getBorderPane(VBox progressContainer)
+    {
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(progressContainer);
         borderPane.setStyle(
                 "-fx-border-color: white; " +
-                        "-fx-border-width: 2; " +
-                        "-fx-border-radius: 10; " +
-                        "-fx-background-radius: 10; " +
-                        "-fx-padding: 10; " +
-                        "-fx-background-color: rgba(0, 0, 0, 0.2);"
+                "-fx-border-width: 2; " +
+                "-fx-border-radius: 10; " +
+                "-fx-background-radius: 10; " +
+                "-fx-padding: 10; " +
+                "-fx-background-color: rgba(0, 0, 0, 0.2);"
         );
         borderPane.setTranslateX(-225);
         borderPane.setTranslateY(-200);
@@ -167,16 +169,19 @@ public class AchievementView extends FXGLScene {
      *
      * @return Pane 容器
      */
-    public Pane getContentRootPane() {
+    public Pane getContentRootPane()
+    {
         return contentRoot;
     }
 
     // 创建单个成就的显示框，包含成就图片、名称、描述和达成时间
-    private VBox createAchievementBox(String name, String description, String imagePath, String unlockTime) {
+    private VBox createAchievementBox(String name, String description, String imagePath, String unlockTime)
+    {
         VBox box = new VBox(10);
         box.setAlignment(Pos.CENTER);
 
-        try {
+        try
+        {
             // 成就图片
             ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/textures/achievements/" + imagePath))));
             imageView.setFitWidth(50);
@@ -203,7 +208,8 @@ public class AchievementView extends FXGLScene {
             spacer2.setMinHeight(30);
 
             box.getChildren().addAll(imageView, nameLabel, spacer1, descriptionLabel, spacer2, timeLabel);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e)
+        {
             logger.log(Level.WARNING, "Null pointer exception while loading image, image path: {0}", imagePath);
         }
 
@@ -211,11 +217,13 @@ public class AchievementView extends FXGLScene {
     }
 
     //返回事件
-    public static class BackEvent extends Event {
+    public static class BackEvent extends Event
+    {
 
         public static final EventType<BackEvent> USER_BACK = new EventType<>(Event.ANY, "USER_BACK");
 
-        public BackEvent() {
+        public BackEvent()
+        {
             super(USER_BACK);
         }
     }

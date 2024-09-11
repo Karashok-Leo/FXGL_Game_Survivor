@@ -11,8 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 /**
+ * 用于存储常量，未来应该转化为配置文件。
  * A static class used for constants storage.
- * should be replaced by config files in the future.
+ * Should be replaced by config files in the future.
  */
 public interface Constants
 {

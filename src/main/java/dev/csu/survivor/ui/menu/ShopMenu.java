@@ -9,10 +9,7 @@ import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.enums.ItemType;
-import dev.csu.survivor.ui.BorderStackPane;
-import dev.csu.survivor.ui.GoldView;
-import dev.csu.survivor.ui.InventoryPane;
-import dev.csu.survivor.ui.ItemView;
+import dev.csu.survivor.ui.*;
 import dev.csu.survivor.util.MathUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
@@ -28,6 +25,12 @@ import javafx.scene.shape.Rectangle;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * 商店界面
+ * <p>
+ * 该类的单例对象通过调用 {@link SurvivorGameHud#getShopMenu()} 获取
+ * </p>
+ */
 public class ShopMenu extends BaseMenu
 {
     protected final HBox shopEntries;
@@ -67,6 +70,14 @@ public class ShopMenu extends BaseMenu
         });
     }
 
+    /**
+     * 创建包含按钮的 BorderStackPane 对象的快捷方法
+     *
+     * @param text    按钮文本
+     * @param width   按钮宽度
+     * @param handler 点击按钮时执行的语句
+     * @return 包含按钮的 BorderStackPane 对象
+     */
     public static BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
     {
         Button button = new FXGLButton(text);
@@ -78,6 +89,14 @@ public class ShopMenu extends BaseMenu
         return new BorderStackPane(width, 40, button);
     }
 
+    /**
+     * 创建出售按钮
+     *
+     * @param itemType              物品种类
+     * @param itemBox               物品详细信息的 VBox 布局
+     * @param inventoryPaneToUpdate 售出时更新的物品栏界面对象
+     * @return 出售按钮的 BorderStackPane 对象
+     */
     public static BorderStackPane createButtonSell(ItemType itemType, VBox itemBox, InventoryPane inventoryPaneToUpdate)
     {
         return createBorderButton(
@@ -137,6 +156,9 @@ public class ShopMenu extends BaseMenu
         menuBox.add(shop, inventory, itemResume);
     }
 
+    /**
+     * 刷新商店内容
+     */
     public void refreshShopEntries()
     {
         this.shopEntries.getChildren().clear();
@@ -153,6 +175,12 @@ public class ShopMenu extends BaseMenu
         return new HBox();
     }
 
+    /**
+     * 创建给定物品种类的商店条目
+     *
+     * @param itemType 物品种类
+     * @return 商店条目对象
+     */
     protected VBox createShopEntry(ItemType itemType)
     {
         VBox itemBox = new VBox();
@@ -161,6 +189,13 @@ public class ShopMenu extends BaseMenu
         return itemBox;
     }
 
+    /**
+     * 创建购买按钮
+     *
+     * @param itemType 物品种类
+     * @param itemBox  物品详细信息的 VBox 布局
+     * @return 购买按钮的 BorderStackPane 对象
+     */
     public BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
     {
         return createBorderButton(

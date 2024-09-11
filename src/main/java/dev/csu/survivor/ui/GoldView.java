@@ -11,6 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
+/**
+ * 显示玩家持有金币数量的视图
+ */
 public class GoldView extends Parent implements Updatable
 {
     protected final AnimatedTexture texture = new AnimatedTexture(Constants.AnimationMaps.COIN);

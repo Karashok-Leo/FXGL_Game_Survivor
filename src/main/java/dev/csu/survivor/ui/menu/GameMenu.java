@@ -3,6 +3,9 @@ package dev.csu.survivor.ui.menu;
 import com.almasb.fxgl.app.scene.MenuType;
 import com.almasb.fxgl.dsl.FXGL;
 
+/**
+ * 游戏菜单界面（按下 ESC 暂停时显示）
+ */
 public class GameMenu extends BaseMenu
 {
     public GameMenu()

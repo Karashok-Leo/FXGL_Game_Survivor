@@ -16,6 +16,13 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
+/**
+ * 物品栏视图
+ * <p>显示以下内容：</p>
+ * <p>5x5物品栏位</p>
+ * <p>物品详细视图</p>
+ * <p>翻页按钮</p>
+ */
 public class InventoryPane extends HBox
 {
     private static final int ITEMS_PER_PAGE = Constants.Client.INVENTORY_COLS * Constants.Client.INVENTORY_ROWS;
@@ -45,6 +52,9 @@ public class InventoryPane extends HBox
         this.getChildren().addAll(inventoryBox, selectItemBox);
     }
 
+    /**
+     * 更新物品栏视图
+     */
     public void updateInventory()
     {
         this.itemPanes = SurvivorGameWorld.getPlayer()
@@ -55,6 +65,11 @@ public class InventoryPane extends HBox
                 .toList();
     }
 
+    /**
+     * 创建翻页按钮
+     *
+     * @return 翻页按钮的 HBox 布局
+     */
     protected HBox createButtonBox()
     {
         BorderStackPane previous = ShopMenu.createBorderButton(
@@ -73,6 +88,12 @@ public class InventoryPane extends HBox
         return buttonBox;
     }
 
+    /**
+     * 创建单个物品栏位
+     *
+     * @param itemEntry 实体物品栏项目
+     * @return 单个物品栏位的 BorderStackPane 对象
+     */
     protected BorderStackPane createInventoryEntry(InventoryComponent.ItemEntry itemEntry)
     {
         Texture texture = itemEntry.type().getTexture().copy();
@@ -122,6 +143,11 @@ public class InventoryPane extends HBox
         return new BorderStackPane(Constants.Client.INVENTORY_BORDER_SIZE, Constants.Client.INVENTORY_BORDER_SIZE);
     }
 
+    /**
+     * 设置当前页码
+     *
+     * @param page 页码
+     */
     public void setPage(int page)
     {
         this.currentPage = Math.clamp(
@@ -134,6 +160,9 @@ public class InventoryPane extends HBox
         this.updatePage();
     }
 
+    /**
+     * 更新当前页的物品栏
+     */
     public void updatePage()
     {
         this.grid.getChildren().clear();
@@ -148,11 +177,17 @@ public class InventoryPane extends HBox
         }
     }
 
+    /**
+     * 上一页
+     */
     public void prev()
     {
         this.setPage(currentPage - 1);
     }
 
+    /**
+     * 下一页
+     */
     public void next()
     {
         this.setPage(currentPage + 1);
