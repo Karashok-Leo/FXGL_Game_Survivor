@@ -67,6 +67,47 @@ public class ShopMenu extends BaseMenu
         });
     }
 
+    public static BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
+    {
+        Button button = new FXGLButton(text);
+        button.setFont(FXGL.getUIFactoryService().newFont(Constants.Client.SHOP_ITEM_NAME_FONT));
+        button.setAlignment(Pos.CENTER);
+        button.setTextFill(Color.WHITE);
+        button.setStyle("-fx-background-color: transparent");
+        button.setOnAction(e -> handler.accept(button));
+        return new BorderStackPane(width, 40, button);
+    }
+
+    public static BorderStackPane createButtonSell(ItemType itemType, VBox itemBox, InventoryPane inventoryPaneToUpdate)
+    {
+        return createBorderButton(
+                "%s (+%d G)".formatted(
+                        FXGL.localize("menu.sell"),
+                        itemType.price
+                ),
+                Constants.Client.SHOP_ENTRY_WIDTH,
+                button ->
+                {
+                    Entity player = SurvivorGameWorld.getPlayer();
+                    GoldComponent golds = player.getComponent(GoldComponent.class);
+
+                    // Remove the item from the inventory
+                    player.getComponent(InventoryComponent.class).removeItem(itemType);
+                    // Increase the golds
+                    golds.restore(itemType.price);
+
+                    FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, itemBox);
+                    ft.setToValue(0);
+                    ft.play();
+
+                    button.setDisable(true);
+
+                    inventoryPaneToUpdate.updateInventory();
+                    inventoryPaneToUpdate.updatePage();
+                }
+        );
+    }
+
     @Override
     protected String getTitle()
     {
@@ -120,17 +161,6 @@ public class ShopMenu extends BaseMenu
         return itemBox;
     }
 
-    public static BorderStackPane createBorderButton(String text, int width, Consumer<Button> handler)
-    {
-        Button button = new FXGLButton(text);
-        button.setFont(FXGL.getUIFactoryService().newFont(Constants.Client.SHOP_ITEM_NAME_FONT));
-        button.setAlignment(Pos.CENTER);
-        button.setTextFill(Color.WHITE);
-        button.setStyle("-fx-background-color: transparent");
-        button.setOnAction(e -> handler.accept(button));
-        return new BorderStackPane(width, 40, button);
-    }
-
     public BorderStackPane createButtonBuy(ItemType itemType, VBox itemBox)
     {
         return createBorderButton(
@@ -160,36 +190,6 @@ public class ShopMenu extends BaseMenu
 
                     this.inventoryPane.updateInventory();
                     this.inventoryPane.updatePage();
-                }
-        );
-    }
-
-    public static BorderStackPane createButtonSell(ItemType itemType, VBox itemBox, InventoryPane inventoryPaneToUpdate)
-    {
-        return createBorderButton(
-                "%s (+%d G)".formatted(
-                        FXGL.localize("menu.sell"),
-                        itemType.price
-                ),
-                Constants.Client.SHOP_ENTRY_WIDTH,
-                button ->
-                {
-                    Entity player = SurvivorGameWorld.getPlayer();
-                    GoldComponent golds = player.getComponent(GoldComponent.class);
-
-                    // Remove the item from the inventory
-                    player.getComponent(InventoryComponent.class).removeItem(itemType);
-                    // Increase the golds
-                    golds.restore(itemType.price);
-
-                    FadeTransition ft = new FadeTransition(Constants.Client.SHOP_ENTRY_FADE_DURATION, itemBox);
-                    ft.setToValue(0);
-                    ft.play();
-
-                    button.setDisable(true);
-
-                    inventoryPaneToUpdate.updateInventory();
-                    inventoryPaneToUpdate.updatePage();
                 }
         );
     }

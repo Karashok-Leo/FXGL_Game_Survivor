@@ -8,11 +8,12 @@ import com.almasb.fxgl.time.LocalTimer;
 import com.almasb.fxgl.time.Timer;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EntityStates;
-import dev.csu.survivor.enums.EntityType;
-import dev.csu.survivor.ui.menu.GameOverMenu;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Should be added after StateComponent and HealthComponent
+ * 控制实体受伤及死亡的组件
+ * 继承并重写 onDeath 方法以实现更复杂的死亡逻辑
+ * 依赖的组件: StateComponent & HealthComponent
  */
 public class HurtComponent extends Component
 {
@@ -40,7 +41,25 @@ public class HurtComponent extends Component
         timer.update(tpf);
     }
 
-    public void hurt(Entity attacker, double damage)
+    /**
+     * 实体死亡时调用
+     */
+    public void onDeath()
+    {
+        this.entity.removeFromWorld();
+    }
+
+    /**
+     * 实体受伤时调用
+     * <p>
+     * 如玩家使用飞镖攻击敌人时，attacker为玩家，damage为玩家的伤害属性值，source为飞镖
+     * </p>
+     *
+     * @param attacker 攻击者，间接的伤害来源
+     * @param damage   实体受到的伤害
+     * @param source   直接的伤害来源
+     */
+    public void hurt(Entity attacker, double damage, @Nullable Entity source)
     {
         // Add cooldown for hurt
         if (hurtCooldown.elapsed(Constants.Common.HURT_COOLDOWN) &&
@@ -55,18 +74,14 @@ public class HurtComponent extends Component
             if (health.isZero())
             {
                 state.changeState(EntityStates.DEATH);
-                timer.runOnceAfter(() ->
-                {
-                    if (entity.isType(EntityType.PLAYER))
-                        FXGL.getSceneService().pushSubScene(new GameOverMenu());
-                    else
-                    {
-                        FXGL.getGameWorld().spawn("gold", entity.getPosition());
-                        entity.removeFromWorld();
-                    }
-                }, Constants.Common.DEATH_DELAY);
+                timer.runOnceAfter(this::onDeath, Constants.Common.DEATH_DELAY);
 
             } else timer.runOnceAfter(() -> state.changeState(EntityStates.IDLE), Constants.Common.HURT_DURATION);
         }
+    }
+
+    public void hurt(Entity attacker, double damage)
+    {
+        this.hurt(attacker, damage, null);
     }
 }

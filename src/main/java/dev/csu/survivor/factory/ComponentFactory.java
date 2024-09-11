@@ -6,7 +6,6 @@ import dev.csu.survivor.component.base.AttributeComponent;
 import dev.csu.survivor.component.base.MultiAnimationComponent;
 import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.enums.AttributeType;
-import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.world.attribute.AttributeInstance;
 
 public class ComponentFactory
@@ -68,10 +67,6 @@ public class ComponentFactory
 
     public static InventoryComponent newPlayerInventoryComponent()
     {
-        InventoryComponent component = new InventoryComponent();
-        component.getInventory().add(new InventoryComponent.ItemEntry(ItemType.BOOMERANG_ATTACK));
-        for (int i = 0; i < 25; i++)
-            component.getInventory().add(new InventoryComponent.ItemEntry(ItemType.HEALING_POTION));
-        return component;
+        return new InventoryComponent();
     }
 }

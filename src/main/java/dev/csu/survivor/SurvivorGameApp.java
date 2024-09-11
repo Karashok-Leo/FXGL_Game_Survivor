@@ -9,7 +9,6 @@ import dev.csu.survivor.factory.SurvivorEntityFactory;
 import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.physics.SurvivorPhysicsHandler;
 import dev.csu.survivor.ui.SurvivorGameHud;
-import dev.csu.survivor.ui.menu.MainMenu;
 import dev.csu.survivor.world.SurvivorGameWorld;
 
 import java.util.Map;
@@ -21,6 +20,11 @@ public class SurvivorGameApp extends GameApplication
     public static void main(String[] args)
     {
         launch(args);
+    }
+
+    public SurvivorGameWorld getWorld()
+    {
+        return world;
     }
 
     @Override

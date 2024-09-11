@@ -2,6 +2,7 @@ package dev.csu.survivor.ui.login;
 
 import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.achievements.AchievementChecker;
+import dev.csu.survivor.achievements.AchievementManager;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.user.UserManager;
 import javafx.application.Application;
@@ -14,8 +15,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 
-public class LoginUI extends Application {
+
+public class LoginUI extends Application
+{
     Label nameLabel = new Label("User Name :");
     Label passwordLabel = new Label("Password  : ");
 
@@ -27,13 +31,13 @@ public class LoginUI extends Application {
     Button btSignIn = new Button("Sign in"); // 注册按钮
     HBox h3 = new HBox(); // 按钮的容器
     VBox pane = new VBox(); // 整体布局容器
-    AchievementChecker checker;
 
     // UserManager 实例
     UserManager userManager = new UserManager();
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage)
+    {
         user.getChildren().addAll(nameLabel, tfUser);
         user.setAlignment(Pos.CENTER);
         user.setSpacing(20);
@@ -59,54 +63,65 @@ public class LoginUI extends Application {
         btSignIn.setOnAction(e -> handleSignIn());
     }
 
+    protected boolean tryLogin(String username, String password)
+    {
+        if (userManager.login(username, password))
+        {
+            FXGL.getEventBus().fireEvent(new CloseLoginWindowEvent(true));
+
+            System.out.println("Login successful");
+            return true;
+        }
+        return false;
+    }
+
     // 处理登录逻辑
-    private void handleLogin(Stage stage) {
+    private void handleLogin(Stage stage)
+    {
         String username = tfUser.getText();
         String password = tfPassword.getText();
 
-        if (!userManager.userExist(username)) {
+        if (!userManager.userExist(username))
+        {
             showErrorDialog("User does not exist.");
-        } else if (userManager.login(username, password)) {
-            // 更新全局用户状态
-            User user = User.getInstance();
-            user.setUsername(username);
-            user.setLoggedIn(true);
-
-
-
-            FXGL.getEventBus().fireEvent(new CloseLoginWindowEvent(true));
-
+        } else if (tryLogin(username, password))
+        {
             stage.close();
-
-            System.out.println("Login successful");
-        } else {
+        } else
+        {
             showErrorDialog("Incorrect username or password.");
         }
     }
 
     // 处理注册逻辑
-    private void handleSignIn() {
-        try {
+    private void handleSignIn()
+    {
+        try
+        {
             String username = tfUser.getText();
             String password = tfPassword.getText();
 
-            if (username.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || password.isEmpty())
+            {
                 showErrorDialog("Incomplete information.");
                 return;
             }
 
-            if (userManager.userExist(username)) {
+            if (userManager.userExist(username))
+            {
                 showErrorDialog("User already exists.");
-            } else {
+            } else
+            {
                 userManager.registerUser(username, password);
                 showSuccessDialog();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore)
+        {
         }
     }
 
-    private void showErrorDialog(String message) {
+    private void showErrorDialog(String message)
+    {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -114,7 +129,8 @@ public class LoginUI extends Application {
         alert.showAndWait();
     }
 
-    private void showSuccessDialog() {
+    private void showSuccessDialog()
+    {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText(null);
@@ -122,20 +138,22 @@ public class LoginUI extends Application {
         alert.showAndWait();
     }
 
-    public static class CloseLoginWindowEvent extends Event {
+    public static class CloseLoginWindowEvent extends Event
+    {
 
         public static final EventType<CloseLoginWindowEvent> USER_LOGIN = new EventType<>(Event.ANY, "USER_LOGIN");
 
         private final boolean isClosed;
-        public CloseLoginWindowEvent(boolean isClosed) {
+
+        public CloseLoginWindowEvent(boolean isClosed)
+        {
             super(USER_LOGIN);
             this.isClosed = isClosed;
         }
 
-        public boolean isClosed() {
+        public boolean isClosed()
+        {
             return isClosed;
         }
     }
-
-
 }

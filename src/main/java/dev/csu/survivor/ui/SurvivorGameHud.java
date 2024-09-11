@@ -1,6 +1,7 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.app.scene.GameScene;
+import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
@@ -8,24 +9,25 @@ import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.HealthComponent;
 import dev.csu.survivor.ui.menu.GameOverMenu;
+import dev.csu.survivor.ui.menu.ShopMenu;
 import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class SurvivorGameHud
 {
     public static SurvivorGameHud INSTANCE;
+
+    private final LazyValue<ShopMenu> shopMenu = new LazyValue<>(ShopMenu::new);
 
     private GameScene gameScene;
     private SubScene gameOver;
@@ -38,14 +40,32 @@ public class SurvivorGameHud
         this.gameOver = new GameOverMenu();
         // Add to the scene graph
         SurvivorProgressBar healthBar = createHealthBar();
-        this.goldView = createGoldView();
-        VBox box = new VBox(healthBar, goldView);
-        box.setPadding(new Insets(Constants.Client.HUD_PADDING));
-        box.setSpacing(Constants.Client.HUD_SPACING);
-        box.setAlignment(Pos.TOP_LEFT);
+        healthBar.setTranslateX(-10);
+
+        this.goldView = new GoldView();
+        this.goldView.setTranslateX(14);
+        this.goldView.setTranslateY(64);
+
+        Label waveLabel = createWaveLabel();
+        waveLabel.setTranslateX(FXGL.getAppWidth() - 240);
+        waveLabel.setTranslateY(16);
+
+        Label enemiesLabel = createEnemiesLabel();
+        enemiesLabel.setTranslateX(FXGL.getAppWidth() - 400);
+        enemiesLabel.setTranslateY(54);
+
+        StackPane pane = new StackPane(healthBar, goldView, waveLabel, enemiesLabel);
+        pane.setPadding(new Insets(Constants.Client.HUD_PADDING));
+        pane.setAlignment(Pos.TOP_LEFT);
+
         // Add goldView as update listener to the scene
         scene.addListener(goldView);
-        scene.addUINode(box);
+        scene.addUINode(pane);
+    }
+
+    public ShopMenu getShopMenu()
+    {
+        return shopMenu.get();
     }
 
     private SurvivorProgressBar createHealthBar()
@@ -53,7 +73,6 @@ public class SurvivorGameHud
         SurvivorProgressBar healthBar = new SurvivorProgressBar();
         healthBar.setWidth(Constants.Client.PLAYER_HEALTH_BAR_WIDTH);
         healthBar.setHeight(Constants.Client.PLAYER_HEALTH_BAR_HEIGHT);
-        healthBar.setTranslateX(-10);
         healthBar.setLabelVisible(true);
         healthBar.setLabelPosition(Position.RIGHT);
         healthBar.setFill(Color.GREEN.brighter());
@@ -75,11 +94,32 @@ public class SurvivorGameHud
         return healthBar;
     }
 
-    private GoldView createGoldView()
+    private Label createWaveLabel()
     {
-        GoldView goldView = new GoldView();
-        goldView.setTranslateX(14);
-        return goldView;
+        Label waveLabel = new Label();
+        waveLabel.setScaleX(1.5);
+        waveLabel.setScaleY(1.5);
+        waveLabel.textProperty().bind(
+                Bindings.concat(
+                        "Wave - ",
+                        SurvivorGameWorld.getInstance().waveProperty()
+                )
+        );
+        StyleUtil.setLabelStyle(waveLabel);
+        return waveLabel;
+    }
+
+    private Label createEnemiesLabel()
+    {
+        Label waveLabel = new Label();
+        waveLabel.textProperty().bind(
+                Bindings.concat(
+                        "Remaining Enemies - ",
+                        SurvivorGameWorld.getInstance().enemiesProperty()
+                )
+        );
+        StyleUtil.setLabelStyle(waveLabel);
+        return waveLabel;
     }
 
     public void createGoldCollectingAnimation(AnimatedTexture texture, double x, double y)

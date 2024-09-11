@@ -6,6 +6,10 @@ import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.ui.AchievementView;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -21,32 +25,23 @@ public class VanillaMainMenu extends BaseMenu
 {
     private static Stage loginStage;
     private Pane achievementPane;
-    private  MenuButton itemLogout;
-    private  MenuButton itemLogin;
+    private SimpleBooleanProperty isLoggedIn;
 
     public VanillaMainMenu()
     {
         super(MenuType.MAIN_MENU);
 
         // 监听用户登录事件
-        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event ->
-        {
-            System.out.println("85252 ");
-            itemLogout.setVisible(true);
-            itemLogin.setVisible(false);
-        });
+        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> isLoggedIn.set(true));
 
-        //监听返回事件
-        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
-        {
-            System.out.println("jianting ");
-            showMainMenu();
-        });
+        FXGL.getEventBus().addEventHandler(User.UserLogoutEvent.USER_LOGOUT, event -> isLoggedIn.set(false));
     }
 
     @Override
     protected void initMenuBox(MenuBox menuBox)
     {
+        isLoggedIn = new SimpleBooleanProperty(false);
+
         MenuButton itemNewGame = new MenuButton("menu.newGame");
         itemNewGame.setOnAction(e -> fireNewGame());
 
@@ -54,17 +49,18 @@ public class VanillaMainMenu extends BaseMenu
         itemOptions.setMenuContent(() -> EMPTY, false);
         itemOptions.setChild(createOptionsMenu());
 
-        itemLogin = new MenuButton("menu.login");
-        itemLogin.setOnAction(e -> openLoginWindow());
-
-        itemLogout = new MenuButton("menu.logout");
-        itemLogout.setOnAction(e->{
-            Logout();
-            itemLogin.setVisible(true);
-            itemLogout.setVisible(false);
-        });
-        itemLogout.setVisible(false);
-
+        MenuButton itemLogin = new MenuButton("menu.login");
+        itemLogin.setMenuContent(() -> EMPTY, false);
+        itemLogin.getBtn().onActionProperty().bind(
+                Bindings.when(isLoggedIn)
+                        .then((EventHandler<ActionEvent>) e -> User.getInstance().logout())
+                        .otherwise(e -> openLoginWindow())
+        );
+        itemLogin.getBtn().textProperty().bind(
+                Bindings.when(isLoggedIn)
+                        .then(FXGL.localizedStringProperty("menu.logout"))
+                        .otherwise(FXGL.localizedStringProperty("menu.login"))
+        );
 
         MenuButton itemAchievement = new MenuButton("menu.achievement");
         itemAchievement.setMenuContent(this::createAchievementContent, false);
@@ -72,23 +68,13 @@ public class VanillaMainMenu extends BaseMenu
         MenuButton itemExit = new MenuButton("menu.exit");
         itemExit.setOnAction(e -> fireExit());
 
-        User user = User.getInstance();
-        if (user.isLoggedIn()){
-
-        }
         menuBox.add(
                 itemNewGame,
                 itemOptions,
                 itemLogin,
-                itemLogout,
                 itemAchievement,
                 itemExit
         );
-    }
-
-    private void Logout() {
-        User user = User.getInstance();
-        user.logout();
     }
 
     @Override
@@ -125,33 +111,17 @@ public class VanillaMainMenu extends BaseMenu
             try
             {
                 loginUI.start(loginStage); // 然后启动 loginStage
-                loginStage.setOnCloseRequest(event ->
-                {
-                    loginStage = null;
-//                  enableButtons(true);
-                });
-//                enableButtons(false);
-            } catch (Exception ex)
+                loginStage.setOnCloseRequest(event -> loginStage = null);
+            } catch (Exception ignore)
             {
-                ex.printStackTrace();
             }
-        }
-    }
-
-    // 展示主菜单
-    public void showMainMenu()
-    {
-        // 隐藏成就页面
-        if (achievementPane != null)
-        {
-            achievementPane.setVisible(false);
         }
     }
 
     // 展示成就页面
     protected FXGLDefaultMenu.MenuContent createAchievementContent()
     {
-        if (!isUserLoggedIn())
+        if (!isLoggedIn.get())
         {
             // 用户未登录，弹出提示框
             FXGL.getDialogService()
@@ -162,17 +132,12 @@ public class VanillaMainMenu extends BaseMenu
         AchievementView achievementView = new AchievementView();
         achievementPane = achievementView.getContentRootPane();
 
-        achievementPane.setTranslateX(-400);
-        achievementPane.setTranslateY(130);
+        achievementPane.setTranslateX(-590);
+        achievementPane.setTranslateY(-100);
+
+        achievementPane.setScaleX(0.8);
+        achievementPane.setScaleY(0.8);
 
         return new FXGLDefaultMenu.MenuContent(achievementPane);
-    }
-
-    // 检查用户是否已登录
-    private boolean isUserLoggedIn()
-    {
-        // 检查用户登录状态的逻辑
-        User currentUser = User.getInstance();
-        return currentUser != null && currentUser.isLoggedIn(); // 根据具体的User类实现进行判断
     }
 }

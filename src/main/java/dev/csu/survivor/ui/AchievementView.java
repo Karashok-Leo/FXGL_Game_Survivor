@@ -3,19 +3,29 @@ package dev.csu.survivor.ui;
 import com.almasb.fxgl.app.scene.FXGLScene;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
+import dev.csu.survivor.util.StyleUtil;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Border;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,13 +46,22 @@ public class AchievementView extends FXGLScene {
         gridPane.setHgap(20);
         gridPane.setVgap(20);
         gridPane.setLayoutX(-225);
-        gridPane.setLayoutY(-250);
+        gridPane.setLayoutY(-100);
+
+        ProgressBar progressBar = new ProgressBar(0);
+        progressBar.setPrefWidth(1000);
+
+        VBox progressContainer = new VBox(10);
+        progressContainer.setAlignment(Pos.CENTER);
+        progressContainer.setLayoutX(-500);
+        progressContainer.setTranslateX(-225);
+        progressContainer.setTranslateY(-325);
 
         User user = User.getInstance();
 
         try {
             // 连接数据库查询数据
-            String query = "SELECT name, description, image_path, created_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
+            String query = "SELECT name, description, image_path, earned_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
             Connection conn = JDBCUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -50,6 +69,14 @@ public class AchievementView extends FXGLScene {
 
             logger.log(Level.INFO, "Querying achievements for user {0}", user.getUsername());
             ResultSet rs = stmt.executeQuery();
+
+            String totalAchievementsQuery = "SELECT COUNT(*) AS total FROM achievements";
+            PreparedStatement totalStmt = conn.prepareStatement(totalAchievementsQuery);
+            ResultSet totalRs = totalStmt.executeQuery();
+            totalRs.next();
+            int totalAchievements = totalRs.getInt("total");
+
+            int achievedCount = 0;
 
             // 检查查询结果是否为空
             if (!rs.isBeforeFirst()) {
@@ -66,16 +93,17 @@ public class AchievementView extends FXGLScene {
                     String name = rs.getString("name");
                     String description = rs.getString("description");
                     String imagePath = rs.getString("image_path");
-                    String unlockTime = rs.getString("created_at");
+                    String unlockTime = rs.getString("earned_at");
 
                     System.out.println(name + " " + description + " " + imagePath + " " + unlockTime);
 
                     logger.log(Level.INFO, "Loading achievement: {0}, Description: {1}", new Object[]{name, description});
 
-                    // 创建成就的显示组件
                     VBox achievementBox = createAchievementBox(name, description, imagePath, unlockTime);
 
-                    gridPane.add(achievementBox, column, row);
+                    BorderStackPane borderStackPane = new BorderStackPane(300, 400, achievementBox);
+
+                    gridPane.add(borderStackPane, column, row);
 
                     // 控制成就展示为每行3个
                     column++;
@@ -83,10 +111,28 @@ public class AchievementView extends FXGLScene {
                         column = 0;
                         row++;
                     }
+
+                    achievedCount++;
                 }
             }
 
             conn.close();
+
+            double progress = (double) achievedCount / totalAchievements;
+            progressBar.setProgress(progress);
+
+            Label progressLabel = new Label("Achieved  " + achievedCount + "  out of " + totalAchievements + "  achievements  (" + (int) (progress * 100) + "%)");
+
+            StyleUtil.setLabelStyle(progressLabel, 18);
+
+            progressContainer.getChildren().addAll(progressLabel, progressBar);
+
+            StackPane progressPane = new StackPane(progressContainer);
+            progressPane.setAlignment(Pos.TOP_CENTER);
+            progressPane.setPadding(new Insets(150, 0, 0, 0));
+
+            contentRoot.getChildren().addAll(progressPane);  // 添加包裹的进度条
+
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Database query exception", e);
         } catch (Exception e) {
@@ -124,17 +170,25 @@ public class AchievementView extends FXGLScene {
 
             // 成就名称
             Label nameLabel = new Label(name);
-            nameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;"); // 设置文字颜色为白色
+            StyleUtil.setLabelStyle(nameLabel, 24);
 
             // 成就描述
             Label descriptionLabel = new Label(description);
-            descriptionLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
+            StyleUtil.setLabelStyle(descriptionLabel, 18);
+            descriptionLabel.setMaxWidth(270);
+            descriptionLabel.setWrapText(true);
 
             // 达成时间
-            Label timeLabel = new Label("Unlock Time: " + unlockTime);
-            timeLabel.setStyle("-fx-text-fill: white;"); // 设置文字颜色为白色
+            Label timeLabel = new Label("Unlock Time: \n" + unlockTime);
+            StyleUtil.setLabelStyle(timeLabel, 16);
 
-            box.getChildren().addAll(imageView, nameLabel, descriptionLabel, timeLabel);
+            // 空白标签用于分隔上下内容
+            Label spacer1 = new Label();
+            Label spacer2 = new Label();
+            spacer1.setMinHeight(50);
+            spacer2.setMinHeight(30);
+
+            box.getChildren().addAll(imageView, nameLabel, spacer1, descriptionLabel, spacer2, timeLabel);
         } catch (NullPointerException e) {
             logger.log(Level.WARNING, "Null pointer exception while loading image, image path: {0}", imagePath);
         }
@@ -146,12 +200,11 @@ public class AchievementView extends FXGLScene {
     public static class BackEvent extends Event {
 
         public static final EventType<BackEvent> USER_BACK = new EventType<>(Event.ANY, "USER_BACK");
+
         public BackEvent() {
             super(USER_BACK);
         }
     }
 }
-
-
 
 

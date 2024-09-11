@@ -7,6 +7,13 @@ import javafx.scene.shape.Rectangle;
 
 public class BorderStackPane extends StackPane
 {
+    public BorderStackPane(double width, double height, Node... nodes)
+    {
+        super();
+        this.getChildren().add(createBorder(width, height));
+        this.getChildren().addAll(nodes);
+    }
+
     public static Rectangle createBorder(double width, double height)
     {
         Rectangle border = new Rectangle(width, height, null);
@@ -15,12 +22,5 @@ public class BorderStackPane extends StackPane
         border.setArcWidth(25.0);
         border.setArcHeight(25.0);
         return border;
-    }
-
-    public BorderStackPane(double width, double height, Node... nodes)
-    {
-        super();
-        this.getChildren().add(createBorder(width, height));
-        this.getChildren().addAll(nodes);
     }
 }

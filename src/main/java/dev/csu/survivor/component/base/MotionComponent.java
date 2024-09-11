@@ -9,7 +9,8 @@ import dev.csu.survivor.enums.EntityStates;
 import javafx.geometry.Point2D;
 
 /**
- * Should be added after StateComponent and AttributeComponent
+ * 控制实体移动的组件
+ * 依赖的组件: StateComponent & AttributeComponent
  */
 public class MotionComponent extends Component
 {
@@ -17,11 +18,26 @@ public class MotionComponent extends Component
     protected StateComponent state;
     protected AttributeComponent attribute;
 
+    /**
+     * 向实体指定方向的动量
+     * 实际的移动速度由实体的移动速度属性决定，而与 v 的长度无关
+     * 施加的动量会在每帧被清除，所以保持移动需要持续调用该方法
+     *
+     * @param v 动量方向
+     */
     public void addVelocity(Vec2 v)
     {
         this.addVelocity(v.x, v.y);
     }
 
+    /**
+     * 向实体指定方向的动量
+     * 实际的移动速度由实体的移动速度属性决定，而与 vx，vy 无关
+     * 施加的动量会在每帧被清除，所以保持移动需要持续调用该方法
+     *
+     * @param vx 动量方向的x分量
+     * @param vy 动量方向的y分量
+     */
     public void addVelocity(double vx, double vy)
     {
         this.velocity.addLocal(vx, vy);

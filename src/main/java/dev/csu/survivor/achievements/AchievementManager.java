@@ -1,7 +1,6 @@
 package dev.csu.survivor.achievements;
 
 
-import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
 
 import java.sql.Connection;
@@ -13,25 +12,31 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AchievementManager {
+public class AchievementManager
+{
     private final List<Achievement> achievements;
 
-    public AchievementManager() {
+    public AchievementManager()
+    {
         this.achievements = new ArrayList<>();
         loadAchievementsFromDatabase();
     }
 
-    private void loadAchievementsFromDatabase() {
+    private void loadAchievementsFromDatabase()
+    {
         String sql = "SELECT achievement_id, name, description, image_path FROM achievements";
 
         // 使用日志记录
         Logger logger = Logger.getLogger(getClass().getName());
 
         try (Connection conn = JDBCUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql))
+        {
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+            try (ResultSet rs = ps.executeQuery())
+            {
+                while (rs.next())
+                {
                     // 从 ResultSet 中获取数据
                     int id = rs.getInt("achievement_id");
                     String name = rs.getString("name");
@@ -44,7 +49,8 @@ public class AchievementManager {
                 }
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             // 使用日志记录异常，提供清晰调试信息
             logger.log(Level.SEVERE, "从数据库加载成就时出错", e);
             e.printStackTrace();
@@ -52,22 +58,29 @@ public class AchievementManager {
     }
 
 
-    public List<Achievement> getAchievements() {
+    public List<Achievement> getAchievements()
+    {
         return achievements;
     }
 
-    public Achievement getAchievementById(int id) {
-        for (Achievement achievement : achievements) {
-            if (achievement.getId() == id) {
+    public Achievement getAchievementById(int id)
+    {
+        for (Achievement achievement : achievements)
+        {
+            if (achievement.getId() == id)
+            {
                 return achievement;
             }
         }
         return null;
     }
 
-    public Achievement getAchievementByName(String name) {
-        for (Achievement achievement : achievements) {
-            if (achievement.getName().equals(name)) {
+    public Achievement getAchievementByName(String name)
+    {
+        for (Achievement achievement : achievements)
+        {
+            if (achievement.getName().equals(name))
+            {
                 return achievement;
             }
         }

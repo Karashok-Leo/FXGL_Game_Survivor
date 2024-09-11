@@ -1,7 +1,6 @@
 package dev.csu.survivor.ui;
 
 import com.almasb.fxgl.core.Updatable;
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.player.GoldComponent;
@@ -11,7 +10,6 @@ import javafx.beans.binding.Bindings;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class GoldView extends Parent implements Updatable
 {
@@ -32,7 +30,7 @@ public class GoldView extends Parent implements Updatable
                                 .valueProperty()
                 )
         );
-        StyleUtil.setLabelStyle(this.label);
+        StyleUtil.setLabelStyle(this.label, Color.GOLD.brighter());
         this.label.translateXProperty().bind(texture.fitWidthProperty().add(16));
         this.label.translateYProperty().bind(texture.fitHeightProperty().divide(2).subtract(label.heightProperty().divide(2)));
         this.getChildren().addAll(texture, label);
