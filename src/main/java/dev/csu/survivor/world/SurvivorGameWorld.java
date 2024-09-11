@@ -9,12 +9,9 @@ import com.almasb.fxgl.time.LocalTimer;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.SurvivorGameApp;
 import dev.csu.survivor.enums.EnemyType;
-import dev.csu.survivor.enums.EntityType;
-import dev.csu.survivor.input.SurvivorGameInput;
 import dev.csu.survivor.ui.SurvivorGameHud;
 import dev.csu.survivor.util.MathUtil;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.util.Duration;
 
 import java.util.List;
 
@@ -43,6 +40,16 @@ public class SurvivorGameWorld
         // create random bushes
         for (int i = 0; i < Constants.Common.RANDOM_BUSH_COUNTS; i++)
             this.internalWorld.spawn("bush", FXGLMath.randomPoint(Constants.GAME_SCENE_RECT));
+    }
+
+    public static SurvivorGameWorld getInstance()
+    {
+        return ((SurvivorGameApp) FXGL.getApp()).getWorld();
+    }
+
+    public static Entity getPlayer()
+    {
+        return getInstance().player;
     }
 
     public void tick()
@@ -86,15 +93,5 @@ public class SurvivorGameWorld
     public SimpleIntegerProperty enemiesProperty()
     {
         return enemies;
-    }
-
-    public static SurvivorGameWorld getInstance()
-    {
-        return ((SurvivorGameApp) FXGL.getApp()).getWorld();
-    }
-
-    public static Entity getPlayer()
-    {
-        return getInstance().player;
     }
 }

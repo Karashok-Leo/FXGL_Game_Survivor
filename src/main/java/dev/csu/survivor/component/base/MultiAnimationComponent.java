@@ -23,13 +23,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Should be added after StateComponent and BoundingBoxComponent
+ * 控制实体动画的组件
+ * 适用于实体具有四个方向（上下左右）与多个状态（如站立、奔跑、攻击、受伤等）的动画
+ * 依赖的组件: StateComponent & BoundingBoxComponent
  */
 public class MultiAnimationComponent extends Component
 {
+    protected static final double SQRT2 = FXGLMath.sqrt(2) / 2;
     protected final AnimationMap animationMap;
     protected AnimatedTexture texture;
-
     protected ReadOnlyObjectProperty<EntityState> stateProperty;
     protected SimpleObjectProperty<Direction> directionProperty;
     protected SimpleObjectProperty<AnimationChannel> channelProperty;
@@ -39,12 +41,21 @@ public class MultiAnimationComponent extends Component
         this.animationMap = animationMap;
     }
 
+    /**
+     * 设置实体面向的方向
+     *
+     * @param direction 方向
+     */
     public void setDirection(Direction direction)
     {
         this.directionProperty.set(direction);
     }
 
-    protected static final double SQRT2 = FXGLMath.sqrt(2) / 2;
+    /**
+     * 更新实体面向的方向
+     *
+     * @param velocity
+     */
     public void updateDirection(Vec2 velocity)
     {
         Vec2 normalize = velocity.normalize();
@@ -99,29 +110,59 @@ public class MultiAnimationComponent extends Component
         else loopAnimation(channel);
     }
 
+    /**
+     * 获取当前正在播放的动画
+     *
+     * @return 当前正在播放的动画
+     */
     private AnimationChannel getCurrentAnimationChannel()
     {
         return this.channelProperty.get();
     }
 
+    /**
+     * 获取当前动画的尺寸
+     *
+     * @return 当前动画的尺寸
+     */
     public Dimension2D getDimension()
     {
         FrameData frameData = getCurrentAnimationChannel().getFrameData(0);
         return new Dimension2D(frameData.getWidth(), frameData.getHeight());
     }
 
+    /**
+     * 播放指定动画频道
+     * 仅播放一次
+     *
+     * @param channel 动画频道
+     */
     protected void playAnimation(AnimationChannel channel)
     {
         if (texture.getAnimationChannel() != channel)
             texture.playAnimationChannel(channel);
     }
 
+
+    /**
+     * 播放指定动画频道
+     * 循环播放
+     *
+     * @param channel 动画频道
+     */
     protected void loopAnimation(AnimationChannel channel)
     {
         if (texture.getAnimationChannel() != channel)
             texture.loopAnimationChannel(channel);
     }
 
+    /**
+     * 用于表示单个状态四种方向的动画
+     *
+     * @param state    实体状态
+     * @param duration 该状态下动画的时长
+     * @param nums     每种方向对应的动画帧数
+     */
     public record StateEntry(EntityState state, Duration duration, EnumMap<Direction, Integer> nums)
     {
         public StateEntry(EntityState state, Duration duration, int[] nums)

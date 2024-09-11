@@ -8,7 +8,9 @@ import dev.csu.survivor.Constants;
 import dev.csu.survivor.enums.EntityStates;
 
 /**
- * Should be added after StateComponent
+ * 控制实体攻击的抽象组件
+ * 继承并实现 doAttack 方法以实现实体特定的攻击逻辑
+ * 依赖的组件: StateComponent
  */
 public abstract class AttackComponent extends Component
 {
@@ -32,6 +34,13 @@ public abstract class AttackComponent extends Component
         timer.update(tpf);
     }
 
+    /**
+     * 实体特定的攻击逻辑
+     *
+     * @param target 目标实体，即被攻击的实体
+     * @see dev.csu.survivor.component.enemy.MeleeAttackComponent
+     * @see dev.csu.survivor.component.enemy.RangedAttackComponent
+     */
     protected abstract void doAttack(Entity target);
 
     public void attack(Entity target)

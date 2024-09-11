@@ -11,6 +11,7 @@ import dev.csu.survivor.component.player.GoldComponent;
 import dev.csu.survivor.enums.AttributeType;
 import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityType;
+import dev.csu.survivor.util.ComponentUtil;
 
 public class SurvivorPhysicsHandler
 {
@@ -99,6 +100,10 @@ public class SurvivorPhysicsHandler
 
         double damage = attributeComponent.getAttributeValue(AttributeType.DAMAGE);
 
-        hurt.getComponent(HurtComponent.class).hurt(ownable, damage);
+        ComponentUtil.findAndConsumeComponentByClass(
+                hurt,
+                HurtComponent.class,
+                hurtComponent -> hurtComponent.hurt(ownable, damage)
+        );
     }
 }

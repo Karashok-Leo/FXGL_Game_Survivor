@@ -6,7 +6,7 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 
 /**
- * Should be added after BoundingBoxComponent
+ * 依赖的组件: BoundingBoxComponent
  */
 public class SimpleAnimationComponent extends Component
 {

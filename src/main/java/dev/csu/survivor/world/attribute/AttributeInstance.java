@@ -20,13 +20,10 @@ public class AttributeInstance
      * V: AttributeModifier
      */
     private final Map<UUID, AttributeModifier> idToModifier = new HashMap<>();
-
-    private boolean dirty = true;
-
     private final SimpleDoubleProperty value;
-
     @Nullable
     private final Consumer<AttributeInstance> updateCallback;
+    private boolean dirty = true;
 
     public AttributeInstance(AttributeType type)
     {

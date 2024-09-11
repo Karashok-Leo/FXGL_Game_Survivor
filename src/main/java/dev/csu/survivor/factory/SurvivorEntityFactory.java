@@ -13,15 +13,16 @@ import com.almasb.fxgl.entity.state.StateComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import dev.csu.survivor.Constants;
-import dev.csu.survivor.component.base.*;
-import dev.csu.survivor.component.enemy.MeleeAttackComponent;
-import dev.csu.survivor.component.enemy.MeleeEnemyComponent;
-import dev.csu.survivor.component.enemy.RangedAttackComponent;
-import dev.csu.survivor.component.enemy.RangedEnemyComponent;
+import dev.csu.survivor.component.base.HealthComponent;
+import dev.csu.survivor.component.base.MotionComponent;
+import dev.csu.survivor.component.base.OwnableComponent;
+import dev.csu.survivor.component.base.SimpleAnimationComponent;
+import dev.csu.survivor.component.enemy.*;
 import dev.csu.survivor.component.misc.HealthBarViewComponent;
 import dev.csu.survivor.component.misc.RandomBushComponent;
 import dev.csu.survivor.component.misc.RandomLandComponent;
 import dev.csu.survivor.component.player.GoldComponent;
+import dev.csu.survivor.component.player.PlayerHurtComponent;
 import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityStates;
 import dev.csu.survivor.enums.EntityType;
@@ -42,7 +43,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new MotionComponent())
                 .with(ComponentFactory.newPlayerAnimationComponent())
                 .with(new HealthComponent())
-                .with(new HurtComponent())
+                .with(new PlayerHurtComponent())
                 .with(new GoldComponent())
                 .with(ComponentFactory.newPlayerInventoryComponent())
                 .with(new KeepOnScreenComponent())
@@ -82,7 +83,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(new HealthComponent())
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
                 .with(new MeleeAttackComponent())
-                .with(new HurtComponent())
+                .with(new EnemyHurtComponent())
                 .with(new MeleeEnemyComponent())
                 .collidable()
                 .build();
@@ -102,7 +103,7 @@ public class SurvivorEntityFactory implements EntityFactory
                 .with(ComponentFactory.newRangedEnemyAnimationComponent())
                 .with(new HealthComponent())
                 .with(new HealthBarViewComponent(-16, -32 - 14, Constants.Client.ENEMY_HEALTH_BAR_WIDTH, Constants.Client.ENEMY_HEALTH_BAR_HEIGHT, Color.RED))
-                .with(new HurtComponent())
+                .with(new EnemyHurtComponent())
                 .with(new RangedAttackComponent())
                 .with(new RangedEnemyComponent())
                 .collidable()

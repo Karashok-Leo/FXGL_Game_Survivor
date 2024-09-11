@@ -28,11 +28,11 @@ import java.util.Optional;
 public class MainMenu extends BaseMenu
 {
 
-    private static Stage loginStage;
     private static final double BUTTON_WIDTH = 200;
     private static final double BUTTON_HEIGHT = 50;
     private static final double MENU_POSITION_X = 700;
     private static final double MENU_POSITION_Y = 500;
+    private static Stage loginStage;
     private final Button newGameButton;
     private final Button loginButton;
     private final Button exitButton;

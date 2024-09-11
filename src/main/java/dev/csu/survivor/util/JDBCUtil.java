@@ -13,15 +13,18 @@ public class JDBCUtil
     private static String username;
     private static String password;
 
-    static {
-        try {
+    static
+    {
+        try
+        {
             // 给这些变量赋值，用到配置文件
             Properties p = new Properties();
             // 将文件中的数据加载到集合里(classpath路径下)
             InputStream inStream = JDBCUtil.class.getClassLoader().getResourceAsStream("db.properties");
 
             // 检查 inStream 是否为 null
-            if (inStream == null) {
+            if (inStream == null)
+            {
                 throw new FileNotFoundException("Property file 'db.properties' not found in the classpath");
             }
 
@@ -35,47 +38,61 @@ public class JDBCUtil
             // 注册驱动
             Class.forName(driver);
 
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e)
+        {
             System.err.println("Error: " + e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    public static Connection getConnection() throws SQLException {
-        Connection conn=DriverManager.getConnection(url,username,password);
+    public static Connection getConnection() throws SQLException
+    {
+        Connection conn = DriverManager.getConnection(url, username, password);
         return conn;
     }
 
     //增删改
-    public static void close(Connection conn, PreparedStatement ps) {
+    public static void close(Connection conn, PreparedStatement ps)
+    {
 
         close(conn, ps, null);
     }
 
     //查
-    public static void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+    public static void close(Connection conn, PreparedStatement ps, ResultSet rs)
+    {
         //如果不进行非空校验，很容易出现空指针异常
-        if(rs != null) {
-            try {
+        if (rs != null)
+        {
+            try
+            {
                 rs.close();
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
 
-        if(ps != null) {
-            try {
+        if (ps != null)
+        {
+            try
+            {
                 ps.close();
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }
 
-        if(conn != null) {
-            try {
+        if (conn != null)
+        {
+            try
+            {
                 conn.close();
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
                 e.printStackTrace();
             }
         }

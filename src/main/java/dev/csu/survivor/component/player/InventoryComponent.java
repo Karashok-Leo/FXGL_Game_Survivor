@@ -9,14 +9,6 @@ import java.util.List;
 
 public class InventoryComponent extends Component
 {
-    public record ItemEntry(ItemType type, Item item)
-    {
-        public ItemEntry(ItemType type)
-        {
-            this(type, type.createItem());
-        }
-    }
-
     private final List<ItemEntry> inventory;
 
     public InventoryComponent(ItemEntry... entries)
@@ -65,5 +57,13 @@ public class InventoryComponent extends Component
                     entry.item.onRemove(entity);
                     inventory.remove(entry);
                 });
+    }
+
+    public record ItemEntry(ItemType type, Item item)
+    {
+        public ItemEntry(ItemType type)
+        {
+            this(type, type.createItem());
+        }
     }
 }

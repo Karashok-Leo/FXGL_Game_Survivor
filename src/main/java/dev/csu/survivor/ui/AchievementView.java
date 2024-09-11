@@ -61,7 +61,7 @@ public class AchievementView extends FXGLScene {
 
         try {
             // 连接数据库查询数据
-            String query = "SELECT name, description, image_path, created_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
+            String query = "SELECT name, description, image_path, earned_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
             Connection conn = JDBCUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
 
@@ -93,7 +93,7 @@ public class AchievementView extends FXGLScene {
                     String name = rs.getString("name");
                     String description = rs.getString("description");
                     String imagePath = rs.getString("image_path");
-                    String unlockTime = rs.getString("created_at");
+                    String unlockTime = rs.getString("earned_at");
 
                     System.out.println(name + " " + description + " " + imagePath + " " + unlockTime);
 

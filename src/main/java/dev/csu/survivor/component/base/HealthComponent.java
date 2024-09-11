@@ -7,7 +7,11 @@ import dev.csu.survivor.enums.AttributeType;
 import javafx.util.Duration;
 
 /**
- * Should be added after AttributeComponent
+ * 实体的生命组件
+ * 添加该组件时最大生命值自动查询实体身上的属性组件，获取并绑定该实体的最大生命值属性
+ * 同时每次更新时获取实体的生命恢复属性，自动恢复生命值
+ * 当最大生命值增加时，当前生命值会直接恢复至最大生命值
+ * 依赖的组件: AttributeComponent
  */
 public class HealthComponent extends RechargeableDoubleComponent
 {

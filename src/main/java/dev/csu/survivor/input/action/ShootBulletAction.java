@@ -7,7 +7,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.time.LocalTimer;
-
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.geometry.Point2D;
@@ -27,7 +26,7 @@ public class ShootBulletAction extends UserAction
         if (localTimer.elapsed(Constants.Common.PLAYER_SHOOT_COOLDOWN))
         {
             shoot();
-            
+
             localTimer.capture();
         }
     }

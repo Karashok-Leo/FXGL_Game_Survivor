@@ -43,7 +43,7 @@ public enum ItemType
     POWER_CRYSTAL(
             () -> new AttributeItem(
                     AttributeType.DAMAGE,
-                    new AttributeModifier("PowerCrystal"  ,AttributeModifier.Operation.ADDITION, Constants.Common.POWER_CRYSTAL_VALUE)
+                    new AttributeModifier("PowerCrystal", AttributeModifier.Operation.ADDITION, Constants.Common.POWER_CRYSTAL_VALUE)
             ),
             5,
             20
@@ -65,35 +65,25 @@ public enum ItemType
      * The localized name of the item will be found by key "item.{id}"
      */
     public final String id;
-
-    public interface ItemFactory extends Supplier<Item>
-    {
-    }
-
-    /**
-     * Used to create a new item every time the shop refreshes
-     */
-    private final ItemFactory itemFactory;
-
     /**
      * The higher the weight, the more likely it is to be sold in the shop
      */
     public final int weight;
-
     /**
      * The price of the item
      */
     public final int price;
-
     /**
      * If an item is stackable, it means that the player can hold multiple of the item, and the shop will also repeat the item
      */
     public final boolean stackable;
-
+    /**
+     * Used to create a new item every time the shop refreshes
+     */
+    private final ItemFactory itemFactory;
     // Lazy initialized fields
     private LazyValue<String> lazyName;
     private LazyValue<Texture> lazyTexture;
-
     ItemType(ItemFactory itemFactory, int price)
     {
         this(itemFactory, 0, price);
@@ -145,5 +135,9 @@ public enum ItemType
     public Item createItem()
     {
         return itemFactory.get();
+    }
+
+    public interface ItemFactory extends Supplier<Item>
+    {
     }
 }
