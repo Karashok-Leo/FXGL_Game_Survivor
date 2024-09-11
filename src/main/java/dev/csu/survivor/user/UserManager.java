@@ -7,6 +7,9 @@ import dev.csu.survivor.util.JDBCUtil;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +41,7 @@ public class UserManager
                         User user = User.getInstance();
                         user.setUserId(rs.getInt("user_id"));
                         user.setUsername(username);
+                        user.setLastLoginDate(new Timestamp(System.currentTimeMillis()));
                         user.setLoggedIn(true);
                         user.setRegisterDate(rs.getTimestamp("register_date"));
                         user.setLastLoginDate(rs.getTimestamp("last_login"));
@@ -55,6 +59,14 @@ public class UserManager
                             updateStmt.setInt(2, user.getUserId());
                             updateStmt.executeUpdate();
                         }
+
+                        //日志记录
+                        String loginLog = " insert into login_logs (user_id,login_time,login_ip) values (?, ?, ?)";
+                        PreparedStatement loginStmt = conn.prepareStatement(loginLog);
+                        loginStmt.setInt(1, user.getUserId());
+                        loginStmt.setString(2, user.getLastLoginDate().toString());
+                        loginStmt.setString(3, "IP");
+                        loginStmt.executeUpdate();
 
                         logger.log(Level.INFO, "User {0} logged in successfully", username);
                         return true;
@@ -149,6 +161,8 @@ public class UserManager
         user.logout();
         logger.log(Level.INFO, "User {0} has logged out", user.getUsername());
     }
+
+
 }
 
 
