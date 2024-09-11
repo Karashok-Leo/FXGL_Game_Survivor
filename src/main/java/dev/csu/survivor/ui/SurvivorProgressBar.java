@@ -1,6 +1,5 @@
 package dev.csu.survivor.ui;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.logging.Logger;
 import com.almasb.fxgl.ui.Position;
 import com.almasb.fxgl.ui.ProgressBar;
@@ -43,19 +42,10 @@ public class SurvivorProgressBar extends Parent
     private final Group barGroup = new Group();
 
     private final Label label = new Label();
-    private Position labelPosition = Position.BOTTOM;
-
-    protected TraceFillProvider traceFillProvider = inc -> Color.WHITE;
-
-    @FunctionalInterface
-    public interface TraceFillProvider
-    {
-        Paint get(boolean inc);
-    }
-
     private final Timeline timeline = new Timeline();
-
     private final ChangeListener<Number> update;
+    protected TraceFillProvider traceFillProvider = inc -> Color.WHITE;
+    private Position labelPosition = Position.BOTTOM;
 
     public SurvivorProgressBar()
     {
@@ -181,14 +171,51 @@ public class SurvivorProgressBar extends Parent
         }
     }
 
+    public static ProgressBar makeHPBar()
+    {
+        ProgressBar bar = new ProgressBar();
+        bar.setHeight(25);
+        bar.setFill(Color.GREEN.brighter());
+        bar.setTraceFill(Color.GREEN.brighter());
+        bar.setLabelVisible(true);
+        return bar;
+    }
+
+    public static ProgressBar makeSkillBar()
+    {
+        ProgressBar bar = new ProgressBar();
+        bar.setHeight(25);
+        bar.setFill(Color.BLUE.brighter().brighter());
+        bar.setTraceFill(Color.BLUE);
+        bar.setLabelVisible(true);
+        return bar;
+    }
+
     public double getWidth()
     {
         return width.get();
     }
 
+    public void setWidth(double value)
+    {
+        if (value <= 0)
+            throw new IllegalArgumentException("Width must be > 0");
+
+        width.set(value);
+        update.changed(currentValue, currentValue.get(), currentValue.get());
+    }
+
     public double getHeight()
     {
         return height.get();
+    }
+
+    public void setHeight(double value)
+    {
+        if (value <= 0)
+            throw new IllegalArgumentException("Height must be > 0");
+
+        height.set(value);
     }
 
     public Label getLabel()
@@ -229,6 +256,11 @@ public class SurvivorProgressBar extends Parent
         this.traceFillProvider = traceFillProvider;
     }
 
+    public boolean isLabelVisible()
+    {
+        return getChildren().contains(label);
+    }
+
     public void setLabelVisible(boolean b)
     {
         if (!b)
@@ -243,11 +275,6 @@ public class SurvivorProgressBar extends Parent
             getChildren().add(label);
             setLabelPosition(labelPosition);
         }
-    }
-
-    public boolean isLabelVisible()
-    {
-        return getChildren().contains(label);
     }
 
     public void setLabelPosition(Position pos)
@@ -292,23 +319,6 @@ public class SurvivorProgressBar extends Parent
         }
     }
 
-    public void setWidth(double value)
-    {
-        if (value <= 0)
-            throw new IllegalArgumentException("Width must be > 0");
-
-        width.set(value);
-        update.changed(currentValue, currentValue.get(), currentValue.get());
-    }
-
-    public void setHeight(double value)
-    {
-        if (value <= 0)
-            throw new IllegalArgumentException("Height must be > 0");
-
-        height.set(value);
-    }
-
     public void setMinValue(double value)
     {
         if (value > currentValue.get())
@@ -331,6 +341,11 @@ public class SurvivorProgressBar extends Parent
         return minValue;
     }
 
+    public double getCurrentValue()
+    {
+        return currentValue.get();
+    }
+
     public void setCurrentValue(double value)
     {
         double newValue = value;
@@ -346,11 +361,6 @@ public class SurvivorProgressBar extends Parent
         }
 
         currentValue.set(newValue);
-    }
-
-    public double getCurrentValue()
-    {
-        return currentValue.get();
     }
 
     public DoubleProperty currentValueProperty()
@@ -380,23 +390,9 @@ public class SurvivorProgressBar extends Parent
         return maxValue;
     }
 
-    public static ProgressBar makeHPBar()
+    @FunctionalInterface
+    public interface TraceFillProvider
     {
-        ProgressBar bar = new ProgressBar();
-        bar.setHeight(25);
-        bar.setFill(Color.GREEN.brighter());
-        bar.setTraceFill(Color.GREEN.brighter());
-        bar.setLabelVisible(true);
-        return bar;
-    }
-
-    public static ProgressBar makeSkillBar()
-    {
-        ProgressBar bar = new ProgressBar();
-        bar.setHeight(25);
-        bar.setFill(Color.BLUE.brighter().brighter());
-        bar.setTraceFill(Color.BLUE);
-        bar.setLabelVisible(true);
-        return bar;
+        Paint get(boolean inc);
     }
 }

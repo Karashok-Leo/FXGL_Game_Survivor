@@ -23,7 +23,6 @@ import dev.csu.survivor.ui.BorderStackPane;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -55,12 +54,13 @@ public abstract class BaseMenu extends FXGLMenu
 {
     protected final ParticleSystem particleSystem = new ParticleSystem();
     protected final SimpleObjectProperty<Color> titleColor = new SimpleObjectProperty<>(Color.WHITE);
-    protected double t = 0.0;
     protected final Pane menuRoot = new Pane();
     protected final Pane menuContentRoot = new Pane();
     protected final FXGLDefaultMenu.MenuContent EMPTY = new FXGLDefaultMenu.MenuContent();
     protected final PressAnyKeyState pressAnyKeyState = new PressAnyKeyState();
     protected final MenuBox menu;
+    protected double t = 0.0;
+    protected ArrayList<Animation<?>> animations = new ArrayList<>();
 
     public BaseMenu(@NotNull MenuType type)
     {
@@ -96,8 +96,6 @@ public abstract class BaseMenu extends FXGLMenu
     {
         return FXGL.getSettings().getTitle();
     }
-
-    protected ArrayList<Animation<?>> animations = new ArrayList<>();
 
     @Override
     public void onCreate()
@@ -456,9 +454,9 @@ public abstract class BaseMenu extends FXGLMenu
 
     protected class MenuButton extends Pane
     {
+        private final Button btn;
         private MenuBox parent = null;
         private FXGLDefaultMenu.MenuContent cachedContent = EMPTY;
-        private final Button btn;
         private boolean isAnimating = false;
 
         public MenuButton(String stringKey)

@@ -19,11 +19,10 @@ import java.util.List;
 public class InventoryPane extends HBox
 {
     private static final int ITEMS_PER_PAGE = Constants.Client.INVENTORY_COLS * Constants.Client.INVENTORY_ROWS;
-
-    private int currentPage;
     protected List<BorderStackPane> itemPanes;
     protected GridPane grid;
     protected VBox selectItemBox;
+    private int currentPage;
 
     public InventoryPane()
     {

@@ -5,17 +5,21 @@ import dev.csu.survivor.component.base.AttackComponent;
 import dev.csu.survivor.component.base.AttributeComponent;
 import dev.csu.survivor.component.base.HurtComponent;
 import dev.csu.survivor.enums.AttributeType;
+import dev.csu.survivor.util.ComponentUtil;
 
 public class MeleeAttackComponent extends AttackComponent
 {
     @Override
     protected void doAttack(Entity target)
     {
-        target.getComponent(HurtComponent.class)
-                .hurt(
+        ComponentUtil.findAndConsumeComponentByClass(
+                target,
+                HurtComponent.class,
+                hurtComponent -> hurtComponent.hurt(
                         entity,
                         entity.getComponent(AttributeComponent.class)
                                 .getAttributeValue(AttributeType.DAMAGE)
-                );
+                )
+        );
     }
 }

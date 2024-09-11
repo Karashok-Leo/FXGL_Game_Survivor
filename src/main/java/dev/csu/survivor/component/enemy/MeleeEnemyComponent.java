@@ -20,16 +20,19 @@ public class MeleeEnemyComponent extends Component
     }
 
     @Override
-    public void onAdded() {
+    public void onAdded()
+    {
         state = entity.getComponent(StateComponent.class);
         motion = entity.getComponent(MotionComponent.class);
     }
 
     @Override
-    public void onUpdate(double tpf) {
+    public void onUpdate(double tpf)
+    {
         if (state.isIn(EntityStates.IDLE))
             state.changeState(EntityStates.RUN);
-        if (state.isIn(EntityStates.RUN, EntityStates.HURT)) {
+        if (state.isIn(EntityStates.RUN, EntityStates.HURT))
+        {
             Point2D target = SurvivorGameWorld
                     .getPlayer()
                     .getPosition();
