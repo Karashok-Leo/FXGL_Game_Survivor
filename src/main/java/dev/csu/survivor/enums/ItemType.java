@@ -84,6 +84,7 @@ public enum ItemType
     // Lazy initialized fields
     private LazyValue<String> lazyName;
     private LazyValue<Texture> lazyTexture;
+
     ItemType(ItemFactory itemFactory, int price)
     {
         this(itemFactory, 0, price);

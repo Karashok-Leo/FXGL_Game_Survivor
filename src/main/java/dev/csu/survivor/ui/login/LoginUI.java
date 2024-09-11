@@ -1,9 +1,6 @@
 package dev.csu.survivor.ui.login;
 
 import com.almasb.fxgl.dsl.FXGL;
-import dev.csu.survivor.achievements.AchievementChecker;
-import dev.csu.survivor.achievements.AchievementManager;
-import dev.csu.survivor.user.User;
 import dev.csu.survivor.user.UserManager;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -14,8 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.sql.Date;
 
 
 public class LoginUI extends Application

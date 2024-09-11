@@ -10,7 +10,7 @@ import javafx.geometry.Point2D;
 
 /**
  * 控制实体移动的组件
- * 依赖的组件: StateComponent & AttributeComponent
+ * <p>依赖的组件: {@link StateComponent} {@link AttributeComponent} </p>
  */
 public class MotionComponent extends Component
 {

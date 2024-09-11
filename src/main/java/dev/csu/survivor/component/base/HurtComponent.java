@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 控制实体受伤及死亡的组件
  * 继承并重写 onDeath 方法以实现更复杂的死亡逻辑
- * 依赖的组件: StateComponent & HealthComponent
+ * <p>依赖的组件: {@link StateComponent} {@link HealthComponent} </p>
  */
 public class HurtComponent extends Component
 {

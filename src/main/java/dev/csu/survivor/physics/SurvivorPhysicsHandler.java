@@ -13,6 +13,9 @@ import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.enums.EntityType;
 import dev.csu.survivor.util.ComponentUtil;
 
+/**
+ * 所有实体碰撞的初始化位置
+ */
 public class SurvivorPhysicsHandler
 {
     public void init(PhysicsWorld physicsWorld)

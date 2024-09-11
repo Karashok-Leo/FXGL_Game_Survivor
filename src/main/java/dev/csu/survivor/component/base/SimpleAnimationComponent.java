@@ -6,7 +6,13 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.texture.AnimationChannel;
 
 /**
- * 依赖的组件: BoundingBoxComponent
+ * 控制实体动画的组件
+ * 适用于实体只有一组动画的情况
+ * <p>
+ * 该组件会自行处理动画纹理以及碰撞箱之间的位置关系，确保实体的中心点位于同时动画纹理和碰撞箱的中心。
+ * 同时该组件还将实体显示的Z轴位置绑定至实体在场景中的y轴位置，这是为了自然地实现俯视角的伪3D效果
+ * </p>
+ * <p>依赖的组件: {@link BoundingBoxComponent} </p>
  */
 public class SimpleAnimationComponent extends Component
 {
@@ -18,7 +24,6 @@ public class SimpleAnimationComponent extends Component
         this.channel = channel;
         this.texture = new AnimatedTexture(channel);
     }
-
 
     @Override
     public void onAdded()

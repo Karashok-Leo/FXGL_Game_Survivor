@@ -37,6 +37,10 @@ public class HealthBarViewComponent extends ChildViewComponent
         super.onAdded();
     }
 
+    /**
+     * 获取该组件内部的SurvivorProgressBar对象
+     * @return 内部的SurvivorProgressBar对象
+     */
     public SurvivorProgressBar getBar()
     {
         return bar;

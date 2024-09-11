@@ -37,6 +37,11 @@ public class RandomLandComponent extends Component
             viewComponent.addChild(createRandomFeature(FXGLMath.randomPoint(Constants.GAME_SCENE_RECT)));
     }
 
+    /**
+     * 创建与游戏场景大小相同的一片空草地
+     *
+     * @return 草地对应的 Rectangle 对象
+     */
     public Rectangle createEmptyGrass()
     {
         return new Rectangle(Constants.GAME_SCENE_WIDTH, Constants.GAME_SCENE_HEIGHT, Color.rgb(129, 186, 68));
@@ -47,6 +52,13 @@ public class RandomLandComponent extends Component
         return createRandomFeature(point.getX(), point.getY());
     }
 
+    /**
+     * 在某点位添加 Feature，即花草等点缀
+     *
+     * @param x X轴位置
+     * @param y Y轴位置
+     * @return Feature 的 Texture 对象
+     */
     public Texture createRandomFeature(double x, double y)
     {
         int random = FXGLMath.random(0, images.length - 1);

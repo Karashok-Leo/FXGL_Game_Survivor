@@ -10,7 +10,7 @@ import dev.csu.survivor.enums.EntityStates;
 /**
  * 控制实体攻击的抽象组件
  * 继承并实现 doAttack 方法以实现实体特定的攻击逻辑
- * 依赖的组件: StateComponent
+ * <p>依赖的组件: {@link StateComponent} </p>
  */
 public abstract class AttackComponent extends Component
 {

@@ -3,12 +3,10 @@ package dev.csu.survivor.ui;
 import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.core.util.LazyValue;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.scene.SubScene;
 import com.almasb.fxgl.texture.AnimatedTexture;
 import com.almasb.fxgl.ui.Position;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.component.base.HealthComponent;
-import dev.csu.survivor.ui.menu.GameOverMenu;
 import dev.csu.survivor.ui.menu.ShopMenu;
 import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
@@ -23,21 +21,25 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+/**
+ * 存储游戏内各UI的类
+ */
 public class SurvivorGameHud
 {
+    /**
+     * 该类的单例，只应该在游戏开始后访问
+     */
     public static SurvivorGameHud INSTANCE;
 
     private final LazyValue<ShopMenu> shopMenu = new LazyValue<>(ShopMenu::new);
 
     private GameScene gameScene;
-    private SubScene gameOver;
     private GoldView goldView;
 
     public void init(GameScene scene)
     {
         INSTANCE = this;
         this.gameScene = scene;
-        this.gameOver = new GameOverMenu();
         // Add to the scene graph
         SurvivorProgressBar healthBar = createHealthBar();
         healthBar.setTranslateX(-10);
@@ -63,11 +65,19 @@ public class SurvivorGameHud
         scene.addUINode(pane);
     }
 
+    /**
+     * 获取商店界面的实例
+     *
+     * @return 商店界面对象
+     */
     public ShopMenu getShopMenu()
     {
         return shopMenu.get();
     }
 
+    /**
+     * 创建玩家血条
+     */
     private SurvivorProgressBar createHealthBar()
     {
         SurvivorProgressBar healthBar = new SurvivorProgressBar();
@@ -94,6 +104,9 @@ public class SurvivorGameHud
         return healthBar;
     }
 
+    /**
+     * 创建波次显示
+     */
     private Label createWaveLabel()
     {
         Label waveLabel = new Label();
@@ -109,6 +122,9 @@ public class SurvivorGameHud
         return waveLabel;
     }
 
+    /**
+     * 创建当前剩余敌人数量显示
+     */
     private Label createEnemiesLabel()
     {
         Label waveLabel = new Label();
@@ -122,6 +138,13 @@ public class SurvivorGameHud
         return waveLabel;
     }
 
+    /**
+     * 创建金币拾取的动画
+     *
+     * @param texture 金币的动画纹理
+     * @param x       拾取位置 X
+     * @param y       拾取位置 Y
+     */
     public void createGoldCollectingAnimation(AnimatedTexture texture, double x, double y)
     {
         gameScene.addChild(texture);
@@ -148,10 +171,5 @@ public class SurvivorGameHud
 
         ft.setOnFinished(event -> gameScene.removeChild(text));
         ft.play();
-    }
-
-    public void switchToGameOverScene()
-    {
-        FXGL.getWindowService().pushSubScene(gameOver);
     }
 }

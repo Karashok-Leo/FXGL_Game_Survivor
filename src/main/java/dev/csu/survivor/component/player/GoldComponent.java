@@ -6,6 +6,9 @@ import com.almasb.fxgl.texture.AnimatedTexture;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.ui.SurvivorGameHud;
 
+/**
+ * 描述实体拥有的金币数量的组件
+ */
 public class GoldComponent extends RechargeableIntComponent
 {
     public GoldComponent()
@@ -13,6 +16,10 @@ public class GoldComponent extends RechargeableIntComponent
         super(Constants.Common.MAX_GOLDS, Constants.Common.INITIAL_GOLDS);
     }
 
+    /**
+     * 当实体拾取金币时调用
+     * @param gold 被拾取的金币实体
+     */
     public void collect(Entity gold)
     {
         gold.removeFromWorld();

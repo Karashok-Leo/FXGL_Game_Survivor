@@ -8,6 +8,9 @@ import dev.csu.survivor.input.action.ShootBulletAction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
+/**
+ * 所有控制交互的初始化位置
+ */
 public class SurvivorGameInput
 {
     public void init(Input input)

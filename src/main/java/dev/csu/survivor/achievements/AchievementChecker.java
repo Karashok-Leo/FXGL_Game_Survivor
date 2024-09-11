@@ -41,7 +41,8 @@ public class AchievementChecker
         User user = User.getInstance();
 
         // 根据不同条件进行判断
-        return switch (condition) {
+        return switch (condition)
+        {
             case "first_login" -> user.getLastLoginDate() == null; // 用户从未登录过
             case "first_game" ->
                 // 检查是否是用户第一次游玩游戏（比如检查游戏游玩记录）

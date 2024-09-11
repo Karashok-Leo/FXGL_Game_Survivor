@@ -5,8 +5,12 @@ import dev.csu.survivor.enums.ItemType;
 import dev.csu.survivor.item.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * 控制实体物品栏的组件
+ */
 public class InventoryComponent extends Component
 {
     private final List<ItemEntry> inventory;
@@ -28,12 +32,23 @@ public class InventoryComponent extends Component
         inventory.forEach(entry -> entry.item.onRemove(entity));
     }
 
+    /**
+     * 获取实体物品栏的所有物品
+     * @return 实体物品栏的所有物品，返回值是一个不可变的列表
+     */
     public List<ItemEntry> getInventory()
     {
-        return inventory;
+        return Collections.unmodifiableList(inventory);
     }
 
     /**
+     * 向物品栏中添加物品
+     * <p>
+     *     自动调用物品的 onApply 方法
+     * </p>
+     * <p>
+     *     应该在
+     * </p>
      * Should be called after the component has been added to the entity.
      */
     public void addItem(ItemType type, Item item)

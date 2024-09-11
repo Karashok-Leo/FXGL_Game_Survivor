@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * {@link IRechargeableComponentItem} 的一个简单实现
+ *
+ * @param clazz
+ * @param componentFactory
+ * @param descHead
+ * @param <C>
+ */
 public record RechargeableComponentItem<C extends RechargeableIntComponent>(
         Class<C> clazz,
         Supplier<C> componentFactory,
@@ -16,7 +24,7 @@ public record RechargeableComponentItem<C extends RechargeableIntComponent>(
 ) implements IRechargeableComponentItem<C>
 {
     @Override
-    public C getComponent()
+    public C createComponent()
     {
         return componentFactory.get();
     }

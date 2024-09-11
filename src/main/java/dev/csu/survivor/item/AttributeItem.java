@@ -13,8 +13,20 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 可以对实体属性进行修改的物品
+ *
+ * @param modifiers 属性种类到修饰符的映射
+ */
 public record AttributeItem(EnumMap<AttributeType, Set<AttributeModifier>> modifiers) implements Item
 {
+    /**
+     * 快捷构造方法
+     * <p>适用于只对一种属性进行修改的物品</p>
+     *
+     * @param type      属性种类
+     * @param modifiers 属性修饰符
+     */
     public AttributeItem(AttributeType type, AttributeModifier... modifiers)
     {
         this();

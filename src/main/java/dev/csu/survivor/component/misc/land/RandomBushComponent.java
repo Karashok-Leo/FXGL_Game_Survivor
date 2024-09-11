@@ -32,6 +32,11 @@ public class RandomBushComponent extends Component
         this.entity.setScaleY(2);
     }
 
+    /**
+     * 创建随机的灌木纹理（从 images 中抽取）
+     *
+     * @return 创建得的灌木的 Texture 对象
+     */
     protected Texture createRandomBush()
     {
         int random = FXGLMath.random(0, images.length - 1);

@@ -20,6 +20,12 @@ public class User
         this.isLoggedIn = false;
     }
 
+    // 获取单例实例
+    public static User getInstance()
+    {
+        return UserHolder.INSTANCE;
+    }
+
     public Timestamp getLastLoginDate()
     {
         return lastLoginDate;
@@ -38,18 +44,6 @@ public class User
     public void setRegisterDate(Timestamp registerDate)
     {
         this.registerDate = registerDate;
-    }
-
-    // 静态内部类，持有单例实例
-    private static class UserHolder
-    {
-        private static final User INSTANCE = new User();
-    }
-
-    // 获取单例实例
-    public static User getInstance()
-    {
-        return UserHolder.INSTANCE;
     }
 
     // Getter 和 Setter 方法
@@ -92,6 +86,12 @@ public class User
         this.lastLoginDate = null;
         this.isLoggedIn = false;
         FXGL.getEventBus().fireEvent(new UserLogoutEvent());
+    }
+
+    // 静态内部类，持有单例实例
+    private static class UserHolder
+    {
+        private static final User INSTANCE = new User();
     }
 
     public static class UserLogoutEvent extends Event

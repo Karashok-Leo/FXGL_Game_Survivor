@@ -6,7 +6,6 @@ import dev.csu.survivor.ui.SurvivorGameHud;
 
 public class OpenShopAction extends UserAction
 {
-
     public OpenShopAction()
     {
         super("Open Shop");
