@@ -41,8 +41,7 @@ public class UserManager
                         User user = User.getInstance();
                         user.setUserId(rs.getInt("user_id"));
                         user.setUsername(username);
-                        LocalDateTime dateTime = LocalDateTime.now();
-                        user.setLastLoginDate(dateTime);
+                        user.setLastLoginDate(new Timestamp(System.currentTimeMillis()));
                         user.setLoggedIn(true);
                         user.setRegisterDate(rs.getTimestamp("register_date"));
                         user.setLastLoginDate(rs.getTimestamp("last_login"));
@@ -65,7 +64,7 @@ public class UserManager
                         String loginLog = " insert into login_logs (user_id,login_time,login_ip) values (?, ?, ?)";
                         PreparedStatement loginStmt = conn.prepareStatement(loginLog);
                         loginStmt.setInt(1, user.getUserId());
-                        loginStmt.setString(2, dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                        loginStmt.setString(2, user.getLastLoginDate().toString());
                         loginStmt.setString(3, "IP");
                         loginStmt.executeUpdate();
 
