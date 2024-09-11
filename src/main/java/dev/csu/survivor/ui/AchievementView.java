@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Border;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,9 +54,7 @@ public class AchievementView extends FXGLScene {
 
         VBox progressContainer = new VBox(10);
         progressContainer.setAlignment(Pos.CENTER);
-        progressContainer.setLayoutX(-500);
-        progressContainer.setTranslateX(-225);
-        progressContainer.setTranslateY(-325);
+        BorderPane borderPane = getBorderPane(progressContainer);
 
         User user = User.getInstance();
 
@@ -127,9 +126,7 @@ public class AchievementView extends FXGLScene {
 
             progressContainer.getChildren().addAll(progressLabel, progressBar);
 
-            StackPane progressPane = new StackPane(progressContainer);
-            progressPane.setAlignment(Pos.TOP_CENTER);
-            progressPane.setPadding(new Insets(150, 0, 0, 0));
+            StackPane progressPane = new StackPane(borderPane);
 
             contentRoot.getChildren().addAll(progressPane);  // 添加包裹的进度条
 
@@ -145,6 +142,22 @@ public class AchievementView extends FXGLScene {
         contentRoot.setStyle("-fx-background-color: transparent;");
 
         contentRoot.getStyleClass().add("achievement-view");
+    }
+
+    private static @NotNull BorderPane getBorderPane(VBox progressContainer) {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(progressContainer);
+        borderPane.setStyle(
+                "-fx-border-color: white; " +
+                        "-fx-border-width: 2; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-padding: 10; " +
+                        "-fx-background-color: rgba(0, 0, 0, 0.2);"
+        );
+        borderPane.setTranslateX(-225);
+        borderPane.setTranslateY(-200);
+        return borderPane;
     }
 
 
