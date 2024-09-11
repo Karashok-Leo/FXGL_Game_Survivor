@@ -115,11 +115,11 @@ public class MainMenu extends BaseMenu
         });
 
         //监听返回事件
-        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
-        {
-            System.out.println("jianting ");
-            showMainMenu();
-        });
+//        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
+//        {
+//            System.out.println("jianting ");
+//            showMainMenu();
+//        });
 
         // 注册按键事件
         FXGL.getInput().addAction(new BackAction("GoTo"), KeyCode.K);

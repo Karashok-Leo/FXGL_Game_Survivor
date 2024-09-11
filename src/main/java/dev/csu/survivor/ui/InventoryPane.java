@@ -6,7 +6,10 @@ import dev.csu.survivor.component.player.InventoryComponent;
 import dev.csu.survivor.ui.menu.ShopMenu;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,13 +26,12 @@ import java.util.List;
  * <p>物品详细视图</p>
  * <p>翻页按钮</p>
  */
-public class InventoryPane extends HBox
+public class InventoryPane extends HBox implements IPaginationBox
 {
-    private static final int ITEMS_PER_PAGE = Constants.Client.INVENTORY_COLS * Constants.Client.INVENTORY_ROWS;
     protected List<BorderStackPane> itemPanes;
-    protected GridPane grid;
-    protected VBox selectItemBox;
-    private int currentPage;
+    protected final GridPane grid;
+    protected final VBox selectItemBox;
+    private final SimpleIntegerProperty currentPage = new SimpleIntegerProperty(0);
 
     public InventoryPane()
     {
@@ -39,12 +41,11 @@ public class InventoryPane extends HBox
         this.grid.setAlignment(Pos.CENTER);
         this.grid.setHgap(Constants.Client.INVENTORY_ENTRY_SPACING);
         this.grid.setVgap(Constants.Client.INVENTORY_ENTRY_SPACING);
+
         this.updateInventory();
         this.setPage(0);
-        HBox buttonBox = this.createButtonBox();
 
-        VBox inventoryBox = new VBox(grid, buttonBox);
-        inventoryBox.setSpacing(Constants.Client.INVENTORY_ENTRY_SPACING);
+        VBox inventoryBox = this.createWholeBox(Constants.Client.INVENTORY_ENTRY_SPACING);
 
         this.selectItemBox = new VBox();
         this.selectItemBox.setTranslateX(100);
@@ -63,29 +64,6 @@ public class InventoryPane extends HBox
                 .stream()
                 .map(this::createInventoryEntry)
                 .toList();
-    }
-
-    /**
-     * 创建翻页按钮
-     *
-     * @return 翻页按钮的 HBox 布局
-     */
-    protected HBox createButtonBox()
-    {
-        BorderStackPane previous = ShopMenu.createBorderButton(
-                "Previous",
-                200,
-                button -> this.prev()
-        );
-        BorderStackPane next = ShopMenu.createBorderButton(
-                "Next",
-                200,
-                button -> this.next()
-        );
-        HBox buttonBox = new HBox(previous, next);
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.setSpacing(80);
-        return buttonBox;
     }
 
     /**
@@ -138,58 +116,39 @@ public class InventoryPane extends HBox
         return new BorderStackPane(Constants.Client.INVENTORY_BORDER_SIZE, Constants.Client.INVENTORY_BORDER_SIZE, texture, btn, rect);
     }
 
-    protected BorderStackPane createEmptyEntry()
+    @Override
+    public IntegerProperty currentPageProperty()
+    {
+        return currentPage;
+    }
+
+    @Override
+    public BorderStackPane createEmptyEntry()
     {
         return new BorderStackPane(Constants.Client.INVENTORY_BORDER_SIZE, Constants.Client.INVENTORY_BORDER_SIZE);
     }
 
-    /**
-     * 设置当前页码
-     *
-     * @param page 页码
-     */
-    public void setPage(int page)
+    @Override
+    public GridPane getEntryPane()
     {
-        this.currentPage = Math.clamp(
-                page,
-                0,
-                itemPanes.isEmpty() ?
-                        0 :
-                        (itemPanes.size() - 1) / ITEMS_PER_PAGE
-        );
-        this.updatePage();
+        return grid;
     }
 
-    /**
-     * 更新当前页的物品栏
-     */
-    public void updatePage()
+    @Override
+    public List<? extends Node> getEntries()
     {
-        this.grid.getChildren().clear();
-        int size = itemPanes.size();
-        int startIndex = currentPage * ITEMS_PER_PAGE;
-        for (int i = 0; i < ITEMS_PER_PAGE; i++)
-        {
-            int index = startIndex + i;
-            int column = i % Constants.Client.INVENTORY_COLS;
-            int row = i / Constants.Client.INVENTORY_COLS;
-            this.grid.add(index < size ? itemPanes.get(index) : createEmptyEntry(), column, row);
-        }
+        return itemPanes;
     }
 
-    /**
-     * 上一页
-     */
-    public void prev()
+    @Override
+    public int getColumns()
     {
-        this.setPage(currentPage - 1);
+        return Constants.Client.INVENTORY_COLS;
     }
 
-    /**
-     * 下一页
-     */
-    public void next()
+    @Override
+    public int getRows()
     {
-        this.setPage(currentPage + 1);
+        return Constants.Client.INVENTORY_ROWS;
     }
 }

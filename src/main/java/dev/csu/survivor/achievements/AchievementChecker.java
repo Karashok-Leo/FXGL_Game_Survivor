@@ -1,6 +1,5 @@
 package dev.csu.survivor.achievements;
 
-import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.enums.AchievementType;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
