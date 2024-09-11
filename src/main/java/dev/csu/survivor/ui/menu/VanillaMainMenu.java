@@ -6,6 +6,10 @@ import com.almasb.fxgl.dsl.FXGL;
 import dev.csu.survivor.ui.AchievementView;
 import dev.csu.survivor.ui.login.LoginUI;
 import dev.csu.survivor.user.User;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -21,28 +25,28 @@ public class VanillaMainMenu extends BaseMenu
 {
     private static Stage loginStage;
     private Pane achievementPane;
+    private SimpleBooleanProperty isLoggedIn;
 
     public VanillaMainMenu()
     {
         super(MenuType.MAIN_MENU);
 
         // 监听用户登录事件
-        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event ->
-        {
-            System.out.println("85252 ");
-        });
+        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> isLoggedIn.set(true));
 
         //监听返回事件
-        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
-        {
-            System.out.println("jianting ");
-            showMainMenu();
-        });
+//        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
+//        {
+//            System.out.println("jianting ");
+//            showMainMenu();
+//        });
     }
 
     @Override
     protected void initMenuBox(MenuBox menuBox)
     {
+        isLoggedIn = new SimpleBooleanProperty(false);
+
         MenuButton itemNewGame = new MenuButton("menu.newGame");
         itemNewGame.setOnAction(e -> fireNewGame());
 
@@ -51,7 +55,16 @@ public class VanillaMainMenu extends BaseMenu
         itemOptions.setChild(createOptionsMenu());
 
         MenuButton itemLogin = new MenuButton("menu.login");
-        itemLogin.setOnAction(e -> openLoginWindow());
+        itemLogin.getBtn().onActionProperty().bind(
+                Bindings.when(isLoggedIn)
+                        .then((EventHandler<ActionEvent>) e -> User.getInstance().logout())
+                        .otherwise(e -> openLoginWindow())
+        );
+        itemLogin.getBtn().textProperty().bind(
+                Bindings.when(isLoggedIn)
+                        .then(FXGL.localizedStringProperty("menu.logout"))
+                        .otherwise(FXGL.localizedStringProperty("menu.login"))
+        );
 
         MenuButton itemAchievement = new MenuButton("menu.achievement");
         itemAchievement.setMenuContent(this::createAchievementContent, false);
@@ -128,7 +141,7 @@ public class VanillaMainMenu extends BaseMenu
     // 展示成就页面
     protected FXGLDefaultMenu.MenuContent createAchievementContent()
     {
-        if (!isUserLoggedIn())
+        if (!isLoggedIn.get())
         {
             // 用户未登录，弹出提示框
             FXGL.getDialogService()

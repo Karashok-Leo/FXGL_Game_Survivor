@@ -72,6 +72,5 @@ public class User {
         this.registerDate = null;
         this.lastLoginDate = null;
         this.isLoggedIn = false;
-        User.getInstance().logout();
     }
 }

@@ -23,6 +23,7 @@ import dev.csu.survivor.ui.BorderStackPane;
 import javafx.animation.FadeTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -506,6 +507,11 @@ public abstract class BaseMenu extends FXGLMenu
                     }
                 }
             });
+        }
+
+        public Button getBtn()
+        {
+            return btn;
         }
 
         public void setOnAction(EventHandler<ActionEvent> handler)
