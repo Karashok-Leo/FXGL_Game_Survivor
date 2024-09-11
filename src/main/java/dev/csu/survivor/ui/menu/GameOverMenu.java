@@ -5,7 +5,6 @@ import com.almasb.fxgl.app.scene.MenuType;
 import dev.csu.survivor.util.StyleUtil;
 import dev.csu.survivor.world.SurvivorGameWorld;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
 public class GameOverMenu extends BaseMenu
 {

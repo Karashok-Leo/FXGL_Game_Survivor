@@ -34,6 +34,8 @@ public class VanillaMainMenu extends BaseMenu
         // 监听用户登录事件
         FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> isLoggedIn.set(true));
 
+        FXGL.getEventBus().addEventHandler(User.UserLogoutEvent.USER_LOGOUT, event -> isLoggedIn.set(false));
+
         //监听返回事件
 //        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
 //        {
@@ -55,6 +57,7 @@ public class VanillaMainMenu extends BaseMenu
         itemOptions.setChild(createOptionsMenu());
 
         MenuButton itemLogin = new MenuButton("menu.login");
+        itemLogin.setMenuContent(() -> EMPTY, false);
         itemLogin.getBtn().onActionProperty().bind(
                 Bindings.when(isLoggedIn)
                         .then((EventHandler<ActionEvent>) e -> User.getInstance().logout())
@@ -115,15 +118,9 @@ public class VanillaMainMenu extends BaseMenu
             try
             {
                 loginUI.start(loginStage); // 然后启动 loginStage
-                loginStage.setOnCloseRequest(event ->
-                {
-                    loginStage = null;
-//                    enableButtons(true);
-                });
-//                enableButtons(false);
-            } catch (Exception ex)
+                loginStage.setOnCloseRequest(event -> loginStage = null);
+            } catch (Exception ignore)
             {
-                ex.printStackTrace();
             }
         }
     }

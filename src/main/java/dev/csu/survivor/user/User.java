@@ -1,5 +1,9 @@
 package dev.csu.survivor.user;
 
+import com.almasb.fxgl.dsl.FXGL;
+import javafx.event.Event;
+import javafx.event.EventType;
+
 import java.sql.Date;
 
 public class User {
@@ -72,5 +76,16 @@ public class User {
         this.registerDate = null;
         this.lastLoginDate = null;
         this.isLoggedIn = false;
+        FXGL.getEventBus().fireEvent(new UserLogoutEvent());
+    }
+
+    public static class UserLogoutEvent extends Event
+    {
+
+        public static final EventType<UserLogoutEvent> USER_LOGOUT = new EventType<>(Event.ANY, "USER_LOGOUT");
+
+        public UserLogoutEvent() {
+            super(USER_LOGOUT);
+        }
     }
 }
