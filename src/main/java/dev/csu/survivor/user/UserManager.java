@@ -1,13 +1,10 @@
 package dev.csu.survivor.user;
 
 import dev.csu.survivor.achievements.AchievementChecker;
-import dev.csu.survivor.achievements.AchievementManager;
+import dev.csu.survivor.enums.AchievementType;
 import dev.csu.survivor.util.JDBCUtil;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -47,7 +44,7 @@ public class UserManager
                         user.setLastLoginDate(rs.getTimestamp("last_login"));
 
                         // 判断是否获得初次登录成就
-                        new AchievementChecker(new AchievementManager()).checkForAchievement(1, "first_login");
+                        AchievementChecker.getInstance().checkForAchievement(AchievementType.FIRST_LOGIN);
 
                         user.setLastLoginDate(Timestamp.valueOf(LocalDateTime.now()));
 

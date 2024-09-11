@@ -1,5 +1,7 @@
 package dev.csu.survivor.achievements;
 
+import com.almasb.fxgl.dsl.FXGL;
+import dev.csu.survivor.enums.AchievementType;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.util.JDBCUtil;
 
@@ -12,6 +14,13 @@ import java.util.logging.Logger;
 
 public class AchievementChecker
 {
+    private static final AchievementChecker checker = new AchievementChecker(AchievementManager.getManager());
+
+    public static AchievementChecker getInstance()
+    {
+        return checker;
+    }
+
     private final AchievementManager achievementManager;
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -20,38 +29,22 @@ public class AchievementChecker
         this.achievementManager = achievementManager;
     }
 
-    public boolean checkForAchievement(int achievementId, String condition)
+    public boolean checkForAchievement(AchievementType achievementType)
     {
         List<Achievement> achievements = achievementManager.getAchievements();
 
         for (Achievement achievement : achievements)
         {
-            if (achievement.getId() == achievementId && checkCondition(condition))
+            if (achievement.getId() == achievementType.ordinal() &&
+                achievementType.checkCondition())
             {
-                awardAchievement(achievementId);
+                awardAchievement(achievementType.ordinal());
+                // 风格大相径庭，不考虑
+//                FXGL.getNotificationService().pushNotification("New achievement unlocked!");
                 return true;
             }
         }
         return false;
-    }
-
-    // 判断是否满足条件
-    private boolean checkCondition(String condition)
-    {
-        User user = User.getInstance();
-
-        // 根据不同条件进行判断
-        return switch (condition)
-        {
-            case "first_login" -> user.getLastLoginDate() == null; // 用户从未登录过
-            case "first_game" ->
-                // 检查是否是用户第一次游玩游戏（比如检查游戏游玩记录）
-                    true; // 这里简化处理，具体逻辑依赖于你的游戏系统
-            case "played_30_minutes" ->
-                // 假设你有方法获取用户的游戏时间
-                    user.getUserId() >= 30 * 60; // 用户游戏时间超过30分钟
-            default -> false;
-        };
     }
 
     // 如果达成成就，则将其插入到数据库

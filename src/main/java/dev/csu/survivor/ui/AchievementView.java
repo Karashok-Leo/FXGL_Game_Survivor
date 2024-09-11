@@ -55,21 +55,11 @@ public class AchievementView extends FXGLScene
 
         try
         {
-            // 连接数据库查询数据
-            String query = "SELECT name, description, image_path, earned_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
             Connection conn = JDBCUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
 
-            stmt.setString(1, String.valueOf(user.getUserId()));
+            ResultSet rs = getAchievementsAchieved(conn, user);
 
-            logger.log(Level.INFO, "Querying achievements for user {0}", user.getUsername());
-            ResultSet rs = stmt.executeQuery();
-
-            String totalAchievementsQuery = "SELECT COUNT(*) AS total FROM achievements";
-            PreparedStatement totalStmt = conn.prepareStatement(totalAchievementsQuery);
-            ResultSet totalRs = totalStmt.executeQuery();
-            totalRs.next();
-            int totalAchievements = totalRs.getInt("total");
+            int totalAchievements = getTotalAchievements(conn);
 
             int achievedCount = 0;
 
@@ -144,6 +134,29 @@ public class AchievementView extends FXGLScene
         contentRoot.setStyle("-fx-background-color: transparent;");
 
         contentRoot.getStyleClass().add("achievement-view");
+    }
+
+    private static ResultSet getAchievementsAchieved(Connection conn, User user) throws SQLException
+    {
+        // 连接数据库查询数据
+        String query = "SELECT name, description, image_path, earned_at FROM achievements NATURAL JOIN user_achievements WHERE user_id = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setString(1, String.valueOf(user.getUserId()));
+
+        logger.log(Level.INFO, "Querying achievements for user {0}", user.getUsername());
+        ResultSet rs = stmt.executeQuery();
+        return rs;
+    }
+
+    private static int getTotalAchievements(Connection conn) throws SQLException
+    {
+        String totalAchievementsQuery = "SELECT COUNT(*) AS total FROM achievements";
+        PreparedStatement totalStmt = conn.prepareStatement(totalAchievementsQuery);
+        ResultSet totalRs = totalStmt.executeQuery();
+        totalRs.next();
+        int totalAchievements = totalRs.getInt("total");
+        return totalAchievements;
     }
 
     private static @NotNull BorderPane getBorderPane(VBox progressContainer)

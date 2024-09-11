@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
+@Deprecated
 public class LoginUI extends Application
 {
     Label nameLabel = new Label("User Name :");

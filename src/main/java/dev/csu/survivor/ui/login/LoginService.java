@@ -3,7 +3,10 @@ package dev.csu.survivor.ui.login;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.DialogService;
 import com.almasb.fxgl.ui.UIFactoryService;
+import dev.csu.survivor.user.User;
 import dev.csu.survivor.user.UserManager;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -71,8 +74,7 @@ public class LoginService
     {
         if (userManager.login(username, password))
         {
-            FXGL.getEventBus().fireEvent(new LoginUI.CloseLoginWindowEvent(true));
-
+            FXGL.getEventBus().fireEvent(new User.UserLoginEvent());
             return true;
         }
         return false;

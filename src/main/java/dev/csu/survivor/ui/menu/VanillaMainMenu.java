@@ -36,7 +36,7 @@ public class VanillaMainMenu extends BaseMenu
         super(MenuType.MAIN_MENU);
 
         // 监听用户登录事件
-        FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> isLoggedIn.set(true));
+        FXGL.getEventBus().addEventHandler(User.UserLoginEvent.USER_LOGIN, event -> isLoggedIn.set(true));
 
         FXGL.getEventBus().addEventHandler(User.UserLogoutEvent.USER_LOGOUT, event -> isLoggedIn.set(false));
     }
@@ -58,7 +58,7 @@ public class VanillaMainMenu extends BaseMenu
         itemLogin.getBtn().onActionProperty().bind(
                 Bindings.when(isLoggedIn)
                         .then((EventHandler<ActionEvent>) e -> User.getInstance().logout())
-                        .otherwise(e ->new LoginService().showLoginBox())
+                        .otherwise(e -> new LoginService().showLoginBox())
         );
         itemLogin.getBtn().textProperty().bind(
                 Bindings.when(isLoggedIn)

@@ -14,6 +14,13 @@ import java.util.logging.Logger;
 
 public class AchievementManager
 {
+    private static final AchievementManager manager = new AchievementManager();
+
+    public static AchievementManager getManager()
+    {
+        return manager;
+    }
+
     private final List<Achievement> achievements;
 
     public AchievementManager()

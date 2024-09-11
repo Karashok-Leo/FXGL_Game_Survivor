@@ -94,6 +94,16 @@ public class User
         private static final User INSTANCE = new User();
     }
 
+    public static class UserLoginEvent extends Event
+    {
+        public static final EventType<UserLoginEvent> USER_LOGIN = new EventType<>(Event.ANY, "USER_LOGIN");
+
+        public UserLoginEvent()
+        {
+            super(USER_LOGIN);
+        }
+    }
+
     public static class UserLogoutEvent extends Event
     {
         public static final EventType<UserLogoutEvent> USER_LOGOUT = new EventType<>(Event.ANY, "USER_LOGOUT");
