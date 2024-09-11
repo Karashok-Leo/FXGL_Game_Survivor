@@ -3,10 +3,9 @@ package dev.csu.survivor.user;
 import dev.csu.survivor.util.JDBCUtil;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +17,7 @@ public class UserManager {
     // 登录方法
     public boolean login(String username, String password) {
         String query = "SELECT user_id, password_hash FROM users WHERE username = ?";
+
         try (Connection conn = JDBCUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
@@ -33,7 +33,17 @@ public class UserManager {
                         User user = User.getInstance();
                         user.setUserId(rs.getInt("user_id"));
                         user.setUsername(username);
+                        LocalDateTime dateTime = LocalDateTime.now();
+                        user.setLastLoginDate(dateTime);
                         user.setLoggedIn(true);
+
+                        //日志记录
+                        String loginLog = " insert into login_logs (user_id,login_time,login_ip) values (?, ?, ?)";
+                        PreparedStatement loginStmt = conn.prepareStatement(loginLog);
+                        loginStmt.setInt(1, user.getUserId());
+                        loginStmt.setString(2, dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                        loginStmt.setString(3, "IP");
+                        loginStmt.executeUpdate();
 
                         logger.log(Level.INFO, "User {0} logged in successfully", username);
                         return true;
@@ -111,6 +121,8 @@ public class UserManager {
         user.logout();
         logger.log(Level.INFO, "User {0} has logged out", user.getUsername());
     }
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package dev.csu.survivor.ui.login;
 
 import com.almasb.fxgl.dsl.FXGL;
+import dev.csu.survivor.achievements.AchievementChecker;
 import dev.csu.survivor.user.User;
 import dev.csu.survivor.user.UserManager;
 import javafx.application.Application;
@@ -26,6 +27,7 @@ public class LoginUI extends Application {
     Button btSignIn = new Button("Sign in"); // 注册按钮
     HBox h3 = new HBox(); // 按钮的容器
     VBox pane = new VBox(); // 整体布局容器
+    AchievementChecker checker;
 
     // UserManager 实例
     UserManager userManager = new UserManager();
@@ -69,6 +71,8 @@ public class LoginUI extends Application {
             User user = User.getInstance();
             user.setUsername(username);
             user.setLoggedIn(true);
+
+
 
             FXGL.getEventBus().fireEvent(new CloseLoginWindowEvent(true));
 
@@ -132,4 +136,6 @@ public class LoginUI extends Application {
             return isClosed;
         }
     }
+
+
 }

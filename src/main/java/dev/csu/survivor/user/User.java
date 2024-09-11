@@ -1,12 +1,13 @@
 package dev.csu.survivor.user;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class User {
     private int userId;
     private String username;
     private Date registerDate;
-    private Date lastLoginDate;
+    private LocalDateTime lastLoginDate;
     private boolean isLoggedIn;
 
     // 私有构造方法，防止外部实例化
@@ -14,11 +15,11 @@ public class User {
         this.isLoggedIn = false;
     }
 
-    public Date getLastLoginDate() {
+    public LocalDateTime getLastLoginDate() {
         return lastLoginDate;
     }
 
-    public void setLastLoginDate(Date lastLoginDate) {
+    public void setLastLoginDate(LocalDateTime lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
     }
 
@@ -72,6 +73,5 @@ public class User {
         this.registerDate = null;
         this.lastLoginDate = null;
         this.isLoggedIn = false;
-        User.getInstance().logout();
     }
 }
