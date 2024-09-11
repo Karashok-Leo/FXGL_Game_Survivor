@@ -35,13 +35,6 @@ public class VanillaMainMenu extends BaseMenu
         FXGL.getEventBus().addEventHandler(LoginUI.CloseLoginWindowEvent.USER_LOGIN, event -> isLoggedIn.set(true));
 
         FXGL.getEventBus().addEventHandler(User.UserLogoutEvent.USER_LOGOUT, event -> isLoggedIn.set(false));
-
-        //监听返回事件
-//        FXGL.getEventBus().addEventHandler(AchievementView.BackEvent.USER_BACK, event ->
-//        {
-//            System.out.println("jianting ");
-//            showMainMenu();
-//        });
     }
 
     @Override
@@ -125,16 +118,6 @@ public class VanillaMainMenu extends BaseMenu
         }
     }
 
-    // 展示主菜单
-    public void showMainMenu()
-    {
-        // 隐藏成就页面
-        if (achievementPane != null)
-        {
-            achievementPane.setVisible(false);
-        }
-    }
-
     // 展示成就页面
     protected FXGLDefaultMenu.MenuContent createAchievementContent()
     {
@@ -149,8 +132,11 @@ public class VanillaMainMenu extends BaseMenu
         AchievementView achievementView = new AchievementView();
         achievementPane = achievementView.getContentRootPane();
 
-        achievementPane.setTranslateX(-400);
-        achievementPane.setTranslateY(130);
+        achievementPane.setTranslateX(-590);
+        achievementPane.setTranslateY(-100);
+
+        achievementPane.setScaleX(0.8);
+        achievementPane.setScaleY(0.8);
 
         return new FXGLDefaultMenu.MenuContent(achievementPane);
     }
