@@ -8,6 +8,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.time.LocalTimer;
 import dev.csu.survivor.Constants;
 import dev.csu.survivor.SurvivorGameApp;
+import dev.csu.survivor.achievements.AchievementChecker;
+import dev.csu.survivor.enums.AchievementType;
 import dev.csu.survivor.enums.EnemyType;
 import dev.csu.survivor.ui.SurvivorGameHud;
 import dev.csu.survivor.util.MathUtil;
@@ -30,6 +32,8 @@ public class SurvivorGameWorld
 
     public SurvivorGameWorld(GameWorld internalWorld)
     {
+        AchievementChecker.getInstance().checkForAchievement(AchievementType.FIRST_GAME);
+
         this.spawnTimer = FXGL.newLocalTimer();
         this.waveTimer = FXGL.newLocalTimer();
         this.spawnTimer.capture();
@@ -121,5 +125,10 @@ public class SurvivorGameWorld
     public SimpleIntegerProperty enemiesProperty()
     {
         return enemies;
+    }
+
+    public Entity getLand()
+    {
+        return land;
     }
 }

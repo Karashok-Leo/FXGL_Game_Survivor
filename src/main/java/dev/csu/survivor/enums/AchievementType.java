@@ -8,6 +8,7 @@ public enum AchievementType
 {
     EMPTY(() -> false),
     FIRST_LOGIN(() -> User.getInstance().getLastLoginDate() == null),
+    FIRST_GAME(() -> true),
     ;
     private final BooleanSupplier condition;
 
